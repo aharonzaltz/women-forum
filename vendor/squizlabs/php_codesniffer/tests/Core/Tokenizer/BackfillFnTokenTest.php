@@ -4,12 +4,14 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2019 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-final class BackfillFnTokenTest extends AbstractTokenizerTestCase
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
+
+class BackfillFnTokenTest extends AbstractMethodUnitTest
 {
 
 
@@ -104,7 +106,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testNestedInner()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token = $this->getTargetToken('/* testNestedInner */', T_FN);
         $this->backfillHelper($token, true);
@@ -135,7 +137,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testNestedSharedCloser()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token = $this->getTargetToken('/* testNestedSharedCloserOuter */', T_FN);
         $this->backfillHelper($token);
@@ -378,7 +380,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testKeywordReturnTypes()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $testMarkers = [
             'Self',
@@ -451,7 +453,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testTernary()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token = $this->getTargetToken('/* testTernary */', T_FN);
         $this->backfillHelper($token);
@@ -503,7 +505,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testTernaryWithTypes()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token = $this->getTargetToken('/* testTernaryWithTypes */', T_FN);
         $this->backfillHelper($token);
@@ -561,7 +563,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testInMatchValue($testMarker, $openerOffset, $closerOffset, $expectedCloserType, $expectedCloserFriendlyName)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token = $this->getTargetToken($testMarker, T_FN);
         $this->backfillHelper($token);
@@ -577,38 +579,38 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      *
      * @see testInMatchValue()
      *
-     * @return array<string, array<string, string|int>>
+     * @return array
      */
-    public static function dataInMatchValue()
+    public function dataInMatchValue()
     {
         return [
             'not_last_value'                      => [
-                'testMarker'                 => '/* testInMatchNotLastValue */',
-                'openerOffset'               => 5,
-                'closerOffset'               => 11,
-                'expectedCloserType'         => 'T_COMMA',
-                'expectedCloserFriendlyName' => 'comma',
+                '/* testInMatchNotLastValue */',
+                5,
+                11,
+                'T_COMMA',
+                'comma',
             ],
             'last_value_with_trailing_comma'      => [
-                'testMarker'                 => '/* testInMatchLastValueWithTrailingComma */',
-                'openerOffset'               => 5,
-                'closerOffset'               => 11,
-                'expectedCloserType'         => 'T_COMMA',
-                'expectedCloserFriendlyName' => 'comma',
+                '/* testInMatchLastValueWithTrailingComma */',
+                5,
+                11,
+                'T_COMMA',
+                'comma',
             ],
             'last_value_without_trailing_comma_1' => [
-                'testMarker'                 => '/* testInMatchLastValueNoTrailingComma1 */',
-                'openerOffset'               => 5,
-                'closerOffset'               => 10,
-                'expectedCloserType'         => 'T_CLOSE_PARENTHESIS',
-                'expectedCloserFriendlyName' => 'close parenthesis',
+                '/* testInMatchLastValueNoTrailingComma1 */',
+                5,
+                10,
+                'T_CLOSE_PARENTHESIS',
+                'close parenthesis',
             ],
             'last_value_without_trailing_comma_2' => [
-                'testMarker'                 => '/* testInMatchLastValueNoTrailingComma2 */',
-                'openerOffset'               => 5,
-                'closerOffset'               => 11,
-                'expectedCloserType'         => 'T_VARIABLE',
-                'expectedCloserFriendlyName' => '$y variable',
+                '/* testInMatchLastValueNoTrailingComma2 */',
+                5,
+                11,
+                'T_VARIABLE',
+                '$y variable',
             ],
         ];
 
@@ -645,7 +647,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     public function testNotAnArrowFunction($testMarker, $testContent='fn')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_STRING, T_FN], $testContent);
         $tokenArray = $tokens[$token];
@@ -667,63 +669,47 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      *
      * @see testNotAnArrowFunction()
      *
-     * @return array<string, array<string, string>>
+     * @return array
      */
-    public static function dataNotAnArrowFunction()
+    public function dataNotAnArrowFunction()
     {
         return [
-            'name of a function, context: declaration'                                       => [
-                'testMarker' => '/* testFunctionName */',
+            ['/* testFunctionName */'],
+            [
+                '/* testConstantDeclaration */',
+                'FN',
             ],
-            'name of a constant, context: declaration using "const" keyword - uppercase'     => [
-                'testMarker'  => '/* testConstantDeclaration */',
-                'testContent' => 'FN',
+            [
+                '/* testConstantDeclarationLower */',
+                'fn',
             ],
-            'name of a constant, context: declaration using "const" keyword - lowercase'     => [
-                'testMarker'  => '/* testConstantDeclarationLower */',
-                'testContent' => 'fn',
+            ['/* testStaticMethodName */'],
+            ['/* testPropertyAssignment */'],
+            [
+                '/* testAnonClassMethodName */',
+                'fN',
             ],
-            'name of a (static) method, context: declaration'                                => [
-                'testMarker' => '/* testStaticMethodName */',
+            ['/* testNonArrowStaticMethodCall */'],
+            [
+                '/* testNonArrowConstantAccess */',
+                'FN',
             ],
-            'name of a property, context: property access'                                   => [
-                'testMarker' => '/* testPropertyAssignment */',
+            [
+                '/* testNonArrowConstantAccessMixed */',
+                'Fn',
             ],
-            'name of a method, context: declaration in an anon class - mixed case'           => [
-                'testMarker'  => '/* testAnonClassMethodName */',
-                'testContent' => 'fN',
+            ['/* testNonArrowObjectMethodCall */'],
+            [
+                '/* testNonArrowObjectMethodCallUpper */',
+                'FN',
             ],
-            'name of a method, context: static method call'                                  => [
-                'testMarker' => '/* testNonArrowStaticMethodCall */',
+            [
+                '/* testNonArrowNamespacedFunctionCall */',
+                'Fn',
             ],
-            'name of a constant, context: constant access - uppercase'                       => [
-                'testMarker'  => '/* testNonArrowConstantAccess */',
-                'testContent' => 'FN',
-            ],
-            'name of a constant, context: constant access - mixed case'                      => [
-                'testMarker'  => '/* testNonArrowConstantAccessMixed */',
-                'testContent' => 'Fn',
-            ],
-            'name of a method, context: method call on object - lowercase'                   => [
-                'testMarker' => '/* testNonArrowObjectMethodCall */',
-            ],
-            'name of a method, context: method call on object - uppercase'                   => [
-                'testMarker'  => '/* testNonArrowObjectMethodCallUpper */',
-                'testContent' => 'FN',
-            ],
-            'name of a (namespaced) function, context: partially qualified function call'    => [
-                'testMarker'  => '/* testNonArrowNamespacedFunctionCall */',
-                'testContent' => 'Fn',
-            ],
-            'name of a (namespaced) function, context: namespace relative function call'     => [
-                'testMarker' => '/* testNonArrowNamespaceOperatorFunctionCall */',
-            ],
-            'name of a function, context: declaration with union types for param and return' => [
-                'testMarker' => '/* testNonArrowFunctionNameWithUnionTypes */',
-            ],
-            'unknown - live coding/parse error'                                              => [
-                'testMarker' => '/* testLiveCoding */',
-            ],
+            ['/* testNonArrowNamespaceOperatorFunctionCall */'],
+            ['/* testNonArrowFunctionNameWithUnionTypes */'],
+            ['/* testLiveCoding */'],
         ];
 
     }//end dataNotAnArrowFunction()
@@ -743,7 +729,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     private function backfillHelper($token, $skipScopeCloserCheck=false)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $this->assertTrue(array_key_exists('scope_condition', $tokens[$token]), 'Scope condition is not set');
         $this->assertTrue(array_key_exists('scope_opener', $tokens[$token]), 'Scope opener is not set');
@@ -795,7 +781,7 @@ final class BackfillFnTokenTest extends AbstractTokenizerTestCase
      */
     private function scopePositionTestHelper($token, $openerOffset, $closerOffset, $expectedCloserType='semicolon')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
         $expectedScopeOpener = ($token + $openerOffset);
         $expectedScopeCloser = ($token + $closerOffset);
 

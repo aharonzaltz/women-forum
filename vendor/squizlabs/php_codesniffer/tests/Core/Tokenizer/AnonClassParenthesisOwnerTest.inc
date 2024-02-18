@@ -5,11 +5,6 @@ $anonClass = new class {
     function __construct() {}
 };
 
-/* testReadonlyNoParentheses */
-$anonClass = new readonly class {
-    function __construct() {}
-};
-
 /* testNoParenthesesAndEmptyTokens */
 $anonClass = new class // phpcs:ignore Standard.Cat
 {
@@ -18,11 +13,6 @@ $anonClass = new class // phpcs:ignore Standard.Cat
 
 /* testWithParentheses */
 $anonClass = new class() {};
-
-/* testReadonlyWithParentheses */
-$anonClass = new readonly class() {
-    function __construct() {}
-};
 
 /* testWithParenthesesAndEmptyTokens */
 $anonClass = new class /*comment */

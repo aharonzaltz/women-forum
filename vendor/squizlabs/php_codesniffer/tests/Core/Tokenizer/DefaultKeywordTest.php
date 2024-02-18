@@ -5,12 +5,14 @@
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020-2021 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-final class DefaultKeywordTest extends AbstractTokenizerTestCase
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
+
+class DefaultKeywordTest extends AbstractMethodUnitTest
 {
 
 
@@ -31,7 +33,7 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      */
     public function testMatchDefault($testMarker, $testContent='default')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_MATCH_DEFAULT, T_DEFAULT, T_STRING], $testContent);
         $tokenArray = $tokens[$token];
@@ -51,50 +53,40 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      *
      * @see testMatchDefault()
      *
-     * @return array<string, array<string, string>>
+     * @return array
      */
-    public static function dataMatchDefault()
+    public function dataMatchDefault()
     {
         return [
-            'simple_match_default'                                    => [
-                'testMarker' => '/* testSimpleMatchDefault */',
-            ],
-            'match_default_in_switch_case_1'                          => [
-                'testMarker' => '/* testMatchDefaultNestedInSwitchCase1 */',
-            ],
-            'match_default_in_switch_case_2'                          => [
-                'testMarker' => '/* testMatchDefaultNestedInSwitchCase2 */',
-            ],
-            'match_default_in_switch_default'                         => [
-                'testMarker' => '/* testMatchDefaultNestedInSwitchDefault */',
-            ],
-            'match_default_containing_switch'                         => [
-                'testMarker' => '/* testMatchDefault */',
-            ],
+            'simple_match_default'                                    => ['/* testSimpleMatchDefault */'],
+            'match_default_in_switch_case_1'                          => ['/* testMatchDefaultNestedInSwitchCase1 */'],
+            'match_default_in_switch_case_2'                          => ['/* testMatchDefaultNestedInSwitchCase2 */'],
+            'match_default_in_switch_default'                         => ['/* testMatchDefaultNestedInSwitchDefault */'],
+            'match_default_containing_switch'                         => ['/* testMatchDefault */'],
 
             'match_default_with_nested_long_array_and_default_key'    => [
-                'testMarker'  => '/* testMatchDefaultWithNestedLongArrayWithClassConstantKey */',
-                'testContent' => 'DEFAULT',
+                '/* testMatchDefaultWithNestedLongArrayWithClassConstantKey */',
+                'DEFAULT',
             ],
             'match_default_with_nested_long_array_and_default_key_2'  => [
-                'testMarker'  => '/* testMatchDefaultWithNestedLongArrayWithClassConstantKeyLevelDown */',
-                'testContent' => 'DEFAULT',
+                '/* testMatchDefaultWithNestedLongArrayWithClassConstantKeyLevelDown */',
+                'DEFAULT',
             ],
             'match_default_with_nested_short_array_and_default_key'   => [
-                'testMarker'  => '/* testMatchDefaultWithNestedShortArrayWithClassConstantKey */',
-                'testContent' => 'DEFAULT',
+                '/* testMatchDefaultWithNestedShortArrayWithClassConstantKey */',
+                'DEFAULT',
             ],
             'match_default_with_nested_short_array_and_default_key_2' => [
-                'testMarker'  => '/* testMatchDefaultWithNestedShortArrayWithClassConstantKeyLevelDown */',
-                'testContent' => 'DEFAULT',
+                '/* testMatchDefaultWithNestedShortArrayWithClassConstantKeyLevelDown */',
+                'DEFAULT',
             ],
             'match_default_in_long_array'                             => [
-                'testMarker'  => '/* testMatchDefaultNestedInLongArray */',
-                'testContent' => 'DEFAULT',
+                '/* testMatchDefaultNestedInLongArray */',
+                'DEFAULT',
             ],
             'match_default_in_short_array'                            => [
-                'testMarker'  => '/* testMatchDefaultNestedInShortArray */',
-                'testContent' => 'DEFAULT',
+                '/* testMatchDefaultNestedInShortArray */',
+                'DEFAULT',
             ],
         ];
 
@@ -121,7 +113,7 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      */
     public function testSwitchDefault($testMarker, $openerOffset, $closerOffset, $conditionStop=null, $testContent='default')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_MATCH_DEFAULT, T_DEFAULT, T_STRING], $testContent);
         $tokenArray = $tokens[$token];
@@ -177,40 +169,40 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      *
      * @see testSwitchDefault()
      *
-     * @return array<string, array<string, string|int>>
+     * @return array
      */
-    public static function dataSwitchDefault()
+    public function dataSwitchDefault()
     {
         return [
             'simple_switch_default'                  => [
-                'testMarker'   => '/* testSimpleSwitchDefault */',
-                'openerOffset' => 1,
-                'closerOffset' => 4,
+                '/* testSimpleSwitchDefault */',
+                1,
+                4,
             ],
             'simple_switch_default_with_curlies'     => [
                 // For a default structure with curly braces, the scope opener
                 // will be the open curly and the closer the close curly.
                 // However, scope conditions will not be set for open to close,
                 // but only for the open token up to the "break/return/continue" etc.
-                'testMarker'    => '/* testSimpleSwitchDefaultWithCurlies */',
-                'openerOffset'  => 3,
-                'closerOffset'  => 12,
-                'conditionStop' => 6,
+                '/* testSimpleSwitchDefaultWithCurlies */',
+                3,
+                12,
+                6,
             ],
             'switch_default_toplevel'                => [
-                'testMarker'   => '/* testSwitchDefault */',
-                'openerOffset' => 1,
-                'closerOffset' => 43,
+                '/* testSwitchDefault */',
+                1,
+                43,
             ],
             'switch_default_nested_in_match_case'    => [
-                'testMarker'   => '/* testSwitchDefaultNestedInMatchCase */',
-                'openerOffset' => 1,
-                'closerOffset' => 20,
+                '/* testSwitchDefaultNestedInMatchCase */',
+                1,
+                20,
             ],
             'switch_default_nested_in_match_default' => [
-                'testMarker'   => '/* testSwitchDefaultNestedInMatchDefault */',
-                'openerOffset' => 1,
-                'closerOffset' => 18,
+                '/* testSwitchDefaultNestedInMatchDefault */',
+                1,
+                18,
             ],
         ];
 
@@ -232,7 +224,7 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      */
     public function testNotDefaultKeyword($testMarker, $testContent='DEFAULT')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_MATCH_DEFAULT, T_DEFAULT, T_STRING], $testContent);
         $tokenArray = $tokens[$token];
@@ -252,68 +244,34 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      *
      * @see testNotDefaultKeyword()
      *
-     * @return array<string, array<string, string>>
+     * @return array
      */
-    public static function dataNotDefaultKeyword()
+    public function dataNotDefaultKeyword()
     {
         return [
-            'class-constant-as-short-array-key'                   => [
-                'testMarker' => '/* testClassConstantAsShortArrayKey */',
-            ],
-            'class-property-as-short-array-key'                   => [
-                'testMarker' => '/* testClassPropertyAsShortArrayKey */',
-            ],
-            'namespaced-constant-as-short-array-key'              => [
-                'testMarker' => '/* testNamespacedConstantAsShortArrayKey */',
-            ],
-            'fqn-global-constant-as-short-array-key'              => [
-                'testMarker' => '/* testFQNGlobalConstantAsShortArrayKey */',
-            ],
-            'class-constant-as-long-array-key'                    => [
-                'testMarker' => '/* testClassConstantAsLongArrayKey */',
-            ],
-            'class-constant-as-yield-key'                         => [
-                'testMarker' => '/* testClassConstantAsYieldKey */',
-            ],
+            'class-constant-as-short-array-key'                   => ['/* testClassConstantAsShortArrayKey */'],
+            'class-property-as-short-array-key'                   => ['/* testClassPropertyAsShortArrayKey */'],
+            'namespaced-constant-as-short-array-key'              => ['/* testNamespacedConstantAsShortArrayKey */'],
+            'fqn-global-constant-as-short-array-key'              => ['/* testFQNGlobalConstantAsShortArrayKey */'],
+            'class-constant-as-long-array-key'                    => ['/* testClassConstantAsLongArrayKey */'],
+            'class-constant-as-yield-key'                         => ['/* testClassConstantAsYieldKey */'],
 
-            'class-constant-as-long-array-key-nested-in-match'    => [
-                'testMarker' => '/* testClassConstantAsLongArrayKeyNestedInMatch */',
-            ],
-            'class-constant-as-long-array-key-nested-in-match-2'  => [
-                'testMarker' => '/* testClassConstantAsLongArrayKeyNestedInMatchLevelDown */',
-            ],
-            'class-constant-as-short-array-key-nested-in-match'   => [
-                'testMarker' => '/* testClassConstantAsShortArrayKeyNestedInMatch */',
-            ],
-            'class-constant-as-short-array-key-nested-in-match-2' => [
-                'testMarker' => '/* testClassConstantAsShortArrayKeyNestedInMatchLevelDown */',
-            ],
-            'class-constant-as-long-array-key-with-nested-match'  => [
-                'testMarker' => '/* testClassConstantAsLongArrayKeyWithNestedMatch */',
-            ],
-            'class-constant-as-short-array-key-with-nested-match' => [
-                'testMarker' => '/* testClassConstantAsShortArrayKeyWithNestedMatch */',
-            ],
+            'class-constant-as-long-array-key-nested-in-match'    => ['/* testClassConstantAsLongArrayKeyNestedInMatch */'],
+            'class-constant-as-long-array-key-nested-in-match-2'  => ['/* testClassConstantAsLongArrayKeyNestedInMatchLevelDown */'],
+            'class-constant-as-short-array-key-nested-in-match'   => ['/* testClassConstantAsShortArrayKeyNestedInMatch */'],
+            'class-constant-as-short-array-key-nested-in-match-2' => ['/* testClassConstantAsShortArrayKeyNestedInMatchLevelDown */'],
+            'class-constant-as-long-array-key-with-nested-match'  => ['/* testClassConstantAsLongArrayKeyWithNestedMatch */'],
+            'class-constant-as-short-array-key-with-nested-match' => ['/* testClassConstantAsShortArrayKeyWithNestedMatch */'],
 
-            'class-constant-in-switch-case'                       => [
-                'testMarker' => '/* testClassConstantInSwitchCase */',
-            ],
-            'class-property-in-switch-case'                       => [
-                'testMarker' => '/* testClassPropertyInSwitchCase */',
-            ],
-            'namespaced-constant-in-switch-case'                  => [
-                'testMarker' => '/* testNamespacedConstantInSwitchCase */',
-            ],
-            'namespace-relative-constant-in-switch-case'          => [
-                'testMarker' => '/* testNamespaceRelativeConstantInSwitchCase */',
-            ],
+            'class-constant-in-switch-case'                       => ['/* testClassConstantInSwitchCase */'],
+            'class-property-in-switch-case'                       => ['/* testClassPropertyInSwitchCase */'],
+            'namespaced-constant-in-switch-case'                  => ['/* testNamespacedConstantInSwitchCase */'],
+            'namespace-relative-constant-in-switch-case'          => ['/* testNamespaceRelativeConstantInSwitchCase */'],
 
-            'class-constant-declaration'                          => [
-                'testMarker' => '/* testClassConstant */',
-            ],
+            'class-constant-declaration'                          => ['/* testClassConstant */'],
             'class-method-declaration'                            => [
-                'testMarker'  => '/* testMethodDeclaration */',
-                'testContent' => 'default',
+                '/* testMethodDeclaration */',
+                'default',
             ],
         ];
 
@@ -325,14 +283,11 @@ final class DefaultKeywordTest extends AbstractTokenizerTestCase
      *
      * @link https://github.com/squizlabs/PHP_CodeSniffer/issues/3326
      *
-     * @covers PHP_CodeSniffer\Tokenizers\PHP::tokenize
-     * @covers PHP_CodeSniffer\Tokenizers\Tokenizer::recurseScopeMap
-     *
      * @return void
      */
     public function testIssue3326()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken('/* testClassConstant */', [T_SEMICOLON]);
         $tokenArray = $tokens[$token];

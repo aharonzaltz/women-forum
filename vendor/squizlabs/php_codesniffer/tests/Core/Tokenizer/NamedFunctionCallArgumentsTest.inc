@@ -32,13 +32,13 @@ array_fill(
     value: 50
 );
 
-/* testNamespaceRelativeFunction */
+/* testNamespaceOperatorFunction */
 namespace\function_name(label:$string, more: false);
 
-/* testPartiallyQualifiedFunction */
+/* testNamespaceRelativeFunction */
 Partially\Qualified\function_name(label:$string, more: false);
 
-/* testFullyQualifiedFunction */
+/* testNamespacedFQNFunction */
 \Fully\Qualified\function_name(label: $string, more:false);
 
 /* testVariableFunction */
@@ -207,9 +207,6 @@ foobar(elseif: $value, /* testReservedKeywordElseif2 */ elseif: $value);
 
 /* testReservedKeywordEmpty1 */
 foobar(empty: $value, /* testReservedKeywordEmpty2 */ empty: $value);
-
-/* testReservedKeywordEnum1 */
-foobar(enum: $value, /* testReservedKeywordEnum2 */ enum: $value);
 
 /* testReservedKeywordEnddeclare1 */
 foobar(enddeclare: $value, /* testReservedKeywordEnddeclare2 */ enddeclare: $value);

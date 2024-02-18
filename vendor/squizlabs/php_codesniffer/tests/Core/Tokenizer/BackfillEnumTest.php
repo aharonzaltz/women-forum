@@ -4,12 +4,14 @@
  *
  * @author    Jaroslav Hanslík <kukulich@kukulich.cz>
  * @copyright 2021 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-final class BackfillEnumTest extends AbstractTokenizerTestCase
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
+
+class BackfillEnumTest extends AbstractMethodUnitTest
 {
 
 
@@ -28,21 +30,21 @@ final class BackfillEnumTest extends AbstractTokenizerTestCase
      */
     public function testEnums($testMarker, $testContent, $openerOffset, $closerOffset)
     {
-        $tokens     = $this->phpcsFile->getTokens();
-        $enum       = $this->getTargetToken($testMarker, [T_ENUM, T_STRING], $testContent);
-        $tokenArray = $tokens[$enum];
+        $tokens = self::$phpcsFile->getTokens();
 
-        $this->assertSame(T_ENUM, $tokenArray['code'], 'Token tokenized as '.$tokenArray['type'].', not T_ENUM (code)');
-        $this->assertSame('T_ENUM', $tokenArray['type'], 'Token tokenized as '.$tokenArray['type'].', not T_ENUM (type)');
+        $enum = $this->getTargetToken($testMarker, [T_ENUM, T_STRING], $testContent);
 
-        $this->assertArrayHasKey('scope_condition', $tokenArray);
-        $this->assertArrayHasKey('scope_opener', $tokenArray);
-        $this->assertArrayHasKey('scope_closer', $tokenArray);
+        $this->assertSame(T_ENUM, $tokens[$enum]['code']);
+        $this->assertSame('T_ENUM', $tokens[$enum]['type']);
 
-        $this->assertSame($enum, $tokenArray['scope_condition']);
+        $this->assertArrayHasKey('scope_condition', $tokens[$enum]);
+        $this->assertArrayHasKey('scope_opener', $tokens[$enum]);
+        $this->assertArrayHasKey('scope_closer', $tokens[$enum]);
 
-        $scopeOpener = $tokenArray['scope_opener'];
-        $scopeCloser = $tokenArray['scope_closer'];
+        $this->assertSame($enum, $tokens[$enum]['scope_condition']);
+
+        $scopeOpener = $tokens[$enum]['scope_opener'];
+        $scopeCloser = $tokens[$enum]['scope_closer'];
 
         $expectedScopeOpener = ($enum + $openerOffset);
         $expectedScopeCloser = ($enum + $closerOffset);
@@ -71,52 +73,52 @@ final class BackfillEnumTest extends AbstractTokenizerTestCase
      *
      * @see testEnums()
      *
-     * @return array<string, array<string, string|int>>
+     * @return array
      */
-    public static function dataEnums()
+    public function dataEnums()
     {
         return [
-            'enum - pure'                                                                   => [
-                'testMarker'   => '/* testPureEnum */',
-                'testContent'  => 'enum',
-                'openerOffset' => 4,
-                'closerOffset' => 12,
+            [
+                '/* testPureEnum */',
+                'enum',
+                4,
+                12,
             ],
-            'enum - backed int'                                                             => [
-                'testMarker'   => '/* testBackedIntEnum */',
-                'testContent'  => 'enum',
-                'openerOffset' => 7,
-                'closerOffset' => 29,
+            [
+                '/* testBackedIntEnum */',
+                'enum',
+                7,
+                29,
             ],
-            'enum - backed string'                                                          => [
-                'testMarker'   => '/* testBackedStringEnum */',
-                'testContent'  => 'enum',
-                'openerOffset' => 8,
-                'closerOffset' => 30,
+            [
+                '/* testBackedStringEnum */',
+                'enum',
+                8,
+                30,
             ],
-            'enum - backed int + implements'                                                => [
-                'testMarker'   => '/* testComplexEnum */',
-                'testContent'  => 'enum',
-                'openerOffset' => 11,
-                'closerOffset' => 72,
+            [
+                '/* testComplexEnum */',
+                'enum',
+                11,
+                72,
             ],
-            'enum keyword when "enum" is the name for the construct (yes, this is allowed)' => [
-                'testMarker'   => '/* testEnumWithEnumAsClassName */',
-                'testContent'  => 'enum',
-                'openerOffset' => 6,
-                'closerOffset' => 7,
+            [
+                '/* testEnumWithEnumAsClassName */',
+                'enum',
+                6,
+                7,
             ],
-            'enum - keyword is case insensitive'                                            => [
-                'testMarker'   => '/* testEnumIsCaseInsensitive */',
-                'testContent'  => 'EnUm',
-                'openerOffset' => 4,
-                'closerOffset' => 5,
+            [
+                '/* testEnumIsCaseInsensitive */',
+                'EnUm',
+                4,
+                5,
             ],
-            'enum - declaration containing comment'                                         => [
-                'testMarker'   => '/* testDeclarationContainingComment */',
-                'testContent'  => 'enum',
-                'openerOffset' => 6,
-                'closerOffset' => 14,
+            [
+                '/* testDeclarationContainingComment */',
+                'enum',
+                6,
+                14,
             ],
         ];
 
@@ -136,12 +138,11 @@ final class BackfillEnumTest extends AbstractTokenizerTestCase
      */
     public function testNotEnums($testMarker, $testContent)
     {
-        $tokens     = $this->phpcsFile->getTokens();
-        $target     = $this->getTargetToken($testMarker, [T_ENUM, T_STRING], $testContent);
-        $tokenArray = $tokens[$target];
+        $tokens = self::$phpcsFile->getTokens();
 
-        $this->assertSame(T_STRING, $tokenArray['code'], 'Token tokenized as '.$tokenArray['type'].', not T_STRING (code)');
-        $this->assertSame('T_STRING', $tokenArray['type'], 'Token tokenized as '.$tokenArray['type'].', not T_STRING (type)');
+        $target = $this->getTargetToken($testMarker, [T_ENUM, T_STRING], $testContent);
+        $this->assertSame(T_STRING, $tokens[$target]['code']);
+        $this->assertSame('T_STRING', $tokens[$target]['type']);
 
     }//end testNotEnums()
 
@@ -151,70 +152,74 @@ final class BackfillEnumTest extends AbstractTokenizerTestCase
      *
      * @see testNotEnums()
      *
-     * @return array<string, array<string, string>>
+     * @return array
      */
-    public static function dataNotEnums()
+    public function dataNotEnums()
     {
         return [
-            'not enum - construct named enum'                            => [
-                'testMarker'  => '/* testEnumAsClassNameAfterEnumKeyword */',
-                'testContent' => 'Enum',
+            [
+                '/* testEnumAsClassNameAfterEnumKeyword */',
+                'Enum',
             ],
-            'not enum - class named enum'                                => [
-                'testMarker'  => '/* testEnumUsedAsClassName */',
-                'testContent' => 'Enum',
+            [
+                '/* testEnumUsedAsClassName */',
+                'Enum',
             ],
-            'not enum - class constant named enum'                       => [
-                'testMarker'  => '/* testEnumUsedAsClassConstantName */',
-                'testContent' => 'ENUM',
+            [
+                '/* testEnumUsedAsClassConstantName */',
+                'ENUM',
             ],
-            'not enum - method named enum'                               => [
-                'testMarker'  => '/* testEnumUsedAsMethodName */',
-                'testContent' => 'enum',
+            [
+                '/* testEnumUsedAsMethodName */',
+                'enum',
             ],
-            'not enum - class property named enum'                       => [
-                'testMarker'  => '/* testEnumUsedAsPropertyName */',
-                'testContent' => 'enum',
+            [
+                '/* testEnumUsedAsPropertyName */',
+                'enum',
             ],
-            'not enum - global function named enum'                      => [
-                'testMarker'  => '/* testEnumUsedAsFunctionName */',
-                'testContent' => 'enum',
+            [
+                '/* testEnumUsedAsFunctionName */',
+                'enum',
             ],
-            'not enum - namespace named enum'                            => [
-                'testMarker'  => '/* testEnumUsedAsNamespaceName */',
-                'testContent' => 'Enum',
+            [
+                '/* testEnumUsedAsEnumName */',
+                'Enum',
             ],
-            'not enum - part of namespace named enum'                    => [
-                'testMarker'  => '/* testEnumUsedAsPartOfNamespaceName */',
-                'testContent' => 'Enum',
+            [
+                '/* testEnumUsedAsNamespaceName */',
+                'Enum',
             ],
-            'not enum - class instantiation for class enum'              => [
-                'testMarker'  => '/* testEnumUsedInObjectInitialization */',
-                'testContent' => 'Enum',
+            [
+                '/* testEnumUsedAsPartOfNamespaceName */',
+                'Enum',
             ],
-            'not enum - function call'                                   => [
-                'testMarker'  => '/* testEnumAsFunctionCall */',
-                'testContent' => 'enum',
+            [
+                '/* testEnumUsedInObjectInitialization */',
+                'Enum',
             ],
-            'not enum - namespace relative function call'                => [
-                'testMarker'  => '/* testEnumAsFunctionCallWithNamespace */',
-                'testContent' => 'enum',
+            [
+                '/* testEnumAsFunctionCall */',
+                'enum',
             ],
-            'not enum - class constant fetch with enum as class name'    => [
-                'testMarker'  => '/* testClassConstantFetchWithEnumAsClassName */',
-                'testContent' => 'Enum',
+            [
+                '/* testEnumAsFunctionCallWithNamespace */',
+                'enum',
             ],
-            'not enum - class constant fetch with enum as constant name' => [
-                'testMarker'  => '/* testClassConstantFetchWithEnumAsConstantName */',
-                'testContent' => 'ENUM',
+            [
+                '/* testClassConstantFetchWithEnumAsClassName */',
+                'Enum',
             ],
-            'parse error, not enum - enum declaration without name'      => [
-                'testMarker'  => '/* testParseErrorMissingName */',
-                'testContent' => 'enum',
+            [
+                '/* testClassConstantFetchWithEnumAsConstantName */',
+                'ENUM',
             ],
-            'parse error, not enum - enum declaration with curlies'      => [
-                'testMarker'  => '/* testParseErrorLiveCoding */',
-                'testContent' => 'enum',
+            [
+                '/* testParseErrorMissingName */',
+                'enum',
+            ],
+            [
+                '/* testParseErrorLiveCoding */',
+                'enum',
             ],
         ];
 

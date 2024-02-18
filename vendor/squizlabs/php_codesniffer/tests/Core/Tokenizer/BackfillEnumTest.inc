@@ -66,6 +66,10 @@ enum /* comment */ Name
     case SOME_CASE;
 }
 
+enum /* testEnumUsedAsEnumName */ Enum
+{
+}
+
 /* testEnumUsedAsNamespaceName */
 namespace Enum;
 /* testEnumUsedAsPartOfNamespaceName */

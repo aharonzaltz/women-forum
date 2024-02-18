@@ -1,17 +1,18 @@
 <?php
 /**
- * Tests the backfilling of the parameter labels for PHP 8.0 named parameters in function calls.
+ * Tests the backfilling of the T_FN token to PHP < 7.4.
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 use PHP_CodeSniffer\Util\Tokens;
 
-final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
+class NamedFunctionCallArgumentsTest extends AbstractMethodUnitTest
 {
 
 
@@ -19,8 +20,8 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      * Verify that parameter labels are tokenized as T_PARAM_NAME and that
      * the colon after it is tokenized as a T_COLON.
      *
-     * @param string        $testMarker The comment prefacing the target token.
-     * @param array<string> $parameters The token content for each parameter label to look for.
+     * @param string $testMarker The comment prefacing the target token.
+     * @param array  $parameters The token content for each parameter label to look for.
      *
      * @dataProvider dataNamedFunctionCallArguments
      * @covers       PHP_CodeSniffer\Tokenizers\PHP::tokenize
@@ -29,7 +30,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testNamedFunctionCallArguments($testMarker, $parameters)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         foreach ($parameters as $content) {
             $label = $this->getTargetToken($testMarker, [T_STRING, T_PARAM_NAME], $content);
@@ -46,7 +47,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
             );
 
             // Get the next non-empty token.
-            $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+            $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
             $this->assertSame(
                 ':',
@@ -73,141 +74,135 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      *
      * @see testNamedFunctionCallArguments()
      *
-     * @return array<string, array<string, string|array<string>>>
+     * @return array
      */
-    public static function dataNamedFunctionCallArguments()
+    public function dataNamedFunctionCallArguments()
     {
         return [
-            'function call, single line, all named args'                          => [
-                'testMarker' => '/* testNamedArgs */',
-                'parameters' => [
+            [
+                '/* testNamedArgs */',
+                [
                     'start_index',
                     'count',
                     'value',
                 ],
             ],
-            'function call, multi-line, all named args'                           => [
-                'testMarker' => '/* testNamedArgsMultiline */',
-                'parameters' => [
+            [
+                '/* testNamedArgsMultiline */',
+                [
                     'start_index',
                     'count',
                     'value',
                 ],
             ],
-            'function call, single line, all named args; comments and whitespace' => [
-                'testMarker' => '/* testNamedArgsWithWhitespaceAndComments */',
-                'parameters' => [
+            [
+                '/* testNamedArgsWithWhitespaceAndComments */',
+                [
                     'start_index',
                     'count',
                     'value',
                 ],
             ],
-            'function call, single line, mixed positional and named args'         => [
-                'testMarker' => '/* testMixedPositionalAndNamedArgs */',
-                'parameters' => [
-                    'double_encode',
-                ],
+            [
+                '/* testMixedPositionalAndNamedArgs */',
+                ['double_encode'],
             ],
-            'function call containing nested function call values'                => [
-                'testMarker' => '/* testNestedFunctionCallOuter */',
-                'parameters' => [
+            [
+                '/* testNestedFunctionCallOuter */',
+                [
                     'start_index',
                     'count',
                     'value',
                 ],
             ],
-            'function call nested in named arg [1]'                               => [
-                'testMarker' => '/* testNestedFunctionCallInner1 */',
-                'parameters' => [
-                    'skip',
-                ],
+            [
+                '/* testNestedFunctionCallInner1 */',
+                ['skip'],
             ],
-            'function call nested in named arg [2]'                               => [
-                'testMarker' => '/* testNestedFunctionCallInner2 */',
-                'parameters' => [
-                    'array_or_countable',
-                ],
+            [
+                '/* testNestedFunctionCallInner2 */',
+                ['array_or_countable'],
             ],
-            'namespace relative function call'                                    => [
-                'testMarker' => '/* testNamespaceRelativeFunction */',
-                'parameters' => [
+            [
+                '/* testNamespaceOperatorFunction */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'partially qualified function call'                                   => [
-                'testMarker' => '/* testPartiallyQualifiedFunction */',
-                'parameters' => [
+            [
+                '/* testNamespaceRelativeFunction */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'fully qualified function call'                                       => [
-                'testMarker' => '/* testFullyQualifiedFunction */',
-                'parameters' => [
+            [
+                '/* testNamespacedFQNFunction */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'variable function call'                                              => [
-                'testMarker' => '/* testVariableFunction */',
-                'parameters' => [
+            [
+                '/* testVariableFunction */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'variable variable function call'                                     => [
-                'testMarker' => '/* testVariableVariableFunction */',
-                'parameters' => [
+            [
+                '/* testVariableVariableFunction */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'method call'                                                         => [
-                'testMarker' => '/* testMethodCall */',
-                'parameters' => [
+            [
+                '/* testMethodCall */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'variable method call'                                                => [
-                'testMarker' => '/* testVariableMethodCall */',
-                'parameters' => [
+            [
+                '/* testVariableMethodCall */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'class instantiation'                                                 => [
-                'testMarker' => '/* testClassInstantiation */',
-                'parameters' => [
+            [
+                '/* testClassInstantiation */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'class instantiation with "self"'                                     => [
-                'testMarker' => '/* testClassInstantiationSelf */',
-                'parameters' => [
+            [
+                '/* testClassInstantiationSelf */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'class instantiation with "static"'                                   => [
-                'testMarker' => '/* testClassInstantiationStatic */',
-                'parameters' => [
+            [
+                '/* testClassInstantiationStatic */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'anonymous class instantiation'                                       => [
-                'testMarker' => '/* testAnonClass */',
-                'parameters' => [
+            [
+                '/* testAnonClass */',
+                [
                     'label',
                     'more',
                 ],
             ],
-            'function call with non-ascii characters in the variable name labels' => [
-                'testMarker' => '/* testNonAsciiNames */',
-                'parameters' => [
+            [
+                '/* testNonAsciiNames */',
+                [
                     '💩💩💩',
                     'Пасха',
                     '_valid',
@@ -215,66 +210,48 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
             ],
 
             // Coding errors which should still be handled.
-            'invalid: named arg before positional (compile error)'                => [
-                'testMarker' => '/* testCompileErrorNamedBeforePositional */',
-                'parameters' => [
-                    'param',
-                ],
+            [
+                '/* testCompileErrorNamedBeforePositional */',
+                ['param'],
             ],
-            'invalid: duplicate parameter name [1]'                               => [
-                'testMarker' => '/* testDuplicateName1 */',
-                'parameters' => [
-                    'param',
-                ],
+            [
+                '/* testDuplicateName1 */',
+                ['param'],
             ],
-            'invalid: duplicate parameter name [2]'                               => [
-                'testMarker' => '/* testDuplicateName2 */',
-                'parameters' => [
-                    'param',
-                ],
+            [
+                '/* testDuplicateName2 */',
+                ['param'],
             ],
-            'invalid: named arg before variadic (error exception)'                => [
-                'testMarker' => '/* testIncorrectOrderWithVariadic */',
-                'parameters' => [
-                    'start_index',
-                ],
+            [
+                '/* testIncorrectOrderWithVariadic */',
+                ['start_index'],
             ],
-            'invalid: named arg after variadic (compile error)'                   => [
-                'testMarker' => '/* testCompileErrorIncorrectOrderWithVariadic */',
-                'parameters' => [
-                    'param',
-                ],
+            [
+                '/* testCompileErrorIncorrectOrderWithVariadic */',
+                ['param'],
             ],
-            'invalid: named arg without value (parse error)'                      => [
-                'testMarker' => '/* testParseErrorNoValue */',
-                'parameters' => [
+            [
+                '/* testParseErrorNoValue */',
+                [
                     'param1',
                     'param2',
                 ],
             ],
-            'invalid: named arg in exit() (parse error)'                          => [
-                'testMarker' => '/* testParseErrorExit */',
-                'parameters' => [
-                    'status',
-                ],
+            [
+                '/* testParseErrorExit */',
+                ['status'],
             ],
-            'invalid: named arg in empty() (parse error)'                         => [
-                'testMarker' => '/* testParseErrorEmpty */',
-                'parameters' => [
-                    'variable',
-                ],
+            [
+                '/* testParseErrorEmpty */',
+                ['variable'],
             ],
-            'invalid: named arg in eval() (parse error)'                          => [
-                'testMarker' => '/* testParseErrorEval */',
-                'parameters' => [
-                    'code',
-                ],
+            [
+                '/* testParseErrorEval */',
+                ['code'],
             ],
-            'invalid: named arg in arbitrary parentheses (parse error)'           => [
-                'testMarker' => '/* testParseErrorArbitraryParentheses */',
-                'parameters' => [
-                    'something',
-                ],
+            [
+                '/* testParseErrorArbitraryParentheses */',
+                ['something'],
             ],
         ];
 
@@ -294,7 +271,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testOtherTstringInFunctionCall($testMarker, $content)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $label = $this->getTargetToken($testMarker, [T_STRING, T_PARAM_NAME], $content);
 
@@ -317,26 +294,26 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      *
      * @see testOtherTstringInFunctionCall()
      *
-     * @return array<string, array<string, string>>
+     * @return array
      */
-    public static function dataOtherTstringInFunctionCall()
+    public function dataOtherTstringInFunctionCall()
     {
         return [
-            'not arg name - global constant'             => [
-                'testMarker' => '/* testPositionalArgs */',
-                'content'    => 'START_INDEX',
+            [
+                '/* testPositionalArgs */',
+                'START_INDEX',
             ],
-            'not arg name - fully qualified constant'    => [
-                'testMarker' => '/* testPositionalArgs */',
-                'content'    => 'COUNT',
+            [
+                '/* testPositionalArgs */',
+                'COUNT',
             ],
-            'not arg name - namespace relative constant' => [
-                'testMarker' => '/* testPositionalArgs */',
-                'content'    => 'VALUE',
+            [
+                '/* testPositionalArgs */',
+                'VALUE',
             ],
-            'not arg name - unqualified function call'   => [
-                'testMarker' => '/* testNestedFunctionCallInner2 */',
-                'content'    => 'count',
+            [
+                '/* testNestedFunctionCallInner2 */',
+                'count',
             ],
         ];
 
@@ -353,12 +330,12 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testMixedPositionalAndNamedArgsWithTernary()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $true = $this->getTargetToken('/* testMixedPositionalAndNamedArgsWithTernary */', T_TRUE);
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($true + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($true + 1), null, true);
 
         $this->assertSame(
             T_INLINE_ELSE,
@@ -374,7 +351,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $label = $this->getTargetToken('/* testMixedPositionalAndNamedArgsWithTernary */', T_PARAM_NAME, 'name');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -405,7 +382,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testNamedArgWithTernary()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         /*
          * First argument.
@@ -414,7 +391,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $label = $this->getTargetToken('/* testNamedArgWithTernary */', T_PARAM_NAME, 'label');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -435,7 +412,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $true = $this->getTargetToken('/* testNamedArgWithTernary */', T_TRUE);
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($true + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($true + 1), null, true);
 
         $this->assertSame(
             T_INLINE_ELSE,
@@ -455,7 +432,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $label = $this->getTargetToken('/* testNamedArgWithTernary */', T_PARAM_NAME, 'more');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -476,7 +453,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $true = $this->getTargetToken('/* testNamedArgWithTernary */', T_STRING, 'CONSTANT_A');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($true + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($true + 1), null, true);
 
         $this->assertSame(
             T_INLINE_ELSE,
@@ -502,7 +479,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testTernaryWithFunctionCallsInThenElse()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         /*
          * Then.
@@ -511,7 +488,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $label = $this->getTargetToken('/* testTernaryWithFunctionCallsInThenElse */', T_PARAM_NAME, 'label');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -532,7 +509,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $closeParens = $this->getTargetToken('/* testTernaryWithFunctionCallsInThenElse */', T_CLOSE_PARENTHESIS);
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($closeParens + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($closeParens + 1), null, true);
 
         $this->assertSame(
             T_INLINE_ELSE,
@@ -552,7 +529,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $label = $this->getTargetToken('/* testTernaryWithFunctionCallsInThenElse */', T_PARAM_NAME, 'more');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -582,12 +559,12 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testTernaryWithConstantsInThenElse()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $constant = $this->getTargetToken('/* testTernaryWithConstantsInThenElse */', T_STRING, 'CONSTANT_NAME');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($constant + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($constant + 1), null, true);
 
         $this->assertSame(
             T_INLINE_ELSE,
@@ -612,12 +589,12 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testSwitchStatement()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $label = $this->getTargetToken('/* testSwitchCaseWithConstant */', T_STRING, 'MY_CONSTANT');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             T_COLON,
@@ -633,7 +610,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $label = $this->getTargetToken('/* testSwitchCaseWithClassProperty */', T_STRING, 'property');
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             T_COLON,
@@ -649,7 +626,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         $default = $this->getTargetToken('/* testSwitchDefault */', T_DEFAULT);
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($default + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($default + 1), null, true);
 
         $this->assertSame(
             T_COLON,
@@ -674,7 +651,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testParseErrorVariableLabel()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $label = $this->getTargetToken('/* testParseErrorDynamicName */', [T_VARIABLE, T_PARAM_NAME], '$variableStoringParamName');
 
@@ -690,7 +667,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         );
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -712,77 +689,12 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
 
 
     /**
-     * Verify whether the colons are tokenized correctly when a return type is used for an inline
-     * closure/arrow function declaration in a ternary.
-     *
-     * @param string $testMarker The comment prefacing the target token.
-     *
-     * @dataProvider dataOtherColonsInTernary
-     * @covers       PHP_CodeSniffer\Tokenizers\PHP::tokenize
-     *
-     * @return void
-     */
-    public function testOtherColonsInTernary($testMarker)
-    {
-        $tokens = $this->phpcsFile->getTokens();
-
-        $startOfStatement = $this->getTargetToken($testMarker, T_VARIABLE);
-
-        // Walk the statement and check the tokenization.
-        // There should be no T_PARAM_NAME tokens.
-        // First colon should be T_COLON for the return type.
-        // Second colon should be T_INLINE_ELSE for the ternary.
-        // Third colon should be T_COLON for the return type.
-        $colonCount = 0;
-        for ($i = ($startOfStatement + 1); $tokens[$i]['line'] === $tokens[$startOfStatement]['line']; $i++) {
-            $this->assertNotEquals(T_PARAM_NAME, $tokens[$i]['code'], "Token $i is tokenized as parameter label");
-
-            if ($tokens[$i]['content'] === ':') {
-                ++$colonCount;
-
-                if ($colonCount === 1) {
-                    $this->assertSame(T_COLON, $tokens[$i]['code'], 'First colon is not tokenized as T_COLON');
-                } else if ($colonCount === 2) {
-                    $this->assertSame(T_INLINE_ELSE, $tokens[$i]['code'], 'Second colon is not tokenized as T_INLINE_ELSE');
-                } else if ($colonCount === 3) {
-                    $this->assertSame(T_COLON, $tokens[$i]['code'], 'Third colon is not tokenized as T_COLON');
-                } else {
-                    $this->fail('Unexpected colon encountered in statement');
-                }
-            }
-        }
-
-    }//end testOtherColonsInTernary()
-
-
-    /**
-     * Data provider.
-     *
-     * @see testOtherColonsInTernary()
-     *
-     * @return array<string, array<string, string>>
-     */
-    public static function dataOtherColonsInTernary()
-    {
-        return [
-            'closures with return types in ternary'        => [
-                'testMarker' => '/* testTernaryWithClosuresAndReturnTypes */',
-            ],
-            'arrow functions with return types in ternary' => [
-                'testMarker' => '/* testTernaryWithArrowFunctionsAndReturnTypes */',
-            ],
-        ];
-
-    }//end dataOtherColonsInTernary()
-
-
-    /**
      * Verify that reserved keywords used as a parameter label are tokenized as T_PARAM_NAME
      * and that the colon after it is tokenized as a T_COLON.
      *
-     * @param string            $testMarker   The comment prefacing the target token.
-     * @param array<string|int> $tokenTypes   The token codes to look for.
-     * @param string            $tokenContent The token content to look for.
+     * @param string $testMarker   The comment prefacing the target token.
+     * @param array  $tokenTypes   The token codes to look for.
+     * @param string $tokenContent The token content to look for.
      *
      * @dataProvider dataReservedKeywordsAsName
      * @covers       PHP_CodeSniffer\Tokenizers\PHP::tokenize
@@ -791,7 +703,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      */
     public function testReservedKeywordsAsName($testMarker, $tokenTypes, $tokenContent)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
         $label  = $this->getTargetToken($testMarker, $tokenTypes, $tokenContent);
 
         $this->assertSame(
@@ -806,7 +718,7 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
         );
 
         // Get the next non-empty token.
-        $colon = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
+        $colon = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($label + 1), null, true);
 
         $this->assertSame(
             ':',
@@ -832,9 +744,9 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
      *
      * @see testReservedKeywordsAsName()
      *
-     * @return array<string, array<string|array<string|int>>>
+     * @return array
      */
-    public static function dataReservedKeywordsAsName()
+    public function dataReservedKeywordsAsName()
     {
         $reservedKeywords = [
             // '__halt_compiler', NOT TESTABLE
@@ -864,7 +776,6 @@ final class NamedFunctionCallArgumentsTest extends AbstractTokenizerTestCase
             'endif',
             'endswitch',
             'endwhile',
-            'enum',
             'eval',
             'exit',
             'extends',

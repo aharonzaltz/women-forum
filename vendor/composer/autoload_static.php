@@ -85,10 +85,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
             'Prophecy\\' => 9,
             'PackageVersions\\' => 16,
         ),
-        'O' => 
-        array (
-            'OAuth\\' => 6,
-        ),
         'L' => 
         array (
             'Laravel\\Homestead\\' => 18,
@@ -128,8 +124,8 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'bantu\\IniGetWrapper\\' => 
         array (
@@ -263,10 +259,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         array (
             0 => __DIR__ . '/..' . '/composer/package-versions-deprecated/src/PackageVersions',
         ),
-        'OAuth\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/carlos-mg89/oauth/src/OAuth',
-        ),
         'Laravel\\Homestead\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/homestead/src',
@@ -318,6 +310,17 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
             'ProxyManager\\' => 
             array (
                 0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src',
+            ),
+        ),
+        'O' => 
+        array (
+            'OAuth\\Unit' => 
+            array (
+                0 => __DIR__ . '/..' . '/lusitanian/oauth/tests',
+            ),
+            'OAuth' => 
+            array (
+                0 => __DIR__ . '/..' . '/lusitanian/oauth/src',
             ),
         ),
     );

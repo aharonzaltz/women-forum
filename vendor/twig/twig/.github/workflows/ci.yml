@@ -29,12 +29,11 @@ jobs:
                     - '7.4'
                     - '8.0'
                     - '8.1'
-                    - '8.2'
                 experimental: [false]
 
         steps:
             - name: "Checkout code"
-              uses: actions/checkout@v4
+              uses: actions/checkout@v2
 
             - name: "Install PHP with extensions"
               uses: shivammathur/setup-php@v2
@@ -75,7 +74,6 @@ jobs:
                     - '7.4'
                     - '8.0'
                     - '8.1'
-                    - '8.2'
                 extension:
                     - 'extra/cssinliner-extra'
                     - 'extra/html-extra'
@@ -88,7 +86,7 @@ jobs:
 
         steps:
             - name: "Checkout code"
-              uses: actions/checkout@v4
+              uses: actions/checkout@v2
 
             - name: "Install PHP with extensions"
               uses: shivammathur/setup-php@v2
@@ -129,11 +127,11 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - '8.2'
+                    - '7.3'
 
         steps:
             - name: "Checkout code"
-              uses: actions/checkout@v4
+              uses: actions/checkout@v2
 
             - name: "Install PHP with extensions"
               uses: shivammathur/setup-php@v2
@@ -143,3 +141,6 @@ jobs:
                   php-version: ${{ matrix.php-version }}
                   ini-values: memory_limit=-1
                   tools: composer:v2
+
+            - run: bash ./tests/drupal_test.sh
+              shell: "bash"

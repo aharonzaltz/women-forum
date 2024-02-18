@@ -4,21 +4,24 @@
  *
  * @author    Alessandro Chitolina <alekitto@gmail.com>
  * @copyright 2019 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-final class AttributesTest extends AbstractTokenizerTestCase
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
+use PHP_CodeSniffer\Util\Tokens;
+
+class AttributesTest extends AbstractMethodUnitTest
 {
 
 
     /**
      * Test that attributes are parsed correctly.
      *
-     * @param string            $testMarker The comment which prefaces the target token in the test file.
-     * @param int               $length     The number of tokens between opener and closer.
-     * @param array<int|string> $tokenCodes The codes of tokens inside the attributes.
+     * @param string $testMarker The comment which prefaces the target token in the test file.
+     * @param int    $length     The number of tokens between opener and closer.
+     * @param array  $tokenCodes The codes of tokens inside the attributes.
      *
      * @dataProvider dataAttribute
      * @covers       PHP_CodeSniffer\Tokenizers\PHP::tokenize
@@ -29,7 +32,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
      */
     public function testAttribute($testMarker, $length, $tokenCodes)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $attribute = $this->getTargetToken($testMarker, T_ATTRIBUTE);
         $this->assertArrayHasKey('attribute_closer', $tokens[$attribute]);
@@ -62,22 +65,20 @@ final class AttributesTest extends AbstractTokenizerTestCase
      *
      * @see testAttribute()
      *
-     * @return array<string, array<string, string|int|array<int|string>>>
+     * @return array
      */
-    public static function dataAttribute()
+    public function dataAttribute()
     {
         return [
-            'class attribute'                                                                   => [
-                'testMarker' => '/* testAttribute */',
-                'length'     => 2,
-                'tokenCodes' => [
-                    T_STRING
-                ],
+            [
+                '/* testAttribute */',
+                2,
+                [ T_STRING ],
             ],
-            'class attribute with param'                                                        => [
-                'testMarker' => '/* testAttributeWithParams */',
-                'length'     => 7,
-                'tokenCodes' => [
+            [
+                '/* testAttributeWithParams */',
+                7,
+                [
                     T_STRING,
                     T_OPEN_PARENTHESIS,
                     T_STRING,
@@ -86,10 +87,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_PARENTHESIS,
                 ],
             ],
-            'class attribute with named param'                                                  => [
-                'testMarker' => '/* testAttributeWithNamedParam */',
-                'length'     => 10,
-                'tokenCodes' => [
+            [
+                '/* testAttributeWithNamedParam */',
+                10,
+                [
                     T_STRING,
                     T_OPEN_PARENTHESIS,
                     T_PARAM_NAME,
@@ -101,17 +102,15 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_PARENTHESIS,
                 ],
             ],
-            'function attribute'                                                                => [
-                'testMarker' => '/* testAttributeOnFunction */',
-                'length'     => 2,
-                'tokenCodes' => [
-                    T_STRING
-                ],
+            [
+                '/* testAttributeOnFunction */',
+                2,
+                [ T_STRING ],
             ],
-            'function attribute with params'                                                    => [
-                'testMarker' => '/* testAttributeOnFunctionWithParams */',
-                'length'     => 17,
-                'tokenCodes' => [
+            [
+                '/* testAttributeOnFunctionWithParams */',
+                17,
+                [
                     T_STRING,
                     T_OPEN_PARENTHESIS,
                     T_CONSTANT_ENCAPSED_STRING,
@@ -130,10 +129,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_PARENTHESIS,
                 ],
             ],
-            'function attribute with arrow function as param'                                   => [
-                'testMarker' => '/* testAttributeWithShortClosureParameter */',
-                'length'     => 17,
-                'tokenCodes' => [
+            [
+                '/* testAttributeWithShortClosureParameter */',
+                17,
+                [
                     T_STRING,
                     T_OPEN_PARENTHESIS,
                     T_STATIC,
@@ -152,10 +151,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_PARENTHESIS,
                 ],
             ],
-            'function attribute; multiple comma separated classes'                              => [
-                'testMarker' => '/* testAttributeGrouping */',
-                'length'     => 26,
-                'tokenCodes' => [
+            [
+                '/* testAttributeGrouping */',
+                26,
+                [
                     T_STRING,
                     T_COMMA,
                     T_WHITESPACE,
@@ -183,10 +182,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_PARENTHESIS,
                 ],
             ],
-            'function attribute; multiple comma separated classes, one per line'                => [
-                'testMarker' => '/* testAttributeMultiline */',
-                'length'     => 31,
-                'tokenCodes' => [
+            [
+                '/* testAttributeMultiline */',
+                31,
+                [
                     T_WHITESPACE,
                     T_WHITESPACE,
                     T_STRING,
@@ -219,49 +218,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_WHITESPACE,
                 ],
             ],
-            'function attribute; multiple comma separated classes, one per line, with comments' => [
-                'testMarker' => '/* testAttributeMultilineWithComment */',
-                'length'     => 34,
-                'tokenCodes' => [
-                    T_WHITESPACE,
-                    T_WHITESPACE,
-                    T_STRING,
-                    T_COMMA,
-                    T_WHITESPACE,
-                    T_COMMENT,
-                    T_WHITESPACE,
-                    T_STRING,
-                    T_OPEN_PARENTHESIS,
-                    T_COMMENT,
-                    T_WHITESPACE,
-                    T_CONSTANT_ENCAPSED_STRING,
-                    T_CLOSE_PARENTHESIS,
-                    T_COMMA,
-                    T_WHITESPACE,
-                    T_WHITESPACE,
-                    T_STRING,
-                    T_OPEN_PARENTHESIS,
-                    T_CONSTANT_ENCAPSED_STRING,
-                    T_COMMA,
-                    T_WHITESPACE,
-                    T_PARAM_NAME,
-                    T_COLON,
-                    T_WHITESPACE,
-                    T_OPEN_SHORT_ARRAY,
-                    T_CONSTANT_ENCAPSED_STRING,
-                    T_WHITESPACE,
-                    T_DOUBLE_ARROW,
-                    T_WHITESPACE,
-                    T_CONSTANT_ENCAPSED_STRING,
-                    T_CLOSE_SHORT_ARRAY,
-                    T_CLOSE_PARENTHESIS,
-                    T_WHITESPACE,
-                ],
-            ],
-            'function attribute; using partially qualified and fully qualified class names'     => [
-                'testMarker' => '/* testFqcnAttribute */',
-                'length'     => 13,
-                'tokenCodes' => [
+            [
+                '/* testFqcnAttribute */',
+                13,
+                [
                     T_STRING,
                     T_NS_SEPARATOR,
                     T_STRING,
@@ -292,7 +252,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
      */
     public function testTwoAttributesOnTheSameLine()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $attribute = $this->getTargetToken('/* testTwoAttributeOnTheSameLine */', T_ATTRIBUTE);
         $this->assertArrayHasKey('attribute_closer', $tokens[$attribute]);
@@ -316,7 +276,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
      */
     public function testAttributeAndLineComment()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $attribute = $this->getTargetToken('/* testAttributeAndCommentOnTheSameLine */', T_ATTRIBUTE);
         $this->assertArrayHasKey('attribute_closer', $tokens[$attribute]);
@@ -329,12 +289,12 @@ final class AttributesTest extends AbstractTokenizerTestCase
 
 
     /**
-     * Test that attributes on function declaration parameters are parsed correctly.
+     * Test that attribute followed by a line comment is parsed correctly.
      *
-     * @param string            $testMarker The comment which prefaces the target token in the test file.
-     * @param int               $position   The token position (starting from T_FUNCTION) of T_ATTRIBUTE token.
-     * @param int               $length     The number of tokens between opener and closer.
-     * @param array<int|string> $tokenCodes The codes of tokens inside the attributes.
+     * @param string $testMarker The comment which prefaces the target token in the test file.
+     * @param int    $position   The token position (starting from T_FUNCTION) of T_ATTRIBUTE token.
+     * @param int    $length     The number of tokens between opener and closer.
+     * @param array  $tokenCodes The codes of tokens inside the attributes.
      *
      * @dataProvider dataAttributeOnParameters
      *
@@ -346,7 +306,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
      */
     public function testAttributeOnParameters($testMarker, $position, $length, array $tokenCodes)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $function  = $this->getTargetToken($testMarker, T_FUNCTION);
         $attribute = ($function + $position);
@@ -384,24 +344,22 @@ final class AttributesTest extends AbstractTokenizerTestCase
      *
      * @see testAttributeOnParameters()
      *
-     * @return array<string, array<string, string|int|array<int|string>>>
+     * @return array
      */
-    public static function dataAttributeOnParameters()
+    public function dataAttributeOnParameters()
     {
         return [
-            'parameter attribute; single, inline'                   => [
-                'testMarker' => '/* testSingleAttributeOnParameter */',
-                'position'   => 4,
-                'length'     => 2,
-                'tokenCodes' => [
-                    T_STRING
-                ],
+            [
+                '/* testSingleAttributeOnParameter */',
+                4,
+                2,
+                [T_STRING],
             ],
-            'parameter attribute; multiple comma separated, inline' => [
-                'testMarker' => '/* testMultipleAttributesOnParameter */',
-                'position'   => 4,
-                'length'     => 10,
-                'tokenCodes' => [
+            [
+                '/* testMultipleAttributesOnParameter */',
+                4,
+                10,
+                [
                     T_STRING,
                     T_COMMA,
                     T_WHITESPACE,
@@ -413,11 +371,11 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_PARENTHESIS,
                 ],
             ],
-            'parameter attribute; single, multiline'                => [
-                'testMarker' => '/* testMultilineAttributesOnParameter */',
-                'position'   => 4,
-                'length'     => 13,
-                'tokenCodes' => [
+            [
+                '/* testMultilineAttributesOnParameter */',
+                4,
+                13,
+                [
                     T_WHITESPACE,
                     T_WHITESPACE,
                     T_STRING,
@@ -440,10 +398,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
     /**
      * Test that an attribute containing text which looks like a PHP close tag is tokenized correctly.
      *
-     * @param string               $testMarker              The comment which prefaces the target token in the test file.
-     * @param int                  $length                  The number of tokens between opener and closer.
-     * @param array<array<string>> $expectedTokensAttribute The codes of tokens inside the attributes.
-     * @param array<int|string>    $expectedTokensAfter     The codes of tokens after the attributes.
+     * @param string $testMarker              The comment which prefaces the target token in the test file.
+     * @param int    $length                  The number of tokens between opener and closer.
+     * @param array  $expectedTokensAttribute The codes of tokens inside the attributes.
+     * @param array  $expectedTokensAfter     The codes of tokens after the attributes.
      *
      * @covers PHP_CodeSniffer\Tokenizers\PHP::parsePhpAttribute
      *
@@ -453,7 +411,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
      */
     public function testAttributeContainingTextLookingLikeCloseTag($testMarker, $length, array $expectedTokensAttribute, array $expectedTokensAfter)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $attribute = $this->getTargetToken($testMarker, T_ATTRIBUTE);
 
@@ -492,15 +450,15 @@ final class AttributesTest extends AbstractTokenizerTestCase
      *
      * @see dataAttributeOnTextLookingLikeCloseTag()
      *
-     * @return array<string, array<string, string|int|array<array<string>>|array<int|string>>>
+     * @return array
      */
-    public static function dataAttributeOnTextLookingLikeCloseTag()
+    public function dataAttributeOnTextLookingLikeCloseTag()
     {
         return [
-            'function attribute; string param with "?>"'            => [
-                'testMarker'              => '/* testAttributeContainingTextLookingLikeCloseTag */',
-                'length'                  => 5,
-                'expectedTokensAttribute' => [
+            [
+                '/* testAttributeContainingTextLookingLikeCloseTag */',
+                5,
+                [
                     [
                         'T_STRING',
                         'DeprecationReason',
@@ -522,7 +480,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
                         ']',
                     ],
                 ],
-                'expectedTokensAfter'     => [
+                [
                     T_WHITESPACE,
                     T_FUNCTION,
                     T_WHITESPACE,
@@ -534,10 +492,10 @@ final class AttributesTest extends AbstractTokenizerTestCase
                     T_CLOSE_CURLY_BRACKET,
                 ],
             ],
-            'function attribute; string param with "?>"; multiline' => [
-                'testMarker'              => '/* testAttributeContainingMultilineTextLookingLikeCloseTag */',
-                'length'                  => 8,
-                'expectedTokensAttribute' => [
+            [
+                '/* testAttributeContainingMultilineTextLookingLikeCloseTag */',
+                8,
+                [
                     [
                         'T_STRING',
                         'DeprecationReason',
@@ -571,7 +529,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
                         ']',
                     ],
                 ],
-                'expectedTokensAfter'     => [
+                [
                     T_WHITESPACE,
                     T_FUNCTION,
                     T_WHITESPACE,
@@ -599,7 +557,7 @@ final class AttributesTest extends AbstractTokenizerTestCase
      */
     public function testInvalidAttribute()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $attribute = $this->getTargetToken('/* testInvalidAttribute */', T_ATTRIBUTE);
 
@@ -615,13 +573,12 @@ final class AttributesTest extends AbstractTokenizerTestCase
      * @covers PHP_CodeSniffer\Tokenizers\PHP::tokenize
      * @covers PHP_CodeSniffer\Tokenizers\PHP::findCloser
      * @covers PHP_CodeSniffer\Tokenizers\PHP::parsePhpAttribute
-     * @covers PHP_CodeSniffer\Tokenizers\PHP::createAttributesNestingMap
      *
      * @return void
      */
     public function testNestedAttributes()
     {
-        $tokens     = $this->phpcsFile->getTokens();
+        $tokens     = self::$phpcsFile->getTokens();
         $tokenCodes = [
             T_STRING,
             T_NS_SEPARATOR,

@@ -6,12 +6,14 @@
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020-2021 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-final class DoubleArrowTest extends AbstractTokenizerTestCase
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
+
+class DoubleArrowTest extends AbstractMethodUnitTest
 {
 
 
@@ -27,7 +29,7 @@ final class DoubleArrowTest extends AbstractTokenizerTestCase
      */
     public function testDoubleArrow($testMarker)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_DOUBLE_ARROW, T_MATCH_ARROW, T_FN_ARROW]);
         $tokenArray = $tokens[$token];
@@ -43,9 +45,9 @@ final class DoubleArrowTest extends AbstractTokenizerTestCase
      *
      * @see testDoubleArrow()
      *
-     * @return array<string, array<string>>
+     * @return array
      */
-    public static function dataDoubleArrow()
+    public function dataDoubleArrow()
     {
         return [
             'simple_long_array'                          => ['/* testLongArrayArrowSimple */'],
@@ -112,7 +114,7 @@ final class DoubleArrowTest extends AbstractTokenizerTestCase
      */
     public function testMatchArrow($testMarker)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_DOUBLE_ARROW, T_MATCH_ARROW, T_FN_ARROW]);
         $tokenArray = $tokens[$token];
@@ -128,9 +130,9 @@ final class DoubleArrowTest extends AbstractTokenizerTestCase
      *
      * @see testMatchArrow()
      *
-     * @return array<string, array<string>>
+     * @return array
      */
-    public static function dataMatchArrow()
+    public function dataMatchArrow()
     {
         return [
             'single_case'                             => ['/* testMatchArrowSimpleSingleCase */'],
@@ -199,7 +201,7 @@ final class DoubleArrowTest extends AbstractTokenizerTestCase
      */
     public function testFnArrow($testMarker)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_DOUBLE_ARROW, T_MATCH_ARROW, T_FN_ARROW]);
         $tokenArray = $tokens[$token];
@@ -215,9 +217,9 @@ final class DoubleArrowTest extends AbstractTokenizerTestCase
      *
      * @see testFnArrow()
      *
-     * @return array<string, array<string>>
+     * @return array
      */
-    public static function dataFnArrow()
+    public function dataFnArrow()
     {
         return [
             'simple_fn'                             => ['/* testFnArrowSimple */'],

@@ -10,22 +10,23 @@
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 use PHP_CodeSniffer\Util\Tokens;
 
-final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
+class StableCommentWhitespaceTest extends AbstractMethodUnitTest
 {
 
 
     /**
      * Test that comment tokenization with new lines at the end of the comment is stable.
      *
-     * @param string                       $testMarker     The comment prefacing the test.
-     * @param array<array<string, string>> $expectedTokens The tokenization expected.
+     * @param string $testMarker     The comment prefacing the test.
+     * @param array  $expectedTokens The tokenization expected.
      *
      * @dataProvider dataCommentTokenization
      * @covers       PHP_CodeSniffer\Tokenizers\PHP::tokenize
@@ -34,20 +35,12 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
      */
     public function testCommentTokenization($testMarker, $expectedTokens)
     {
-        $tokens  = $this->phpcsFile->getTokens();
+        $tokens  = self::$phpcsFile->getTokens();
         $comment = $this->getTargetToken($testMarker, Tokens::$commentTokens);
 
         foreach ($expectedTokens as $key => $tokenInfo) {
-            $this->assertSame(
-                constant($tokenInfo['type']),
-                $tokens[$comment]['code'],
-                'Token tokenized as '.Tokens::tokenName($tokens[$comment]['code']).', not '.$tokenInfo['type'].' (code)'
-            );
-            $this->assertSame(
-                $tokenInfo['type'],
-                $tokens[$comment]['type'],
-                'Token tokenized as '.$tokens[$comment]['type'].', not '.$tokenInfo['type'].' (type)'
-            );
+            $this->assertSame(constant($tokenInfo['type']), $tokens[$comment]['code']);
+            $this->assertSame($tokenInfo['type'], $tokens[$comment]['type']);
             $this->assertSame($tokenInfo['content'], $tokens[$comment]['content']);
 
             ++$comment;
@@ -61,14 +54,14 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
      *
      * @see testCommentTokenization()
      *
-     * @return array<string, array<string, string|array<array<string, string>>>>
+     * @return array
      */
-    public static function dataCommentTokenization()
+    public function dataCommentTokenization()
     {
         return [
-            'slash comment, single line'                                  => [
-                'testMarker'     => '/* testSingleLineSlashComment */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineSlashComment */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Comment
@@ -81,9 +74,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, single line, trailing'                        => [
-                'testMarker'     => '/* testSingleLineSlashCommentTrailing */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineSlashCommentTrailing */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Comment
@@ -96,9 +89,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash ignore annotation, single line'                        => [
-                'testMarker'     => '/* testSingleLineSlashAnnotation */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineSlashAnnotation */',
+                [
                     [
                         'type'    => 'T_PHPCS_DISABLE',
                         'content' => '// phpcs:disable Stnd.Cat
@@ -111,9 +104,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, multi-line'                                   => [
-                'testMarker'     => '/* testMultiLineSlashComment */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineSlashComment */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Comment1
@@ -136,9 +129,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, multi-line, indented'                         => [
-                'testMarker'     => '/* testMultiLineSlashCommentWithIndent */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineSlashCommentWithIndent */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Comment1
@@ -169,9 +162,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, multi-line, ignore annotation as first line'  => [
-                'testMarker'     => '/* testMultiLineSlashCommentWithAnnotationStart */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineSlashCommentWithAnnotationStart */',
+                [
                     [
                         'type'    => 'T_PHPCS_IGNORE',
                         'content' => '// phpcs:ignore Stnd.Cat
@@ -194,9 +187,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, multi-line, ignore annotation as middle line' => [
-                'testMarker'     => '/* testMultiLineSlashCommentWithAnnotationMiddle */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineSlashCommentWithAnnotationMiddle */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Comment1
@@ -219,9 +212,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, multi-line, ignore annotation as last line'   => [
-                'testMarker'     => '/* testMultiLineSlashCommentWithAnnotationEnd */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineSlashCommentWithAnnotationEnd */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Comment1
@@ -244,9 +237,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, single line'                                   => [
-                'testMarker'     => '/* testSingleLineStarComment */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineStarComment */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Single line star comment */',
@@ -258,9 +251,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, single line, trailing'                         => [
-                'testMarker'     => '/* testSingleLineStarCommentTrailing */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineStarCommentTrailing */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Comment */',
@@ -272,9 +265,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star ignore annotation, single line'                         => [
-                'testMarker'     => '/* testSingleLineStarAnnotation */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineStarAnnotation */',
+                [
                     [
                         'type'    => 'T_PHPCS_IGNORE',
                         'content' => '/* phpcs:ignore Stnd.Cat */',
@@ -286,9 +279,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, multi-line'                                    => [
-                'testMarker'     => '/* testMultiLineStarComment */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineStarComment */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Comment1
@@ -310,9 +303,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, multi-line, indented'                          => [
-                'testMarker'     => '/* testMultiLineStarCommentWithIndent */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineStarCommentWithIndent */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Comment1
@@ -334,9 +327,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, multi-line, ignore annotation as first line'   => [
-                'testMarker'     => '/* testMultiLineStarCommentWithAnnotationStart */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineStarCommentWithAnnotationStart */',
+                [
                     [
                         'type'    => 'T_PHPCS_IGNORE',
                         'content' => '/* @phpcs:ignore Stnd.Cat
@@ -358,9 +351,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, multi-line, ignore annotation as middle line'  => [
-                'testMarker'     => '/* testMultiLineStarCommentWithAnnotationMiddle */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineStarCommentWithAnnotationMiddle */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Comment1
@@ -382,9 +375,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'star comment, multi-line, ignore annotation as last line'    => [
-                'testMarker'     => '/* testMultiLineStarCommentWithAnnotationEnd */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineStarCommentWithAnnotationEnd */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Comment1
@@ -407,9 +400,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                 ],
             ],
 
-            'docblock comment, single line'                               => [
-                'testMarker'     => '/* testSingleLineDocblockComment */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineDocblockComment */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -433,9 +426,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'docblock comment, single line, trailing'                     => [
-                'testMarker'     => '/* testSingleLineDocblockCommentTrailing */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineDocblockCommentTrailing */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -459,9 +452,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'docblock ignore annotation, single line'                     => [
-                'testMarker'     => '/* testSingleLineDocblockAnnotation */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineDocblockAnnotation */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -486,9 +479,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                 ],
             ],
 
-            'docblock comment, multi-line'                                => [
-                'testMarker'     => '/* testMultiLineDocblockComment */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineDocblockComment */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -597,9 +590,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'docblock comment, multi-line, indented'                      => [
-                'testMarker'     => '/* testMultiLineDocblockCommentWithIndent */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineDocblockCommentWithIndent */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -708,9 +701,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'docblock comment, multi-line, ignore annotation'             => [
-                'testMarker'     => '/* testMultiLineDocblockCommentWithAnnotation */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineDocblockCommentWithAnnotation */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -819,9 +812,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'docblock comment, multi-line, ignore annotation as tag'      => [
-                'testMarker'     => '/* testMultiLineDocblockCommentWithTagAnnotation */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineDocblockCommentWithTagAnnotation */',
+                [
                     [
                         'type'    => 'T_DOC_COMMENT_OPEN_TAG',
                         'content' => '/**',
@@ -930,9 +923,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'hash comment, single line'                                   => [
-                'testMarker'     => '/* testSingleLineHashComment */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineHashComment */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '# Comment
@@ -945,9 +938,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'hash comment, single line, trailing'                         => [
-                'testMarker'     => '/* testSingleLineHashCommentTrailing */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineHashCommentTrailing */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '# Comment
@@ -960,9 +953,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'hash comment, multi-line'                                    => [
-                'testMarker'     => '/* testMultiLineHashComment */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineHashComment */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '# Comment1
@@ -985,9 +978,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'hash comment, multi-line, indented'                          => [
-                'testMarker'     => '/* testMultiLineHashCommentWithIndent */',
-                'expectedTokens' => [
+            [
+                '/* testMultiLineHashCommentWithIndent */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '# Comment1
@@ -1018,9 +1011,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'slash comment, single line, without new line at end'         => [
-                'testMarker'     => '/* testSingleLineSlashCommentNoNewLineAtEnd */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineSlashCommentNoNewLineAtEnd */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '// Slash ',
@@ -1032,9 +1025,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'hash comment, single line, without new line at end'          => [
-                'testMarker'     => '/* testSingleLineHashCommentNoNewLineAtEnd */',
-                'expectedTokens' => [
+            [
+                '/* testSingleLineHashCommentNoNewLineAtEnd */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '# Hash ',
@@ -1046,9 +1039,9 @@ final class StableCommentWhitespaceTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'unclosed star comment at end of file'                        => [
-                'testMarker'     => '/* testCommentAtEndOfFile */',
-                'expectedTokens' => [
+            [
+                '/* testCommentAtEndOfFile */',
+                [
                     [
                         'type'    => 'T_COMMENT',
                         'content' => '/* Comment',

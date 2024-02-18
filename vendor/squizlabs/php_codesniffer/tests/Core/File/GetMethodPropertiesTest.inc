@@ -34,23 +34,16 @@ class MyClass {
     /* testMessyNullableReturnMethod */
     public function myFunction() /* comment
         */ :
-        /* comment */ ? // phpcs:ignore Stnd.Cat.Sniff -- For reasons.
+        /* comment */ ? //comment
         array {}
 
     /* testReturnNamespace */
     function myFunction(): \MyNamespace\MyClass {}
 
     /* testReturnMultilineNamespace */
-    // Parse error in PHP 8.0.
     function myFunction(): \MyNamespace /** comment *\/ comment */
                            \MyClass /* comment */
                            \Foo {}
-
-    /* testReturnUnqualifiedName */
-    private function myFunction(): ?MyClass {}
-
-    /* testReturnPartiallyQualifiedName */
-    function myFunction(): Sub\Level\MyClass {}
 }
 
 abstract class MyClass
@@ -77,11 +70,6 @@ $result = array_map(
 class ReturnMe {
     /* testReturnTypeStatic */
     private function myFunction(): static {
-        return $this;
-    }
-
-    /* testReturnTypeNullableStatic */
-    function myNullableFunction(): ?static {
         return $this;
     }
 }
@@ -114,11 +102,11 @@ function unionTypesAllPseudoTypes($var) : false|MIXED|self|parent|static|iterabl
 $closure = function () use($a) :?int|float {};
 
 /* testPHP8PseudoTypeNull */
-// PHP 8.0 - 8.1: Intentional fatal error - null pseudotype is only allowed in union types, but that's not the concern of the method.
+// Intentional fatal error - null pseudotype is only allowed in union types, but that's not the concern of the method.
 function pseudoTypeNull(): null {}
 
 /* testPHP8PseudoTypeFalse */
-// PHP 8.0 - 8.1: Intentional fatal error - false pseudotype is only allowed in union types, but that's not the concern of the method.
+// Intentional fatal error - false pseudotype is only allowed in union types, but that's not the concern of the method.
 function pseudoTypeFalse(): false {}
 
 /* testPHP8PseudoTypeFalseAndBool */
@@ -162,34 +150,3 @@ $closure = function (): string&int {};
 /* testPHP81NullableIntersectionTypes */
 // Intentional fatal error - nullability is not allowed with intersection types, but that's not the concern of the method.
 $closure = function (): ?Foo&Bar {};
-
-/* testPHP82PseudoTypeTrue */
-function pseudoTypeTrue(): ?true {}
-
-/* testPHP82PseudoTypeFalseAndTrue */
-// Intentional fatal error - Type contains both true and false, bool should be used instead, but that's not the concern of the method.
-function pseudoTypeFalseAndTrue(): true|false {}
-
-/* testNotAFunction */
-return true;
-
-/* testPhpcsIssue1264 */
-function foo() : array {
-    echo $foo;
-}
-
-/* testArrowFunctionArrayReturnValue */
-$fn = fn(): array => [a($a, $b)];
-
-/* testArrowFunctionReturnByRef */
-fn&(?string $a) : ?string => $b;
-
-/* testFunctionCallFnPHPCS353-354 */
-$value = $obj->fn(true);
-
-/* testFunctionDeclarationNestedInTernaryPHPCS2975 */
-return (!$a ? [ new class { public function b(): c {} } ] : []);
-
-/* testArrowFunctionLiveCoding */
-// Intentional parse error. This has to be the last test in the file.
-$fn = fn

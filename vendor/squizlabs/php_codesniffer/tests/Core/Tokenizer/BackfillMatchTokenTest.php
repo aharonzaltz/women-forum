@@ -5,14 +5,15 @@
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020-2021 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 use PHP_CodeSniffer\Util\Tokens;
 
-final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
+class BackfillMatchTokenTest extends AbstractMethodUnitTest
 {
 
 
@@ -31,7 +32,7 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      */
     public function testMatchExpression($testMarker, $openerOffset, $closerOffset, $testContent='match')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_STRING, T_MATCH], $testContent);
         $tokenArray = $tokens[$token];
@@ -50,147 +51,147 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      *
      * @see testMatchExpression()
      *
-     * @return array<string, array<string, string|int>>
+     * @return array
      */
-    public static function dataMatchExpression()
+    public function dataMatchExpression()
     {
         return [
             'simple_match'                              => [
-                'testMarker'   => '/* testMatchSimple */',
-                'openerOffset' => 6,
-                'closerOffset' => 33,
+                '/* testMatchSimple */',
+                6,
+                33,
             ],
             'no_trailing_comma'                         => [
-                'testMarker'   => '/* testMatchNoTrailingComma */',
-                'openerOffset' => 6,
-                'closerOffset' => 24,
+                '/* testMatchNoTrailingComma */',
+                6,
+                24,
             ],
             'with_default_case'                         => [
-                'testMarker'   => '/* testMatchWithDefault */',
-                'openerOffset' => 6,
-                'closerOffset' => 33,
+                '/* testMatchWithDefault */',
+                6,
+                33,
             ],
             'expression_in_condition'                   => [
-                'testMarker'   => '/* testMatchExpressionInCondition */',
-                'openerOffset' => 6,
-                'closerOffset' => 77,
+                '/* testMatchExpressionInCondition */',
+                6,
+                77,
             ],
             'multicase'                                 => [
-                'testMarker'   => '/* testMatchMultiCase */',
-                'openerOffset' => 6,
-                'closerOffset' => 40,
+                '/* testMatchMultiCase */',
+                6,
+                40,
             ],
             'multicase_trailing_comma_in_case'          => [
-                'testMarker'   => '/* testMatchMultiCaseTrailingCommaInCase */',
-                'openerOffset' => 6,
-                'closerOffset' => 47,
+                '/* testMatchMultiCaseTrailingCommaInCase */',
+                6,
+                47,
             ],
             'in_closure_not_lowercase'                  => [
-                'testMarker'   => '/* testMatchInClosureNotLowercase */',
-                'openerOffset' => 6,
-                'closerOffset' => 36,
-                'testContent'  => 'Match',
+                '/* testMatchInClosureNotLowercase */',
+                6,
+                36,
+                'Match',
             ],
             'in_arrow_function'                         => [
-                'testMarker'   => '/* testMatchInArrowFunction */',
-                'openerOffset' => 5,
-                'closerOffset' => 36,
+                '/* testMatchInArrowFunction */',
+                5,
+                36,
             ],
             'arrow_function_in_match_no_trailing_comma' => [
-                'testMarker'   => '/* testArrowFunctionInMatchNoTrailingComma */',
-                'openerOffset' => 6,
-                'closerOffset' => 44,
+                '/* testArrowFunctionInMatchNoTrailingComma */',
+                6,
+                44,
             ],
             'in_function_call_param_not_lowercase'      => [
-                'testMarker'   => '/* testMatchInFunctionCallParamNotLowercase */',
-                'openerOffset' => 8,
-                'closerOffset' => 32,
-                'testContent'  => 'MATCH',
+                '/* testMatchInFunctionCallParamNotLowercase */',
+                8,
+                32,
+                'MATCH',
             ],
             'in_method_call_param'                      => [
-                'testMarker'   => '/* testMatchInMethodCallParam */',
-                'openerOffset' => 5,
-                'closerOffset' => 13,
+                '/* testMatchInMethodCallParam */',
+                5,
+                13,
             ],
             'discard_result'                            => [
-                'testMarker'   => '/* testMatchDiscardResult */',
-                'openerOffset' => 6,
-                'closerOffset' => 18,
+                '/* testMatchDiscardResult */',
+                6,
+                18,
             ],
             'duplicate_conditions_and_comments'         => [
-                'testMarker'   => '/* testMatchWithDuplicateConditionsWithComments */',
-                'openerOffset' => 12,
-                'closerOffset' => 59,
+                '/* testMatchWithDuplicateConditionsWithComments */',
+                12,
+                59,
             ],
             'nested_match_outer'                        => [
-                'testMarker'   => '/* testNestedMatchOuter */',
-                'openerOffset' => 6,
-                'closerOffset' => 33,
+                '/* testNestedMatchOuter */',
+                6,
+                33,
             ],
             'nested_match_inner'                        => [
-                'testMarker'   => '/* testNestedMatchInner */',
-                'openerOffset' => 6,
-                'closerOffset' => 14,
+                '/* testNestedMatchInner */',
+                6,
+                14,
             ],
             'ternary_condition'                         => [
-                'testMarker'   => '/* testMatchInTernaryCondition */',
-                'openerOffset' => 6,
-                'closerOffset' => 21,
+                '/* testMatchInTernaryCondition */',
+                6,
+                21,
             ],
             'ternary_then'                              => [
-                'testMarker'   => '/* testMatchInTernaryThen */',
-                'openerOffset' => 6,
-                'closerOffset' => 21,
+                '/* testMatchInTernaryThen */',
+                6,
+                21,
             ],
             'ternary_else'                              => [
-                'testMarker'   => '/* testMatchInTernaryElse */',
-                'openerOffset' => 6,
-                'closerOffset' => 21,
+                '/* testMatchInTernaryElse */',
+                6,
+                21,
             ],
             'array_value'                               => [
-                'testMarker'   => '/* testMatchInArrayValue */',
-                'openerOffset' => 6,
-                'closerOffset' => 21,
+                '/* testMatchInArrayValue */',
+                6,
+                21,
             ],
             'array_key'                                 => [
-                'testMarker'   => '/* testMatchInArrayKey */',
-                'openerOffset' => 6,
-                'closerOffset' => 21,
+                '/* testMatchInArrayKey */',
+                6,
+                21,
             ],
             'returning_array'                           => [
-                'testMarker'   => '/* testMatchreturningArray */',
-                'openerOffset' => 6,
-                'closerOffset' => 125,
+                '/* testMatchreturningArray */',
+                6,
+                125,
             ],
             'nested_in_switch_case_1'                   => [
-                'testMarker'   => '/* testMatchWithDefaultNestedInSwitchCase1 */',
-                'openerOffset' => 6,
-                'closerOffset' => 25,
+                '/* testMatchWithDefaultNestedInSwitchCase1 */',
+                6,
+                25,
             ],
             'nested_in_switch_case_2'                   => [
-                'testMarker'   => '/* testMatchWithDefaultNestedInSwitchCase2 */',
-                'openerOffset' => 6,
-                'closerOffset' => 25,
+                '/* testMatchWithDefaultNestedInSwitchCase2 */',
+                6,
+                25,
             ],
             'nested_in_switch_default'                  => [
-                'testMarker'   => '/* testMatchWithDefaultNestedInSwitchDefault */',
-                'openerOffset' => 6,
-                'closerOffset' => 25,
+                '/* testMatchWithDefaultNestedInSwitchDefault */',
+                6,
+                25,
             ],
             'match_with_nested_switch'                  => [
-                'testMarker'   => '/* testMatchContainingSwitch */',
-                'openerOffset' => 6,
-                'closerOffset' => 180,
+                '/* testMatchContainingSwitch */',
+                6,
+                180,
             ],
             'no_cases'                                  => [
-                'testMarker'   => '/* testMatchNoCases */',
-                'openerOffset' => 6,
-                'closerOffset' => 7,
+                '/* testMatchNoCases */',
+                6,
+                7,
             ],
             'multi_default'                             => [
-                'testMarker'   => '/* testMatchMultiDefault */',
-                'openerOffset' => 6,
-                'closerOffset' => 40,
+                '/* testMatchMultiDefault */',
+                6,
+                40,
             ],
         ];
 
@@ -212,7 +213,7 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      */
     public function testNotAMatchStructure($testMarker, $testContent='match')
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $token      = $this->getTargetToken($testMarker, [T_STRING, T_MATCH], $testContent);
         $tokenArray = $tokens[$token];
@@ -227,7 +228,7 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
         $this->assertArrayNotHasKey('parenthesis_opener', $tokenArray, 'Parenthesis opener is set');
         $this->assertArrayNotHasKey('parenthesis_closer', $tokenArray, 'Parenthesis closer is set');
 
-        $next = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($token + 1), null, true);
+        $next = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($token + 1), null, true);
         if ($next !== false && $tokens[$next]['code'] === T_OPEN_PARENTHESIS) {
             $this->assertArrayNotHasKey('parenthesis_owner', $tokenArray, 'Parenthesis owner is set for opener after');
         }
@@ -240,102 +241,76 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      *
      * @see testNotAMatchStructure()
      *
-     * @return array<string, array<string, string>>
+     * @return array
      */
-    public static function dataNotAMatchStructure()
+    public function dataNotAMatchStructure()
     {
         return [
-            'static_method_call'                   => [
-                'testMarker' => '/* testNoMatchStaticMethodCall */',
-            ],
+            'static_method_call'                   => ['/* testNoMatchStaticMethodCall */'],
             'class_constant_access'                => [
-                'testMarker'  => '/* testNoMatchClassConstantAccess */',
-                'testContent' => 'MATCH',
+                '/* testNoMatchClassConstantAccess */',
+                'MATCH',
             ],
             'class_constant_array_access'          => [
-                'testMarker'  => '/* testNoMatchClassConstantArrayAccessMixedCase */',
-                'testContent' => 'Match',
+                '/* testNoMatchClassConstantArrayAccessMixedCase */',
+                'Match',
             ],
-            'method_call'                          => [
-                'testMarker' => '/* testNoMatchMethodCall */',
-            ],
+            'method_call'                          => ['/* testNoMatchMethodCall */'],
             'method_call_uppercase'                => [
-                'testMarker'  => '/* testNoMatchMethodCallUpper */',
-                'testContent' => 'MATCH',
+                '/* testNoMatchMethodCallUpper */',
+                'MATCH',
             ],
-            'property_access'                      => [
-                'testMarker' => '/* testNoMatchPropertyAccess */',
-            ],
-            'namespaced_function_call'             => [
-                'testMarker' => '/* testNoMatchNamespacedFunctionCall */',
-            ],
-            'namespace_operator_function_call'     => [
-                'testMarker' => '/* testNoMatchNamespaceOperatorFunctionCall */',
-            ],
-            'interface_method_declaration'         => [
-                'testMarker' => '/* testNoMatchInterfaceMethodDeclaration */',
-            ],
-            'class_constant_declaration'           => [
-                'testMarker' => '/* testNoMatchClassConstantDeclarationLower */',
-            ],
-            'class_method_declaration'             => [
-                'testMarker' => '/* testNoMatchClassMethodDeclaration */',
-            ],
-            'property_assigment'                   => [
-                'testMarker' => '/* testNoMatchPropertyAssignment */',
-            ],
+            'property_access'                      => ['/* testNoMatchPropertyAccess */'],
+            'namespaced_function_call'             => ['/* testNoMatchNamespacedFunctionCall */'],
+            'namespace_operator_function_call'     => ['/* testNoMatchNamespaceOperatorFunctionCall */'],
+            'interface_method_declaration'         => ['/* testNoMatchInterfaceMethodDeclaration */'],
+            'class_constant_declaration'           => ['/* testNoMatchClassConstantDeclarationLower */'],
+            'class_method_declaration'             => ['/* testNoMatchClassMethodDeclaration */'],
+            'property_assigment'                   => ['/* testNoMatchPropertyAssignment */'],
             'class_instantiation'                  => [
-                'testMarker'  => '/* testNoMatchClassInstantiation */',
-                'testContent' => 'Match',
+                '/* testNoMatchClassInstantiation */',
+                'Match',
             ],
             'anon_class_method_declaration'        => [
-                'testMarker'  => '/* testNoMatchAnonClassMethodDeclaration */',
-                'testContent' => 'maTCH',
+                '/* testNoMatchAnonClassMethodDeclaration */',
+                'maTCH',
             ],
             'class_declaration'                    => [
-                'testMarker'  => '/* testNoMatchClassDeclaration */',
-                'testContent' => 'Match',
+                '/* testNoMatchClassDeclaration */',
+                'Match',
             ],
             'interface_declaration'                => [
-                'testMarker'  => '/* testNoMatchInterfaceDeclaration */',
-                'testContent' => 'Match',
+                '/* testNoMatchInterfaceDeclaration */',
+                'Match',
             ],
             'trait_declaration'                    => [
-                'testMarker'  => '/* testNoMatchTraitDeclaration */',
-                'testContent' => 'Match',
+                '/* testNoMatchTraitDeclaration */',
+                'Match',
             ],
             'constant_declaration'                 => [
-                'testMarker'  => '/* testNoMatchConstantDeclaration */',
-                'testContent' => 'MATCH',
+                '/* testNoMatchConstantDeclaration */',
+                'MATCH',
             ],
-            'function_declaration'                 => [
-                'testMarker' => '/* testNoMatchFunctionDeclaration */',
-            ],
+            'function_declaration'                 => ['/* testNoMatchFunctionDeclaration */'],
             'namespace_declaration'                => [
-                'testMarker'  => '/* testNoMatchNamespaceDeclaration */',
-                'testContent' => 'Match',
+                '/* testNoMatchNamespaceDeclaration */',
+                'Match',
             ],
             'class_extends_declaration'            => [
-                'testMarker'  => '/* testNoMatchExtendedClassDeclaration */',
-                'testContent' => 'Match',
+                '/* testNoMatchExtendedClassDeclaration */',
+                'Match',
             ],
             'class_implements_declaration'         => [
-                'testMarker'  => '/* testNoMatchImplementedClassDeclaration */',
-                'testContent' => 'Match',
+                '/* testNoMatchImplementedClassDeclaration */',
+                'Match',
             ],
             'use_statement'                        => [
-                'testMarker'  => '/* testNoMatchInUseStatement */',
-                'testContent' => 'Match',
+                '/* testNoMatchInUseStatement */',
+                'Match',
             ],
-            'unsupported_inline_control_structure' => [
-                'testMarker' => '/* testNoMatchMissingCurlies */',
-            ],
-            'unsupported_alternative_syntax'       => [
-                'testMarker' => '/* testNoMatchAlternativeSyntax */',
-            ],
-            'live_coding'                          => [
-                'testMarker' => '/* testLiveCoding */',
-            ],
+            'unsupported_inline_control_structure' => ['/* testNoMatchMissingCurlies */'],
+            'unsupported_alternative_syntax'       => ['/* testNoMatchAlternativeSyntax */'],
+            'live_coding'                          => ['/* testLiveCoding */'],
         ];
 
     }//end dataNotAMatchStructure()
@@ -369,25 +344,25 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      *
      * @see testSwitchExpression()
      *
-     * @return array<string, array<string, string|int>>
+     * @return array
      */
-    public static function dataSwitchExpression()
+    public function dataSwitchExpression()
     {
         return [
             'switch_containing_match'   => [
-                'testMarker'   => '/* testSwitchContainingMatch */',
-                'openerOffset' => 6,
-                'closerOffset' => 174,
+                '/* testSwitchContainingMatch */',
+                6,
+                174,
             ],
             'match_containing_switch_1' => [
-                'testMarker'   => '/* testSwitchNestedInMatch1 */',
-                'openerOffset' => 5,
-                'closerOffset' => 63,
+                '/* testSwitchNestedInMatch1 */',
+                5,
+                63,
             ],
             'match_containing_switch_2' => [
-                'testMarker'   => '/* testSwitchNestedInMatch2 */',
-                'openerOffset' => 5,
-                'closerOffset' => 63,
+                '/* testSwitchNestedInMatch2 */',
+                5,
+                63,
             ],
         ];
 
@@ -422,35 +397,35 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      *
      * @see testSwitchCaseVersusMatch()
      *
-     * @return array<string, array<string, string|int>>
+     * @return array
      */
-    public static function dataSwitchCaseVersusMatch()
+    public function dataSwitchCaseVersusMatch()
     {
         return [
             'switch_with_nested_match_case_1'       => [
-                'testMarker'   => '/* testMatchWithDefaultNestedInSwitchCase1 */',
-                'openerOffset' => 3,
-                'closerOffset' => 55,
+                '/* testMatchWithDefaultNestedInSwitchCase1 */',
+                3,
+                55,
             ],
             'switch_with_nested_match_case_2'       => [
-                'testMarker'   => '/* testMatchWithDefaultNestedInSwitchCase2 */',
-                'openerOffset' => 4,
-                'closerOffset' => 21,
+                '/* testMatchWithDefaultNestedInSwitchCase2 */',
+                4,
+                21,
             ],
             'switch_with_nested_match_default_case' => [
-                'testMarker'   => '/* testMatchWithDefaultNestedInSwitchDefault */',
-                'openerOffset' => 1,
-                'closerOffset' => 38,
+                '/* testMatchWithDefaultNestedInSwitchDefault */',
+                1,
+                38,
             ],
             'match_with_nested_switch_case'         => [
-                'testMarker'   => '/* testSwitchDefaultNestedInMatchCase */',
-                'openerOffset' => 1,
-                'closerOffset' => 18,
+                '/* testSwitchDefaultNestedInMatchCase */',
+                1,
+                18,
             ],
             'match_with_nested_switch_default_case' => [
-                'testMarker'   => '/* testSwitchDefaultNestedInMatchDefault */',
-                'openerOffset' => 1,
-                'closerOffset' => 20,
+                '/* testSwitchDefaultNestedInMatchDefault */',
+                1,
+                20,
             ],
         ];
 
@@ -476,7 +451,7 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      */
     private function scopeTestHelper($token, $openerOffset, $closerOffset, $skipScopeCloserCheck=false)
     {
-        $tokens     = $this->phpcsFile->getTokens();
+        $tokens     = self::$phpcsFile->getTokens();
         $tokenArray = $tokens[$token];
         $tokenType  = $tokenArray['type'];
         $expectedScopeOpener = ($token + $openerOffset);
@@ -531,7 +506,7 @@ final class BackfillMatchTokenTest extends AbstractTokenizerTestCase
      */
     private function parenthesisTestHelper($token)
     {
-        $tokens     = $this->phpcsFile->getTokens();
+        $tokens     = self::$phpcsFile->getTokens();
         $tokenArray = $tokens[$token];
         $tokenType  = $tokenArray['type'];
 

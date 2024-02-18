@@ -14,22 +14,22 @@
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-use PHP_CodeSniffer\Util\Tokens;
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 
-final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
+class UndoNamespacedNameSingleTokenTest extends AbstractMethodUnitTest
 {
 
 
     /**
      * Test that identifier names are tokenized the same across PHP versions, based on the PHP 5/7 tokenization.
      *
-     * @param string                       $testMarker     The comment prefacing the test.
-     * @param array<array<string, string>> $expectedTokens The tokenization expected.
+     * @param string $testMarker     The comment prefacing the test.
+     * @param array  $expectedTokens The tokenization expected.
      *
      * @dataProvider dataIdentifierTokenization
      * @covers       PHP_CodeSniffer\Tokenizers\PHP::tokenize
@@ -38,20 +38,12 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
      */
     public function testIdentifierTokenization($testMarker, $expectedTokens)
     {
-        $tokens     = $this->phpcsFile->getTokens();
+        $tokens     = self::$phpcsFile->getTokens();
         $identifier = $this->getTargetToken($testMarker, constant($expectedTokens[0]['type']));
 
         foreach ($expectedTokens as $key => $tokenInfo) {
-            $this->assertSame(
-                constant($tokenInfo['type']),
-                $tokens[$identifier]['code'],
-                'Token tokenized as '.Tokens::tokenName($tokens[$identifier]['code']).', not '.$tokenInfo['type'].' (code)'
-            );
-            $this->assertSame(
-                $tokenInfo['type'],
-                $tokens[$identifier]['type'],
-                'Token tokenized as '.$tokens[$identifier]['type'].', not '.$tokenInfo['type'].' (type)'
-            );
+            $this->assertSame(constant($tokenInfo['type']), $tokens[$identifier]['code']);
+            $this->assertSame($tokenInfo['type'], $tokens[$identifier]['type']);
             $this->assertSame($tokenInfo['content'], $tokens[$identifier]['content']);
 
             ++$identifier;
@@ -65,14 +57,14 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
      *
      * @see testIdentifierTokenization()
      *
-     * @return array<string, array<string, string|array<array<string, string>>>>
+     * @return array
      */
-    public static function dataIdentifierTokenization()
+    public function dataIdentifierTokenization()
     {
         return [
-            'namespace declaration'                                                                       => [
-                'testMarker'     => '/* testNamespaceDeclaration */',
-                'expectedTokens' => [
+            [
+                '/* testNamespaceDeclaration */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Package',
@@ -83,9 +75,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'namespace declaration, multi-level'                                                          => [
-                'testMarker'     => '/* testNamespaceDeclarationWithLevels */',
-                'expectedTokens' => [
+            [
+                '/* testNamespaceDeclarationWithLevels */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Vendor',
@@ -112,9 +104,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, class'                                                                 => [
-                'testMarker'     => '/* testUseStatement */',
-                'expectedTokens' => [
+            [
+                '/* testUseStatement */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'ClassName',
@@ -125,9 +117,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, class, multi-level'                                                    => [
-                'testMarker'     => '/* testUseStatementWithLevels */',
-                'expectedTokens' => [
+            [
+                '/* testUseStatementWithLevels */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Vendor',
@@ -154,9 +146,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, function'                                                              => [
-                'testMarker'     => '/* testFunctionUseStatement */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionUseStatement */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'function',
@@ -175,9 +167,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, function, multi-level'                                                 => [
-                'testMarker'     => '/* testFunctionUseStatementWithLevels */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionUseStatementWithLevels */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'function',
@@ -212,9 +204,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, constant'                                                              => [
-                'testMarker'     => '/* testConstantUseStatement */',
-                'expectedTokens' => [
+            [
+                '/* testConstantUseStatement */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'const',
@@ -233,9 +225,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, constant, multi-level'                                                 => [
-                'testMarker'     => '/* testConstantUseStatementWithLevels */',
-                'expectedTokens' => [
+            [
+                '/* testConstantUseStatementWithLevels */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'const',
@@ -270,9 +262,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, multi-statement, unqualified class'                                    => [
-                'testMarker'     => '/* testMultiUseUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testMultiUseUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'UnqualifiedClassName',
@@ -283,9 +275,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'import use statement, multi-statement, partially qualified class'                            => [
-                'testMarker'     => '/* testMultiUsePartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testMultiUsePartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Sublevel',
@@ -304,9 +296,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'group use statement, multi-level prefix, mix inside group'                                   => [
-                'testMarker'     => '/* testGroupUseStatement */',
-                'expectedTokens' => [
+            [
+                '/* testGroupUseStatement */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Vendor',
@@ -500,9 +492,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class declaration'                                                                           => [
-                'testMarker'     => '/* testClassName */',
-                'expectedTokens' => [
+            [
+                '/* testClassName */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'MyClass',
@@ -514,9 +506,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class declaration, extends fully qualified name'                                             => [
-                'testMarker'     => '/* testExtendedFQN */',
-                'expectedTokens' => [
+            [
+                '/* testExtendedFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -548,9 +540,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class declaration, implements namespace relative name'                                       => [
-                'testMarker'     => '/* testImplementsRelative */',
-                'expectedTokens' => [
+            [
+                '/* testImplementsRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -569,9 +561,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class declaration, implements fully qualified name'                                          => [
-                'testMarker'     => '/* testImplementsFQN */',
-                'expectedTokens' => [
+            [
+                '/* testImplementsFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -594,9 +586,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class declaration, implements unqualified name'                                              => [
-                'testMarker'     => '/* testImplementsUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testImplementsUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Unqualified',
@@ -607,9 +599,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class declaration, implements partially qualified name'                                      => [
-                'testMarker'     => '/* testImplementsPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testImplementsPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Sub',
@@ -637,9 +629,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'method declaration'                                                                          => [
-                'testMarker'     => '/* testFunctionName */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionName */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'function_name',
@@ -650,9 +642,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'param type declaration, namespace relative name'                                             => [
-                'testMarker'     => '/* testTypeDeclarationRelative */',
-                'expectedTokens' => [
+            [
+                '/* testTypeDeclarationRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -675,9 +667,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'param type declaration, fully qualified name'                                                => [
-                'testMarker'     => '/* testTypeDeclarationFQN */',
-                'expectedTokens' => [
+            [
+                '/* testTypeDeclarationFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -708,9 +700,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'param type declaration, unqualified name'                                                    => [
-                'testMarker'     => '/* testTypeDeclarationUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testTypeDeclarationUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Unqualified',
@@ -725,9 +717,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'param type declaration, partially qualified name'                                            => [
-                'testMarker'     => '/* testTypeDeclarationPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testTypeDeclarationPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_NULLABLE',
                         'content' => '?',
@@ -750,9 +742,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'return type declaration, fully qualified name'                                               => [
-                'testMarker'     => '/* testReturnTypeFQN */',
-                'expectedTokens' => [
+            [
+                '/* testReturnTypeFQN */',
+                [
                     [
                         'type'    => 'T_NULLABLE',
                         'content' => '?',
@@ -771,9 +763,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'function call, namespace relative name'                                                      => [
-                'testMarker'     => '/* testFunctionCallRelative */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionCallRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'NameSpace',
@@ -792,9 +784,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'function call, fully qualified name'                                                         => [
-                'testMarker'     => '/* testFunctionCallFQN */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionCallFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -825,9 +817,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'function call, unqualified name'                                                             => [
-                'testMarker'     => '/* testFunctionCallUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionCallUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'function_name',
@@ -838,9 +830,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'function call, partially qualified name'                                                     => [
-                'testMarker'     => '/* testFunctionCallPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testFunctionPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Level',
@@ -859,9 +851,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'catch, namespace relative name'                                                              => [
-                'testMarker'     => '/* testCatchRelative */',
-                'expectedTokens' => [
+            [
+                '/* testCatchRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -888,9 +880,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'catch, fully qualified name'                                                                 => [
-                'testMarker'     => '/* testCatchFQN */',
-                'expectedTokens' => [
+            [
+                '/* testCatchFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -905,9 +897,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'catch, unqualified name'                                                                     => [
-                'testMarker'     => '/* testCatchUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testCatchUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Exception',
@@ -918,9 +910,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'catch, partially qualified name'                                                             => [
-                'testMarker'     => '/* testCatchPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testCatchPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Level',
@@ -939,9 +931,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class instantiation, namespace relative name'                                                => [
-                'testMarker'     => '/* testNewRelative */',
-                'expectedTokens' => [
+            [
+                '/* testNewRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -960,9 +952,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class instantiation, fully qualified name'                                                   => [
-                'testMarker'     => '/* testNewFQN */',
-                'expectedTokens' => [
+            [
+                '/* testNewFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -985,9 +977,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class instantiation, unqualified name'                                                       => [
-                'testMarker'     => '/* testNewUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testNewUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'ClassName',
@@ -998,9 +990,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'class instantiation, partially qualified name'                                               => [
-                'testMarker'     => '/* testNewPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testNewPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Level',
@@ -1019,9 +1011,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'double colon class access, namespace relative name'                                          => [
-                'testMarker'     => '/* testDoubleColonRelative */',
-                'expectedTokens' => [
+            [
+                '/* testDoubleColonRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -1040,9 +1032,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'double colon class access, fully qualified name'                                             => [
-                'testMarker'     => '/* testDoubleColonFQN */',
-                'expectedTokens' => [
+            [
+                '/* testDoubleColonFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -1057,9 +1049,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'double colon class access, unqualified name'                                                 => [
-                'testMarker'     => '/* testDoubleColonUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testDoubleColonUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'ClassName',
@@ -1070,9 +1062,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'double colon class access, partially qualified name'                                         => [
-                'testMarker'     => '/* testDoubleColonPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testDoubleColonPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Level',
@@ -1091,9 +1083,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'instanceof, namespace relative name'                                                         => [
-                'testMarker'     => '/* testInstanceOfRelative */',
-                'expectedTokens' => [
+            [
+                '/* testInstanceOfRelative */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -1112,9 +1104,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'instanceof, fully qualified name'                                                            => [
-                'testMarker'     => '/* testInstanceOfFQN */',
-                'expectedTokens' => [
+            [
+                '/* testInstanceOfFQN */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',
@@ -1137,9 +1129,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'instanceof, unqualified name'                                                                => [
-                'testMarker'     => '/* testInstanceOfUnqualified */',
-                'expectedTokens' => [
+            [
+                '/* testInstanceOfUnqualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'ClassName',
@@ -1150,9 +1142,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'instanceof, partially qualified name'                                                        => [
-                'testMarker'     => '/* testInstanceOfPartiallyQualified */',
-                'expectedTokens' => [
+            [
+                '/* testInstanceOfPartiallyQualified */',
+                [
                     [
                         'type'    => 'T_STRING',
                         'content' => 'Partially',
@@ -1171,9 +1163,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'function call, namespace relative, with whitespace (invalid in PHP 8)'                       => [
-                'testMarker'     => '/* testInvalidInPHP8Whitespace */',
-                'expectedTokens' => [
+            [
+                '/* testInvalidInPHP8Whitespace */',
+                [
                     [
                         'type'    => 'T_NAMESPACE',
                         'content' => 'namespace',
@@ -1221,9 +1213,9 @@ final class UndoNamespacedNameSingleTokenTest extends AbstractTokenizerTestCase
                     ],
                 ],
             ],
-            'double colon class access, fully qualified, with whitespace and comments (invalid in PHP 8)' => [
-                'testMarker'     => '/* testInvalidInPHP8Comments */',
-                'expectedTokens' => [
+            [
+                '/* testInvalidInPHP8Comments */',
+                [
                     [
                         'type'    => 'T_NS_SEPARATOR',
                         'content' => '\\',

@@ -11,17 +11,11 @@
 
 namespace Prophecy\Doubler\Generator;
 
-use Prophecy\Doubler\Generator\Node\ArgumentTypeNode;
-use Prophecy\Doubler\Generator\Node\ReturnTypeNode;
 use Prophecy\Exception\InvalidArgumentException;
 use Prophecy\Exception\Doubler\ClassMirrorException;
 use ReflectionClass;
-use ReflectionIntersectionType;
 use ReflectionMethod;
-use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionType;
-use ReflectionUnionType;
 
 /**
  * Class mirror.
@@ -31,7 +25,7 @@ use ReflectionUnionType;
  */
 class ClassMirror
 {
-    private const REFLECTABLE_METHODS = array(
+    private static $reflectableMethods = array(
         '__construct',
         '__destruct',
         '__sleep',
@@ -44,13 +38,14 @@ class ClassMirror
     /**
      * Reflects provided arguments into class node.
      *
-     * @param ReflectionClass<object>|null $class
-     * @param ReflectionClass<object>[]    $interfaces
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces
      *
      * @return Node\ClassNode
      *
+     * @throws \Prophecy\Exception\InvalidArgumentException
      */
-    public function reflect(?ReflectionClass $class, array $interfaces)
+    public function reflect(ReflectionClass $class = null, array $interfaces)
     {
         $node = new Node\ClassNode;
 
@@ -90,19 +85,12 @@ class ClassMirror
         return $node;
     }
 
-    /**
-     * @param ReflectionClass<object> $class
-     */
-    private function reflectClassToNode(ReflectionClass $class, Node\ClassNode $node): void
+    private function reflectClassToNode(ReflectionClass $class, Node\ClassNode $node)
     {
         if (true === $class->isFinal()) {
             throw new ClassMirrorException(sprintf(
                 'Could not reflect class %s as it is marked final.', $class->getName()
             ), $class);
-        }
-
-        if (method_exists(ReflectionClass::class, 'isReadOnly')) {
-            $node->setReadOnly($class->isReadOnly());
         }
 
         $node->setParentClass($class->getName());
@@ -117,7 +105,7 @@ class ClassMirror
 
         foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             if (0 === strpos($method->getName(), '_')
-                && !in_array($method->getName(), self::REFLECTABLE_METHODS)) {
+                && !in_array($method->getName(), self::$reflectableMethods)) {
                 continue;
             }
 
@@ -130,10 +118,7 @@ class ClassMirror
         }
     }
 
-    /**
-     * @param ReflectionClass<object> $interface
-     */
-    private function reflectInterfaceToNode(ReflectionClass $interface, Node\ClassNode $node): void
+    private function reflectInterfaceToNode(ReflectionClass $interface, Node\ClassNode $node)
     {
         $node->addInterface($interface->getName());
 
@@ -142,7 +127,7 @@ class ClassMirror
         }
     }
 
-    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode): void
+    private function reflectMethodToNode(ReflectionMethod $method, Node\ClassNode $classNode)
     {
         $node = new Node\MethodNode($method->getName());
 
@@ -158,41 +143,41 @@ class ClassMirror
             $node->setReturnsReference();
         }
 
-        if ($method->hasReturnType()) {
-            \assert($method->getReturnType() !== null);
-            $returnTypes = $this->getTypeHints($method->getReturnType(), $method->getDeclaringClass(), $method->getReturnType()->allowsNull());
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
-        }
-        elseif (method_exists($method, 'hasTentativeReturnType') && $method->hasTentativeReturnType()) {
-            \assert($method->getTentativeReturnType() !== null);
-            $returnTypes = $this->getTypeHints($method->getTentativeReturnType(), $method->getDeclaringClass(), $method->getTentativeReturnType()->allowsNull());
-            $node->setReturnTypeNode(new ReturnTypeNode(...$returnTypes));
+        if (version_compare(PHP_VERSION, '7.0', '>=') && $method->hasReturnType()) {
+            $returnType = PHP_VERSION_ID >= 70100 ? $method->getReturnType()->getName() : (string) $method->getReturnType();
+            $returnTypeLower = strtolower($returnType);
+
+            if ('self' === $returnTypeLower) {
+                $returnType = $method->getDeclaringClass()->getName();
+            }
+            if ('parent' === $returnTypeLower) {
+                $returnType = $method->getDeclaringClass()->getParentClass()->getName();
+            }
+
+            $node->setReturnType($returnType);
+
+            if (version_compare(PHP_VERSION, '7.1', '>=') && $method->getReturnType()->allowsNull()) {
+                $node->setNullableReturnType(true);
+            }
         }
 
         if (is_array($params = $method->getParameters()) && count($params)) {
             foreach ($params as $param) {
-                $this->reflectArgumentToNode($param, $method->getDeclaringClass(), $node);
+                $this->reflectArgumentToNode($param, $node);
             }
         }
 
         $classNode->addMethod($node);
     }
 
-    /**
-     * @param ReflectionClass<object> $declaringClass
-     *
-     * @return void
-     */
-    private function reflectArgumentToNode(ReflectionParameter $parameter, ReflectionClass $declaringClass, Node\MethodNode $methodNode): void
+    private function reflectArgumentToNode(ReflectionParameter $parameter, Node\MethodNode $methodNode)
     {
         $name = $parameter->getName() == '...' ? '__dot_dot_dot__' : $parameter->getName();
         $node = new Node\ArgumentNode($name);
 
-        $typeHints = $this->getTypeHints($parameter->getType(), $declaringClass, $parameter->allowsNull());
+        $node->setTypeHint($this->getTypeHint($parameter));
 
-        $node->setTypeNode(new ArgumentTypeNode(...$typeHints));
-
-        if ($parameter->isVariadic()) {
+        if ($this->isVariadic($parameter)) {
             $node->setAsVariadic();
         }
 
@@ -204,13 +189,14 @@ class ClassMirror
             $node->setAsPassedByReference();
         }
 
+        $node->setAsNullable($this->isNullable($parameter));
 
         $methodNode->addArgument($node);
     }
 
-    private function hasDefaultValue(ReflectionParameter $parameter): bool
+    private function hasDefaultValue(ReflectionParameter $parameter)
     {
-        if ($parameter->isVariadic()) {
+        if ($this->isVariadic($parameter)) {
             return false;
         }
 
@@ -218,12 +204,9 @@ class ClassMirror
             return true;
         }
 
-        return $parameter->isOptional() || ($parameter->allowsNull() && $parameter->getType() && \PHP_VERSION_ID < 80100);
+        return $parameter->isOptional() || $this->isNullable($parameter);
     }
 
-    /**
-     * @return mixed
-     */
     private function getDefaultValue(ReflectionParameter $parameter)
     {
         if (!$parameter->isDefaultValueAvailable()) {
@@ -233,58 +216,45 @@ class ClassMirror
         return $parameter->getDefaultValue();
     }
 
-    /**
-     * @param ReflectionClass<object> $class
-     *
-     * @return list<string>
-     */
-    private function getTypeHints(?ReflectionType $type, ReflectionClass $class, bool $allowsNull) : array
+    private function getTypeHint(ReflectionParameter $parameter)
     {
-        $types = [];
-
-        if ($type instanceof ReflectionNamedType) {
-            $types = [$type->getName()];
-
-        }
-        elseif ($type instanceof ReflectionUnionType) {
-            $types = $type->getTypes();
-            if (\PHP_VERSION_ID >= 80200) {
-                foreach ($types as $reflectionType) {
-                    if ($reflectionType instanceof ReflectionIntersectionType) {
-                        throw new ClassMirrorException('Doubling intersection types is not supported', $class);
-                    }
-                }
-            }
-        }
-        elseif ($type instanceof ReflectionIntersectionType) {
-            throw new ClassMirrorException('Doubling intersection types is not supported', $class);
-        }
-        elseif(is_object($type)) {
-            throw new ClassMirrorException('Unknown reflection type ' . get_class($type), $class);
+        if (null !== $className = $this->getParameterClassName($parameter)) {
+            return $className;
         }
 
-        $types = array_map(
-            function(string $type) use ($class) {
-                if ($type === 'self') {
-                    return $class->getName();
-                }
-                if ($type === 'parent') {
-                    if (false === $class->getParentClass()) {
-                        throw new ClassMirrorException(sprintf('Invalid type "parent" in class "%s" without a parent', $class->getName()), $class);
-                    }
-
-                    return $class->getParentClass()->getName();
-                }
-
-                return $type;
-            },
-            $types
-        );
-
-        if ($types && $types != ['mixed'] && $allowsNull) {
-            $types[] = 'null';
+        if (true === $parameter->isArray()) {
+            return 'array';
         }
 
-        return $types;
+        if (version_compare(PHP_VERSION, '5.4', '>=') && true === $parameter->isCallable()) {
+            return 'callable';
+        }
+
+        if (version_compare(PHP_VERSION, '7.0', '>=') && true === $parameter->hasType()) {
+            return PHP_VERSION_ID >= 70100 ? $parameter->getType()->getName() : (string) $parameter->getType();
+        }
+
+        return null;
+    }
+
+    private function isVariadic(ReflectionParameter $parameter)
+    {
+        return PHP_VERSION_ID >= 50600 && $parameter->isVariadic();
+    }
+
+    private function isNullable(ReflectionParameter $parameter)
+    {
+        return $parameter->allowsNull() && null !== $this->getTypeHint($parameter);
+    }
+
+    private function getParameterClassName(ReflectionParameter $parameter)
+    {
+        try {
+            return $parameter->getClass() ? $parameter->getClass()->getName() : null;
+        } catch (\ReflectionException $e) {
+            preg_match('/\[\s\<\w+?>\s([\w,\\\]+)/s', $parameter, $matches);
+
+            return isset($matches[1]) ? $matches[1] : null;
+        }
     }
 }

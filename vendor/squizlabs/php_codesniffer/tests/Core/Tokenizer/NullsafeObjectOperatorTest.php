@@ -4,20 +4,21 @@
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 use PHP_CodeSniffer\Util\Tokens;
 
-final class NullsafeObjectOperatorTest extends AbstractTokenizerTestCase
+class NullsafeObjectOperatorTest extends AbstractMethodUnitTest
 {
 
     /**
      * Tokens to search for.
      *
-     * @var array<int|string>
+     * @var array
      */
     protected $find = [
         T_NULLSAFE_OBJECT_OPERATOR,
@@ -35,7 +36,7 @@ final class NullsafeObjectOperatorTest extends AbstractTokenizerTestCase
      */
     public function testObjectOperator()
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $operator = $this->getTargetToken('/* testObjectOperator */', $this->find);
         $this->assertSame(T_OBJECT_OPERATOR, $tokens[$operator]['code'], 'Failed asserting code is object operator');
@@ -56,7 +57,7 @@ final class NullsafeObjectOperatorTest extends AbstractTokenizerTestCase
      */
     public function testNullsafeObjectOperator($testMarker)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $operator = $this->getTargetToken($testMarker, $this->find);
         $this->assertSame(T_NULLSAFE_OBJECT_OPERATOR, $tokens[$operator]['code'], 'Failed asserting code is nullsafe object operator');
@@ -70,13 +71,13 @@ final class NullsafeObjectOperatorTest extends AbstractTokenizerTestCase
      *
      * @see testNullsafeObjectOperator()
      *
-     * @return array<string, array<string>>
+     * @return array
      */
-    public static function dataNullsafeObjectOperator()
+    public function dataNullsafeObjectOperator()
     {
         return [
-            'nullsafe operator'                         => ['/* testNullsafeObjectOperator */'],
-            'illegal nullsafe operator (write context)' => ['/* testNullsafeObjectOperatorWriteContext */'],
+            ['/* testNullsafeObjectOperator */'],
+            ['/* testNullsafeObjectOperatorWriteContext */'],
         ];
 
     }//end dataNullsafeObjectOperator()
@@ -96,14 +97,14 @@ final class NullsafeObjectOperatorTest extends AbstractTokenizerTestCase
      */
     public function testTernaryThen($testMarker, $testObjectOperator=false)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $operator = $this->getTargetToken($testMarker, $this->find);
         $this->assertSame(T_INLINE_THEN, $tokens[$operator]['code'], 'Failed asserting code is inline then');
         $this->assertSame('T_INLINE_THEN', $tokens[$operator]['type'], 'Failed asserting type is inline then');
 
         if ($testObjectOperator === true) {
-            $next = $this->phpcsFile->findNext(Tokens::$emptyTokens, ($operator + 1), null, true);
+            $next = self::$phpcsFile->findNext(Tokens::$emptyTokens, ($operator + 1), null, true);
             $this->assertSame(T_OBJECT_OPERATOR, $tokens[$next]['code'], 'Failed asserting code is object operator');
             $this->assertSame('T_OBJECT_OPERATOR', $tokens[$next]['type'], 'Failed asserting type is object operator');
         }
@@ -116,25 +117,21 @@ final class NullsafeObjectOperatorTest extends AbstractTokenizerTestCase
      *
      * @see testTernaryThen()
      *
-     * @return array<string, array<string, string|bool>>
+     * @return array
      */
-    public static function dataTernaryThen()
+    public function dataTernaryThen()
     {
         return [
-            'ternary then'                                         => [
-                'testMarker' => '/* testTernaryThen */',
+            ['/* testTernaryThen */'],
+            [
+                '/* testParseErrorWhitespaceNotAllowed */',
+                true,
             ],
-            'whitespace between question mark and object operator' => [
-                'testMarker'         => '/* testParseErrorWhitespaceNotAllowed */',
-                'testObjectOperator' => true,
+            [
+                '/* testParseErrorCommentNotAllowed */',
+                true,
             ],
-            'comment between question mark and object operator'    => [
-                'testMarker'         => '/* testParseErrorCommentNotAllowed */',
-                'testObjectOperator' => true,
-            ],
-            'parse error/live coding'                              => [
-                'testMarker' => '/* testLiveCoding */',
-            ],
+            ['/* testLiveCoding */'],
         ];
 
     }//end dataTernaryThen()

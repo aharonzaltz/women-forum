@@ -1,25 +1,27 @@
 <?php
 /**
- * Tests the scope opener/closers are set correctly when the namespace keyword is used as an operator.
+ * Tests the adding of the "bracket_opener/closer" keys to use group tokens.
  *
  * @author    Juliette Reinders Folmer <phpcs_nospam@adviesenzo.nl>
  * @copyright 2020 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
-final class ScopeSettingWithNamespaceOperatorTest extends AbstractTokenizerTestCase
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
+
+class ScopeSettingWithNamespaceOperatorTest extends AbstractMethodUnitTest
 {
 
 
     /**
      * Test that the scope opener/closers are set correctly when the namespace keyword is encountered as an operator.
      *
-     * @param string            $testMarker The comment which prefaces the target tokens in the test file.
-     * @param array<int|string> $tokenTypes The token type to search for.
-     * @param array<int|string> $open       Optional. The token type for the scope opener.
-     * @param array<int|string> $close      Optional. The token type for the scope closer.
+     * @param string       $testMarker The comment which prefaces the target tokens in the test file.
+     * @param int|string[] $tokenTypes The token type to search for.
+     * @param int|string[] $open       Optional. The token type for the scope opener.
+     * @param int|string[] $close      Optional. The token type for the scope closer.
      *
      * @dataProvider dataScopeSetting
      * @covers       PHP_CodeSniffer\Tokenizers\Tokenizer::recurseScopeMap
@@ -28,7 +30,7 @@ final class ScopeSettingWithNamespaceOperatorTest extends AbstractTokenizerTestC
      */
     public function testScopeSetting($testMarker, $tokenTypes, $open=T_OPEN_CURLY_BRACKET, $close=T_CLOSE_CURLY_BRACKET)
     {
-        $tokens = $this->phpcsFile->getTokens();
+        $tokens = self::$phpcsFile->getTokens();
 
         $target = $this->getTargetToken($testMarker, $tokenTypes);
         $opener = $this->getTargetToken($testMarker, $open);
@@ -57,36 +59,36 @@ final class ScopeSettingWithNamespaceOperatorTest extends AbstractTokenizerTestC
      *
      * @see testScopeSetting()
      *
-     * @return array<string, array<string, string|array<int|string>>>
+     * @return array
      */
-    public static function dataScopeSetting()
+    public function dataScopeSetting()
     {
         return [
-            'class which extends namespace relative name'           => [
-                'testMarker' => '/* testClassExtends */',
-                'tokenTypes' => [T_CLASS],
+            [
+                '/* testClassExtends */',
+                [T_CLASS],
             ],
-            'class which implements namespace relative name'        => [
-                'testMarker' => '/* testClassImplements */',
-                'tokenTypes' => [T_ANON_CLASS],
+            [
+                '/* testClassImplements */',
+                [T_ANON_CLASS],
             ],
-            'interface which extend namespace relative name'        => [
-                'testMarker' => '/* testInterfaceExtends */',
-                'tokenTypes' => [T_INTERFACE],
+            [
+                '/* testInterfaceExtends */',
+                [T_INTERFACE],
             ],
-            'namespace relative name in function return type'       => [
-                'testMarker' => '/* testFunctionReturnType */',
-                'tokenTypes' => [T_FUNCTION],
+            [
+                '/* testFunctionReturnType */',
+                [T_FUNCTION],
             ],
-            'namespace relative name in closure return type'        => [
-                'testMarker' => '/* testClosureReturnType */',
-                'tokenTypes' => [T_CLOSURE],
+            [
+                '/* testClosureReturnType */',
+                [T_CLOSURE],
             ],
-            'namespace relative name in arrow function return type' => [
-                'testMarker' => '/* testArrowFunctionReturnType */',
-                'tokenTypes' => [T_FN],
-                'open'       => [T_FN_ARROW],
-                'close'      => [T_SEMICOLON],
+            [
+                '/* testArrowFunctionReturnType */',
+                [T_FN],
+                [T_FN_ARROW],
+                [T_SEMICOLON],
             ],
         ];
 

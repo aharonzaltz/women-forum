@@ -31,15 +31,22 @@ class Doubler
     private $namer;
 
     /**
-     * @var list<ClassPatchInterface>
+     * @var ClassPatchInterface[]
      */
     private $patches = array();
 
     /**
-     * @var Instantiator|null
+     * @var \Doctrine\Instantiator\Instantiator
      */
     private $instantiator;
 
+    /**
+     * Initializes doubler.
+     *
+     * @param ClassMirror   $mirror
+     * @param ClassCreator  $creator
+     * @param NameGenerator $namer
+     */
     public function __construct(ClassMirror $mirror = null, ClassCreator $creator = null,
                                 NameGenerator $namer = null)
     {
@@ -51,7 +58,7 @@ class Doubler
     /**
      * Returns list of registered class patches.
      *
-     * @return list<ClassPatchInterface>
+     * @return ClassPatchInterface[]
      */
     public function getClassPatches()
     {
@@ -62,8 +69,6 @@ class Doubler
      * Registers new class patch.
      *
      * @param ClassPatchInterface $patch
-     *
-     * @return void
      */
     public function registerClassPatch(ClassPatchInterface $patch)
     {
@@ -77,13 +82,11 @@ class Doubler
     /**
      * Creates double from specific class or/and list of interfaces.
      *
-     * @template T of object
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces Array of ReflectionClass instances
+     * @param array             $args       Constructor arguments
      *
-     * @param ReflectionClass<T>|null   $class
-     * @param ReflectionClass<object>[] $interfaces Array of ReflectionClass instances
-     * @param array<mixed>|null         $args       Constructor arguments
-     *
-     * @return T&DoubleInterface
+     * @return DoubleInterface
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
@@ -120,12 +123,10 @@ class Doubler
     /**
      * Creates double class and returns its FQN.
      *
-     * @template T of object
+     * @param ReflectionClass   $class
+     * @param ReflectionClass[] $interfaces
      *
-     * @param ReflectionClass<T>|null   $class
-     * @param ReflectionClass<object>[] $interfaces
-     *
-     * @return class-string<T&DoubleInterface>
+     * @return string
      */
     protected function createDoubleClass(ReflectionClass $class = null, array $interfaces)
     {
@@ -137,10 +138,8 @@ class Doubler
                 $patch->apply($node);
             }
         }
-        $node->addInterface(DoubleInterface::class);
 
         $this->creator->create($name, $node);
-        \assert(class_exists($name, false));
 
         return $name;
     }

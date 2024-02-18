@@ -4,9 +4,7 @@
  *
  * @author    Ryan McCue <ryan+gh@hmn.md>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- *
- * @deprecated 3.9.0
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\Generic\Sniffs\Debug;
@@ -37,7 +35,7 @@ class ESLintSniff implements Sniff
     /**
      * Returns the token types that this sniff is interested in.
      *
-     * @return array<int|string>
+     * @return int[]
      */
     public function register()
     {
@@ -53,14 +51,14 @@ class ESLintSniff implements Sniff
      * @param int                         $stackPtr  The position in the stack where
      *                                               the token was found.
      *
-     * @return int
+     * @return void
      * @throws \PHP_CodeSniffer\Exceptions\RuntimeException If jshint.js could not be run
      */
     public function process(File $phpcsFile, $stackPtr)
     {
         $eslintPath = Config::getExecutablePath('eslint');
         if ($eslintPath === null) {
-            return ($phpcsFile->numTokens + 1);
+            return;
         }
 
         $filename = $phpcsFile->getFilename();

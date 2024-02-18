@@ -4,7 +4,7 @@
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Standards\PSR2\Sniffs\Classes;
@@ -65,51 +65,41 @@ class ClassDeclarationSniff extends PEARClassDeclarationSniff
         $stackPtrType = strtolower($tokens[$stackPtr]['content']);
 
         // Check alignment of the keyword and braces.
-        $classModifiers = [
-            T_ABSTRACT => T_ABSTRACT,
-            T_FINAL    => T_FINAL,
-            T_READONLY => T_READONLY,
-        ];
+        if ($tokens[($stackPtr - 1)]['code'] === T_WHITESPACE) {
+            $prevContent = $tokens[($stackPtr - 1)]['content'];
+            if ($prevContent !== $phpcsFile->eolChar) {
+                $blankSpace = substr($prevContent, strpos($prevContent, $phpcsFile->eolChar));
+                $spaces     = strlen($blankSpace);
 
-        $prevNonSpace = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
-        $prevNonEmpty = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+                if (in_array($tokens[($stackPtr - 2)]['code'], [T_ABSTRACT, T_FINAL], true) === true
+                    && $spaces !== 1
+                ) {
+                    $prevContent = strtolower($tokens[($stackPtr - 2)]['content']);
+                    $error       = 'Expected 1 space between %s and %s keywords; %s found';
+                    $data        = [
+                        $prevContent,
+                        $stackPtrType,
+                        $spaces,
+                    ];
 
-        if (isset($classModifiers[$tokens[$prevNonEmpty]['code']]) === true) {
-            $spaces    = 0;
-            $errorCode = 'SpaceBeforeKeyword';
-            if ($tokens[$prevNonEmpty]['line'] !== $tokens[$stackPtr]['line']) {
-                $spaces    = 'newline';
-                $errorCode = 'NewlineBeforeKeyword';
-            } else if ($tokens[($stackPtr - 1)]['code'] === T_WHITESPACE) {
-                $spaces = $tokens[($stackPtr - 1)]['length'];
-            }
-
-            if ($spaces !== 1) {
-                $error = 'Expected 1 space between %s and %s keywords; %s found';
-                $data  = [
-                    strtolower($tokens[$prevNonEmpty]['content']),
+                    $fix = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceBeforeKeyword', $data);
+                    if ($fix === true) {
+                        $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
+                    }
+                }
+            } else if ($tokens[($stackPtr - 2)]['code'] === T_ABSTRACT
+                || $tokens[($stackPtr - 2)]['code'] === T_FINAL
+            ) {
+                $prevContent = strtolower($tokens[($stackPtr - 2)]['content']);
+                $error       = 'Expected 1 space between %s and %s keywords; newline found';
+                $data        = [
+                    $prevContent,
                     $stackPtrType,
-                    $spaces,
                 ];
 
-                if ($prevNonSpace !== $prevNonEmpty) {
-                    // Comment found between modifier and class keyword. Do not auto-fix.
-                    $phpcsFile->addError($error, $stackPtr, $errorCode, $data);
-                } else {
-                    $fix = $phpcsFile->addFixableError($error, $stackPtr, $errorCode, $data);
-                    if ($fix === true) {
-                        if ($spaces === 0) {
-                            $phpcsFile->fixer->addContentBefore($stackPtr, ' ');
-                        } else {
-                            $phpcsFile->fixer->beginChangeset();
-                            $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
-                            for ($i = ($stackPtr - 2); $i > $prevNonSpace; $i--) {
-                                $phpcsFile->fixer->replaceToken($i, ' ');
-                            }
-
-                            $phpcsFile->fixer->endChangeset();
-                        }
-                    }
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'NewlineBeforeKeyword', $data);
+                if ($fix === true) {
+                    $phpcsFile->fixer->replaceToken(($stackPtr - 1), ' ');
                 }
             }//end if
         }//end if
@@ -501,12 +491,12 @@ class ClassDeclarationSniff extends PEARClassDeclarationSniff
 
             if ($fix === true) {
                 $phpcsFile->fixer->beginChangeset();
-                for ($i = ($prevContent + 1); $tokens[$i]['line'] !== $tokens[$closeBrace]['line']; $i++) {
+                for ($i = ($prevContent + 1); $i < $closeBrace; $i++) {
                     $phpcsFile->fixer->replaceToken($i, '');
                 }
 
                 if (strpos($tokens[$prevContent]['content'], $phpcsFile->eolChar) === false) {
-                    $phpcsFile->fixer->addNewline($prevContent);
+                    $phpcsFile->fixer->replaceToken($closeBrace, $phpcsFile->eolChar.$tokens[$closeBrace]['content']);
                 }
 
                 $phpcsFile->fixer->endChangeset();

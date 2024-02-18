@@ -1,17 +1,18 @@
 <?php
 /**
- * Tests the conversion of PHP native context sensitive keywords to T_STRING.
+ * Tests the conversion of context sensitive keywords to T_STRING.
  *
  * @author    Jaroslav Hanslík <kukulich@kukulich.cz>
  * @copyright 2020 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/PHPCSStandards/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
+ * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
 namespace PHP_CodeSniffer\Tests\Core\Tokenizer;
 
+use PHP_CodeSniffer\Tests\Core\AbstractMethodUnitTest;
 use PHP_CodeSniffer\Util\Tokens;
 
-final class ContextSensitiveKeywordsTest extends AbstractTokenizerTestCase
+class ContextSensitiveKeywordsTest extends AbstractMethodUnitTest
 {
 
 
@@ -27,12 +28,12 @@ final class ContextSensitiveKeywordsTest extends AbstractTokenizerTestCase
      */
     public function testStrings($testMarker)
     {
-        $tokens     = $this->phpcsFile->getTokens();
-        $target     = $this->getTargetToken($testMarker, (Tokens::$contextSensitiveKeywords + [T_STRING]));
-        $tokenArray = $tokens[$target];
+        $tokens = self::$phpcsFile->getTokens();
 
-        $this->assertSame(T_STRING, $tokenArray['code'], 'Token tokenized as '.$tokenArray['type'].', not T_STRING (code)');
-        $this->assertSame('T_STRING', $tokenArray['type'], 'Token tokenized as '.$tokenArray['type'].', not T_STRING (type)');
+        $token = $this->getTargetToken($testMarker, (Tokens::$contextSensitiveKeywords + [T_STRING]));
+
+        $this->assertSame(T_STRING, $tokens[$token]['code']);
+        $this->assertSame('T_STRING', $tokens[$token]['type']);
 
     }//end testStrings()
 
@@ -42,99 +43,91 @@ final class ContextSensitiveKeywordsTest extends AbstractTokenizerTestCase
      *
      * @see testStrings()
      *
-     * @return array<string, array<string>>
+     * @return array
      */
-    public static function dataStrings()
+    public function dataStrings()
     {
         return [
-            'constant declaration: abstract'                  => ['/* testAbstract */'],
-            'constant declaration: array'                     => ['/* testArray */'],
-            'constant declaration: as'                        => ['/* testAs */'],
-            'constant declaration: break'                     => ['/* testBreak */'],
-            'constant declaration: callable'                  => ['/* testCallable */'],
-            'constant declaration: case'                      => ['/* testCase */'],
-            'constant declaration: catch'                     => ['/* testCatch */'],
-            'constant declaration: class'                     => ['/* testClass */'],
-            'constant declaration: clone'                     => ['/* testClone */'],
-            'constant declaration: const'                     => ['/* testConst */'],
-            'constant declaration: continue'                  => ['/* testContinue */'],
-            'constant declaration: declare'                   => ['/* testDeclare */'],
-            'constant declaration: default'                   => ['/* testDefault */'],
-            'constant declaration: do'                        => ['/* testDo */'],
-            'constant declaration: echo'                      => ['/* testEcho */'],
-            'constant declaration: else'                      => ['/* testElse */'],
-            'constant declaration: elseif'                    => ['/* testElseIf */'],
-            'constant declaration: empty'                     => ['/* testEmpty */'],
-            'constant declaration: enddeclare'                => ['/* testEndDeclare */'],
-            'constant declaration: endfor'                    => ['/* testEndFor */'],
-            'constant declaration: endforeach'                => ['/* testEndForeach */'],
-            'constant declaration: endif'                     => ['/* testEndIf */'],
-            'constant declaration: endswitch'                 => ['/* testEndSwitch */'],
-            'constant declaration: endwhile'                  => ['/* testEndWhile */'],
-            'constant declaration: enum'                      => ['/* testEnum */'],
-            'constant declaration: eval'                      => ['/* testEval */'],
-            'constant declaration: exit'                      => ['/* testExit */'],
-            'constant declaration: extends'                   => ['/* testExtends */'],
-            'constant declaration: final'                     => ['/* testFinal */'],
-            'constant declaration: finally'                   => ['/* testFinally */'],
-            'constant declaration: fn'                        => ['/* testFn */'],
-            'constant declaration: for'                       => ['/* testFor */'],
-            'constant declaration: foreach'                   => ['/* testForeach */'],
-            'constant declaration: function'                  => ['/* testFunction */'],
-            'constant declaration: global'                    => ['/* testGlobal */'],
-            'constant declaration: goto'                      => ['/* testGoto */'],
-            'constant declaration: if'                        => ['/* testIf */'],
-            'constant declaration: implements'                => ['/* testImplements */'],
-            'constant declaration: include'                   => ['/* testInclude */'],
-            'constant declaration: include_once'              => ['/* testIncludeOnce */'],
-            'constant declaration: instanceof'                => ['/* testInstanceOf */'],
-            'constant declaration: insteadof'                 => ['/* testInsteadOf */'],
-            'constant declaration: interface'                 => ['/* testInterface */'],
-            'constant declaration: isset'                     => ['/* testIsset */'],
-            'constant declaration: list'                      => ['/* testList */'],
-            'constant declaration: match'                     => ['/* testMatch */'],
-            'constant declaration: namespace'                 => ['/* testNamespace */'],
-            'constant declaration: new'                       => ['/* testNew */'],
-            'constant declaration: print'                     => ['/* testPrint */'],
-            'constant declaration: private'                   => ['/* testPrivate */'],
-            'constant declaration: protected'                 => ['/* testProtected */'],
-            'constant declaration: public'                    => ['/* testPublic */'],
-            'constant declaration: readonly'                  => ['/* testReadonly */'],
-            'constant declaration: require'                   => ['/* testRequire */'],
-            'constant declaration: require_once'              => ['/* testRequireOnce */'],
-            'constant declaration: return'                    => ['/* testReturn */'],
-            'constant declaration: static'                    => ['/* testStatic */'],
-            'constant declaration: switch'                    => ['/* testSwitch */'],
-            'constant declaration: throws'                    => ['/* testThrows */'],
-            'constant declaration: trait'                     => ['/* testTrait */'],
-            'constant declaration: try'                       => ['/* testTry */'],
-            'constant declaration: unset'                     => ['/* testUnset */'],
-            'constant declaration: use'                       => ['/* testUse */'],
-            'constant declaration: var'                       => ['/* testVar */'],
-            'constant declaration: while'                     => ['/* testWhile */'],
-            'constant declaration: yield'                     => ['/* testYield */'],
-            'constant declaration: yield_from'                => ['/* testYieldFrom */'],
-            'constant declaration: and'                       => ['/* testAnd */'],
-            'constant declaration: or'                        => ['/* testOr */'],
-            'constant declaration: xor'                       => ['/* testXor */'],
+            ['/* testAbstract */'],
+            ['/* testArray */'],
+            ['/* testAs */'],
+            ['/* testBreak */'],
+            ['/* testCallable */'],
+            ['/* testCase */'],
+            ['/* testCatch */'],
+            ['/* testClass */'],
+            ['/* testClone */'],
+            ['/* testConst */'],
+            ['/* testContinue */'],
+            ['/* testDeclare */'],
+            ['/* testDefault */'],
+            ['/* testDo */'],
+            ['/* testEcho */'],
+            ['/* testElse */'],
+            ['/* testElseIf */'],
+            ['/* testEmpty */'],
+            ['/* testEndDeclare */'],
+            ['/* testEndFor */'],
+            ['/* testEndForeach */'],
+            ['/* testEndIf */'],
+            ['/* testEndSwitch */'],
+            ['/* testEndWhile */'],
+            ['/* testEnum */'],
+            ['/* testEval */'],
+            ['/* testExit */'],
+            ['/* testExtends */'],
+            ['/* testFinal */'],
+            ['/* testFinally */'],
+            ['/* testFn */'],
+            ['/* testFor */'],
+            ['/* testForeach */'],
+            ['/* testFunction */'],
+            ['/* testGlobal */'],
+            ['/* testGoto */'],
+            ['/* testIf */'],
+            ['/* testImplements */'],
+            ['/* testInclude */'],
+            ['/* testIncludeOnce */'],
+            ['/* testInstanceOf */'],
+            ['/* testInsteadOf */'],
+            ['/* testInterface */'],
+            ['/* testIsset */'],
+            ['/* testList */'],
+            ['/* testMatch */'],
+            ['/* testNamespace */'],
+            ['/* testNew */'],
+            ['/* testParent */'],
+            ['/* testPrint */'],
+            ['/* testPrivate */'],
+            ['/* testProtected */'],
+            ['/* testPublic */'],
+            ['/* testReadonly */'],
+            ['/* testRequire */'],
+            ['/* testRequireOnce */'],
+            ['/* testReturn */'],
+            ['/* testSelf */'],
+            ['/* testStatic */'],
+            ['/* testSwitch */'],
+            ['/* testThrows */'],
+            ['/* testTrait */'],
+            ['/* testTry */'],
+            ['/* testUnset */'],
+            ['/* testUse */'],
+            ['/* testVar */'],
+            ['/* testWhile */'],
+            ['/* testYield */'],
+            ['/* testYieldFrom */'],
+            ['/* testAnd */'],
+            ['/* testOr */'],
+            ['/* testXor */'],
 
-            'constant declaration: array in type'             => ['/* testArrayIsTstringInConstType */'],
-            'constant declaration: array, name after type'    => ['/* testArrayNameForTypedConstant */'],
-            'constant declaration: static, name after type'   => ['/* testStaticIsNameForTypedConstant */'],
-            'constant declaration: private, name after type'  => ['/* testPrivateNameForUnionTypedConstant */'],
-            'constant declaration: final, name after type'    => ['/* testFinalNameForIntersectionTypedConstant */'],
+            ['/* testKeywordAfterNamespaceShouldBeString */'],
+            ['/* testNamespaceNameIsString1 */'],
+            ['/* testNamespaceNameIsString2 */'],
+            ['/* testNamespaceNameIsString3 */'],
 
-            'namespace declaration: class'                    => ['/* testKeywordAfterNamespaceShouldBeString */'],
-            'namespace declaration (partial): my'             => ['/* testNamespaceNameIsString1 */'],
-            'namespace declaration (partial): class'          => ['/* testNamespaceNameIsString2 */'],
-            'namespace declaration (partial): foreach'        => ['/* testNamespaceNameIsString3 */'],
-
-            'function declaration: eval'                      => ['/* testKeywordAfterFunctionShouldBeString */'],
-            'function declaration with return by ref: switch' => ['/* testKeywordAfterFunctionByRefShouldBeString */'],
-            'function declaration with return by ref: static' => ['/* testKeywordStaticAfterFunctionByRefShouldBeString */'],
-
-            'function call: static'                           => ['/* testKeywordAsFunctionCallNameShouldBeStringStatic */'],
-            'method call: static'                             => ['/* testKeywordAsMethodCallNameShouldBeStringStatic */'],
+            ['/* testKeywordAfterFunctionShouldBeString */'],
+            ['/* testKeywordAfterFunctionByRefShouldBeString */'],
         ];
 
     }//end dataStrings()
@@ -153,20 +146,12 @@ final class ContextSensitiveKeywordsTest extends AbstractTokenizerTestCase
      */
     public function testKeywords($testMarker, $expectedTokenType)
     {
-        $tokens     = $this->phpcsFile->getTokens();
-        $target     = $this->getTargetToken($testMarker, (Tokens::$contextSensitiveKeywords + [T_ANON_CLASS, T_MATCH_DEFAULT, T_STRING]));
-        $tokenArray = $tokens[$target];
+        $tokens = self::$phpcsFile->getTokens();
 
-        $this->assertSame(
-            constant($expectedTokenType),
-            $tokenArray['code'],
-            'Token tokenized as '.$tokenArray['type'].', not '.$expectedTokenType.' (code)'
-        );
-        $this->assertSame(
-            $expectedTokenType,
-            $tokenArray['type'],
-            'Token tokenized as '.$tokenArray['type'].', not '.$expectedTokenType.' (type)'
-        );
+        $token = $this->getTargetToken($testMarker, (Tokens::$contextSensitiveKeywords + [T_ANON_CLASS, T_MATCH_DEFAULT, T_PARENT, T_SELF, T_STRING]));
+
+        $this->assertSame(constant($expectedTokenType), $tokens[$token]['code']);
+        $this->assertSame($expectedTokenType, $tokens[$token]['type']);
 
     }//end testKeywords()
 
@@ -178,361 +163,343 @@ final class ContextSensitiveKeywordsTest extends AbstractTokenizerTestCase
      *
      * @return array
      */
-    public static function dataKeywords()
+    public function dataKeywords()
     {
         return [
-            'namespace: declaration'                 => [
-                'testMarker'        => '/* testNamespaceIsKeyword */',
-                'expectedTokenType' => 'T_NAMESPACE',
+            [
+                '/* testNamespaceIsKeyword */',
+                'T_NAMESPACE',
             ],
-            'array: default value in const decl'     => [
-                'testMarker'        => '/* testArrayIsKeywordInConstDefault */',
-                'expectedTokenType' => 'T_ARRAY',
+            [
+                '/* testAbstractIsKeyword */',
+                'T_ABSTRACT',
             ],
-            'static: type in constant declaration'   => [
-                'testMarker'        => '/* testStaticIsKeywordAsConstType */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testClassIsKeyword */',
+                'T_CLASS',
             ],
-            'static: value in constant declaration'  => [
-                'testMarker'        => '/* testStaticIsKeywordAsConstDefault */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testExtendsIsKeyword */',
+                'T_EXTENDS',
             ],
-
-            'abstract: class declaration'            => [
-                'testMarker'        => '/* testAbstractIsKeyword */',
-                'expectedTokenType' => 'T_ABSTRACT',
+            [
+                '/* testImplementsIsKeyword */',
+                'T_IMPLEMENTS',
             ],
-            'class: declaration'                     => [
-                'testMarker'        => '/* testClassIsKeyword */',
-                'expectedTokenType' => 'T_CLASS',
+            [
+                '/* testUseIsKeyword */',
+                'T_USE',
             ],
-            'extends: in class declaration'          => [
-                'testMarker'        => '/* testExtendsIsKeyword */',
-                'expectedTokenType' => 'T_EXTENDS',
+            [
+                '/* testInsteadOfIsKeyword */',
+                'T_INSTEADOF',
             ],
-            'implements: in class declaration'       => [
-                'testMarker'        => '/* testImplementsIsKeyword */',
-                'expectedTokenType' => 'T_IMPLEMENTS',
+            [
+                '/* testAsIsKeyword */',
+                'T_AS',
             ],
-            'use: in trait import'                   => [
-                'testMarker'        => '/* testUseIsKeyword */',
-                'expectedTokenType' => 'T_USE',
+            [
+                '/* testConstIsKeyword */',
+                'T_CONST',
             ],
-            'insteadof: in trait import'             => [
-                'testMarker'        => '/* testInsteadOfIsKeyword */',
-                'expectedTokenType' => 'T_INSTEADOF',
+            [
+                '/* testPrivateIsKeyword */',
+                'T_PRIVATE',
             ],
-            'as: in trait import'                    => [
-                'testMarker'        => '/* testAsIsKeyword */',
-                'expectedTokenType' => 'T_AS',
+            [
+                '/* testProtectedIsKeyword */',
+                'T_PROTECTED',
             ],
-            'const: declaration'                     => [
-                'testMarker'        => '/* testConstIsKeyword */',
-                'expectedTokenType' => 'T_CONST',
+            [
+                '/* testPublicIsKeyword */',
+                'T_PUBLIC',
             ],
-            'private: property declaration'          => [
-                'testMarker'        => '/* testPrivateIsKeyword */',
-                'expectedTokenType' => 'T_PRIVATE',
+            [
+                '/* testVarIsKeyword */',
+                'T_VAR',
             ],
-            'protected: property declaration'        => [
-                'testMarker'        => '/* testProtectedIsKeyword */',
-                'expectedTokenType' => 'T_PROTECTED',
+            [
+                '/* testStaticIsKeyword */',
+                'T_STATIC',
             ],
-            'public: property declaration'           => [
-                'testMarker'        => '/* testPublicIsKeyword */',
-                'expectedTokenType' => 'T_PUBLIC',
+            [
+                '/* testReadonlyIsKeyword */',
+                'T_READONLY',
             ],
-            'var: property declaration'              => [
-                'testMarker'        => '/* testVarIsKeyword */',
-                'expectedTokenType' => 'T_VAR',
+            [
+                '/* testFinalIsKeyword */',
+                'T_FINAL',
             ],
-            'static: property declaration'           => [
-                'testMarker'        => '/* testStaticIsKeyword */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testFunctionIsKeyword */',
+                'T_FUNCTION',
             ],
-            'readonly: property declaration'         => [
-                'testMarker'        => '/* testReadonlyIsKeywordForProperty */',
-                'expectedTokenType' => 'T_READONLY',
+            [
+                '/* testCallableIsKeyword */',
+                'T_CALLABLE',
             ],
-            'final: function declaration'            => [
-                'testMarker'        => '/* testFinalIsKeyword */',
-                'expectedTokenType' => 'T_FINAL',
+            [
+                '/* testSelfIsKeyword */',
+                'T_SELF',
             ],
-            'function: declaration'                  => [
-                'testMarker'        => '/* testFunctionIsKeyword */',
-                'expectedTokenType' => 'T_FUNCTION',
+            [
+                '/* testParentIsKeyword */',
+                'T_PARENT',
             ],
-            'callable: param type declaration'       => [
-                'testMarker'        => '/* testCallableIsKeyword */',
-                'expectedTokenType' => 'T_CALLABLE',
-            ],
-            'readonly: anon class declaration'       => [
-                'testMarker'        => '/* testReadonlyIsKeywordForAnonClass */',
-                'expectedTokenType' => 'T_READONLY',
-            ],
-            'return: statement'                      => [
-                'testMarker'        => '/* testReturnIsKeyword */',
-                'expectedTokenType' => 'T_RETURN',
+            [
+                '/* testReturnIsKeyword */',
+                'T_RETURN',
             ],
 
-            'interface: declaration'                 => [
-                'testMarker'        => '/* testInterfaceIsKeyword */',
-                'expectedTokenType' => 'T_INTERFACE',
+            [
+                '/* testInterfaceIsKeyword */',
+                'T_INTERFACE',
             ],
-            'trait: declaration'                     => [
-                'testMarker'        => '/* testTraitIsKeyword */',
-                'expectedTokenType' => 'T_TRAIT',
+            [
+                '/* testTraitIsKeyword */',
+                'T_TRAIT',
             ],
-            'enum: declaration'                      => [
-                'testMarker'        => '/* testEnumIsKeyword */',
-                'expectedTokenType' => 'T_ENUM',
-            ],
-
-            'new: named instantiation'               => [
-                'testMarker'        => '/* testNewIsKeyword */',
-                'expectedTokenType' => 'T_NEW',
-            ],
-            'instanceof: comparison'                 => [
-                'testMarker'        => '/* testInstanceOfIsKeyword */',
-                'expectedTokenType' => 'T_INSTANCEOF',
-            ],
-            'clone'                                  => [
-                'testMarker'        => '/* testCloneIsKeyword */',
-                'expectedTokenType' => 'T_CLONE',
+            [
+                '/* testEnumIsKeyword */',
+                'T_ENUM',
             ],
 
-            'if'                                     => [
-                'testMarker'        => '/* testIfIsKeyword */',
-                'expectedTokenType' => 'T_IF',
+            [
+                '/* testNewIsKeyword */',
+                'T_NEW',
             ],
-            'empty'                                  => [
-                'testMarker'        => '/* testEmptyIsKeyword */',
-                'expectedTokenType' => 'T_EMPTY',
+            [
+                '/* testInstanceOfIsKeyword */',
+                'T_INSTANCEOF',
             ],
-            'elseif'                                 => [
-                'testMarker'        => '/* testElseIfIsKeyword */',
-                'expectedTokenType' => 'T_ELSEIF',
-            ],
-            'else'                                   => [
-                'testMarker'        => '/* testElseIsKeyword */',
-                'expectedTokenType' => 'T_ELSE',
-            ],
-            'endif'                                  => [
-                'testMarker'        => '/* testEndIfIsKeyword */',
-                'expectedTokenType' => 'T_ENDIF',
+            [
+                '/* testCloneIsKeyword */',
+                'T_CLONE',
             ],
 
-            'for'                                    => [
-                'testMarker'        => '/* testForIsKeyword */',
-                'expectedTokenType' => 'T_FOR',
+            [
+                '/* testIfIsKeyword */',
+                'T_IF',
             ],
-            'endfor'                                 => [
-                'testMarker'        => '/* testEndForIsKeyword */',
-                'expectedTokenType' => 'T_ENDFOR',
+            [
+                '/* testEmptyIsKeyword */',
+                'T_EMPTY',
             ],
-
-            'foreach'                                => [
-                'testMarker'        => '/* testForeachIsKeyword */',
-                'expectedTokenType' => 'T_FOREACH',
+            [
+                '/* testElseIfIsKeyword */',
+                'T_ELSEIF',
             ],
-            'endforeach'                             => [
-                'testMarker'        => '/* testEndForeachIsKeyword */',
-                'expectedTokenType' => 'T_ENDFOREACH',
+            [
+                '/* testElseIsKeyword */',
+                'T_ELSE',
             ],
-
-            'switch'                                 => [
-                'testMarker'        => '/* testSwitchIsKeyword */',
-                'expectedTokenType' => 'T_SWITCH',
-            ],
-            'case: in switch'                        => [
-                'testMarker'        => '/* testCaseIsKeyword */',
-                'expectedTokenType' => 'T_CASE',
-            ],
-            'default: in switch'                     => [
-                'testMarker'        => '/* testDefaultIsKeyword */',
-                'expectedTokenType' => 'T_DEFAULT',
-            ],
-            'endswitch'                              => [
-                'testMarker'        => '/* testEndSwitchIsKeyword */',
-                'expectedTokenType' => 'T_ENDSWITCH',
-            ],
-            'break: in switch'                       => [
-                'testMarker'        => '/* testBreakIsKeyword */',
-                'expectedTokenType' => 'T_BREAK',
-            ],
-            'continue: in switch'                    => [
-                'testMarker'        => '/* testContinueIsKeyword */',
-                'expectedTokenType' => 'T_CONTINUE',
+            [
+                '/* testEndIfIsKeyword */',
+                'T_ENDIF',
             ],
 
-            'do'                                     => [
-                'testMarker'        => '/* testDoIsKeyword */',
-                'expectedTokenType' => 'T_DO',
+            [
+                '/* testForIsKeyword */',
+                'T_FOR',
             ],
-            'while'                                  => [
-                'testMarker'        => '/* testWhileIsKeyword */',
-                'expectedTokenType' => 'T_WHILE',
-            ],
-            'endwhile'                               => [
-                'testMarker'        => '/* testEndWhileIsKeyword */',
-                'expectedTokenType' => 'T_ENDWHILE',
+            [
+                '/* testEndForIsKeyword */',
+                'T_ENDFOR',
             ],
 
-            'try'                                    => [
-                'testMarker'        => '/* testTryIsKeyword */',
-                'expectedTokenType' => 'T_TRY',
+            [
+                '/* testForeachIsKeyword */',
+                'T_FOREACH',
             ],
-            'throw: statement'                       => [
-                'testMarker'        => '/* testThrowIsKeyword */',
-                'expectedTokenType' => 'T_THROW',
-            ],
-            'catch'                                  => [
-                'testMarker'        => '/* testCatchIsKeyword */',
-                'expectedTokenType' => 'T_CATCH',
-            ],
-            'finally'                                => [
-                'testMarker'        => '/* testFinallyIsKeyword */',
-                'expectedTokenType' => 'T_FINALLY',
+            [
+                '/* testEndForeachIsKeyword */',
+                'T_ENDFOREACH',
             ],
 
-            'global'                                 => [
-                'testMarker'        => '/* testGlobalIsKeyword */',
-                'expectedTokenType' => 'T_GLOBAL',
+            [
+                '/* testSwitchIsKeyword */',
+                'T_SWITCH',
             ],
-            'echo'                                   => [
-                'testMarker'        => '/* testEchoIsKeyword */',
-                'expectedTokenType' => 'T_ECHO',
+            [
+                '/* testCaseIsKeyword */',
+                'T_CASE',
             ],
-            'print: statement'                       => [
-                'testMarker'        => '/* testPrintIsKeyword */',
-                'expectedTokenType' => 'T_PRINT',
+            [
+                '/* testDefaultIsKeyword */',
+                'T_DEFAULT',
             ],
-            'die: statement'                         => [
-                'testMarker'        => '/* testDieIsKeyword */',
-                'expectedTokenType' => 'T_EXIT',
+            [
+                '/* testEndSwitchIsKeyword */',
+                'T_ENDSWITCH',
             ],
-            'eval'                                   => [
-                'testMarker'        => '/* testEvalIsKeyword */',
-                'expectedTokenType' => 'T_EVAL',
+            [
+                '/* testBreakIsKeyword */',
+                'T_BREAK',
             ],
-            'exit: statement'                        => [
-                'testMarker'        => '/* testExitIsKeyword */',
-                'expectedTokenType' => 'T_EXIT',
-            ],
-            'isset'                                  => [
-                'testMarker'        => '/* testIssetIsKeyword */',
-                'expectedTokenType' => 'T_ISSET',
-            ],
-            'unset'                                  => [
-                'testMarker'        => '/* testUnsetIsKeyword */',
-                'expectedTokenType' => 'T_UNSET',
+            [
+                '/* testContinueIsKeyword */',
+                'T_CONTINUE',
             ],
 
-            'include'                                => [
-                'testMarker'        => '/* testIncludeIsKeyword */',
-                'expectedTokenType' => 'T_INCLUDE',
+            [
+                '/* testDoIsKeyword */',
+                'T_DO',
             ],
-            'include_once'                           => [
-                'testMarker'        => '/* testIncludeOnceIsKeyword */',
-                'expectedTokenType' => 'T_INCLUDE_ONCE',
+            [
+                '/* testWhileIsKeyword */',
+                'T_WHILE',
             ],
-            'require'                                => [
-                'testMarker'        => '/* testRequireIsKeyword */',
-                'expectedTokenType' => 'T_REQUIRE',
-            ],
-            'require_once'                           => [
-                'testMarker'        => '/* testRequireOnceIsKeyword */',
-                'expectedTokenType' => 'T_REQUIRE_ONCE',
+            [
+                '/* testEndWhileIsKeyword */',
+                'T_ENDWHILE',
             ],
 
-            'list'                                   => [
-                'testMarker'        => '/* testListIsKeyword */',
-                'expectedTokenType' => 'T_LIST',
+            [
+                '/* testTryIsKeyword */',
+                'T_TRY',
             ],
-            'goto'                                   => [
-                'testMarker'        => '/* testGotoIsKeyword */',
-                'expectedTokenType' => 'T_GOTO',
+            [
+                '/* testThrowIsKeyword */',
+                'T_THROW',
             ],
-            'match'                                  => [
-                'testMarker'        => '/* testMatchIsKeyword */',
-                'expectedTokenType' => 'T_MATCH',
+            [
+                '/* testCatchIsKeyword */',
+                'T_CATCH',
             ],
-            'default: in match expression'           => [
-                'testMarker'        => '/* testMatchDefaultIsKeyword */',
-                'expectedTokenType' => 'T_MATCH_DEFAULT',
-            ],
-            'fn'                                     => [
-                'testMarker'        => '/* testFnIsKeyword */',
-                'expectedTokenType' => 'T_FN',
+            [
+                '/* testFinallyIsKeyword */',
+                'T_FINALLY',
             ],
 
-            'yield'                                  => [
-                'testMarker'        => '/* testYieldIsKeyword */',
-                'expectedTokenType' => 'T_YIELD',
+            [
+                '/* testGlobalIsKeyword */',
+                'T_GLOBAL',
             ],
-            'yield from'                             => [
-                'testMarker'        => '/* testYieldFromIsKeyword */',
-                'expectedTokenType' => 'T_YIELD_FROM',
+            [
+                '/* testEchoIsKeyword */',
+                'T_ECHO',
             ],
-
-            'declare'                                => [
-                'testMarker'        => '/* testDeclareIsKeyword */',
-                'expectedTokenType' => 'T_DECLARE',
+            [
+                '/* testPrintIsKeyword */',
+                'T_PRINT',
             ],
-            'enddeclare'                             => [
-                'testMarker'        => '/* testEndDeclareIsKeyword */',
-                'expectedTokenType' => 'T_ENDDECLARE',
+            [
+                '/* testDieIsKeyword */',
+                'T_EXIT',
             ],
-
-            'and: in if'                             => [
-                'testMarker'        => '/* testAndIsKeyword */',
-                'expectedTokenType' => 'T_LOGICAL_AND',
+            [
+                '/* testEvalIsKeyword */',
+                'T_EVAL',
             ],
-            'or: in if'                              => [
-                'testMarker'        => '/* testOrIsKeyword */',
-                'expectedTokenType' => 'T_LOGICAL_OR',
+            [
+                '/* testExitIsKeyword */',
+                'T_EXIT',
             ],
-            'xor: in if'                             => [
-                'testMarker'        => '/* testXorIsKeyword */',
-                'expectedTokenType' => 'T_LOGICAL_XOR',
+            [
+                '/* testIssetIsKeyword */',
+                'T_ISSET',
             ],
-
-            'class: anon class declaration'          => [
-                'testMarker'        => '/* testAnonymousClassIsKeyword */',
-                'expectedTokenType' => 'T_ANON_CLASS',
-            ],
-            'extends: anon class declaration'        => [
-                'testMarker'        => '/* testExtendsInAnonymousClassIsKeyword */',
-                'expectedTokenType' => 'T_EXTENDS',
-            ],
-            'implements: anon class declaration'     => [
-                'testMarker'        => '/* testImplementsInAnonymousClassIsKeyword */',
-                'expectedTokenType' => 'T_IMPLEMENTS',
-            ],
-            'static: class instantiation'            => [
-                'testMarker'        => '/* testClassInstantiationStaticIsKeyword */',
-                'expectedTokenType' => 'T_STATIC',
-            ],
-            'namespace: operator'                    => [
-                'testMarker'        => '/* testNamespaceInNameIsKeyword */',
-                'expectedTokenType' => 'T_NAMESPACE',
+            [
+                '/* testUnsetIsKeyword */',
+                'T_UNSET',
             ],
 
-            'static: closure declaration'            => [
-                'testMarker'        => '/* testStaticIsKeywordBeforeClosure */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testIncludeIsKeyword */',
+                'T_INCLUDE',
             ],
-            'static: parameter type (illegal)'       => [
-                'testMarker'        => '/* testStaticIsKeywordWhenParamType */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testIncludeOnceIsKeyword */',
+                'T_INCLUDE_ONCE',
             ],
-            'static: arrow function declaration'     => [
-                'testMarker'        => '/* testStaticIsKeywordBeforeArrow */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testRequireIsKeyword */',
+                'T_REQUIRE',
             ],
-            'static: return type for arrow function' => [
-                'testMarker'        => '/* testStaticIsKeywordWhenReturnType */',
-                'expectedTokenType' => 'T_STATIC',
+            [
+                '/* testRequireOnceIsKeyword */',
+                'T_REQUIRE_ONCE',
+            ],
+
+            [
+                '/* testListIsKeyword */',
+                'T_LIST',
+            ],
+            [
+                '/* testGotoIsKeyword */',
+                'T_GOTO',
+            ],
+            [
+                '/* testMatchIsKeyword */',
+                'T_MATCH',
+            ],
+            [
+                '/* testMatchDefaultIsKeyword */',
+                'T_MATCH_DEFAULT',
+            ],
+            [
+                '/* testFnIsKeyword */',
+                'T_FN',
+            ],
+
+            [
+                '/* testYieldIsKeyword */',
+                'T_YIELD',
+            ],
+            [
+                '/* testYieldFromIsKeyword */',
+                'T_YIELD_FROM',
+            ],
+
+            [
+                '/* testDeclareIsKeyword */',
+                'T_DECLARE',
+            ],
+            [
+                '/* testEndDeclareIsKeyword */',
+                'T_ENDDECLARE',
+            ],
+
+            [
+                '/* testAndIsKeyword */',
+                'T_LOGICAL_AND',
+            ],
+            [
+                '/* testOrIsKeyword */',
+                'T_LOGICAL_OR',
+            ],
+            [
+                '/* testXorIsKeyword */',
+                'T_LOGICAL_XOR',
+            ],
+
+            [
+                '/* testAnonymousClassIsKeyword */',
+                'T_ANON_CLASS',
+            ],
+            [
+                '/* testExtendsInAnonymousClassIsKeyword */',
+                'T_EXTENDS',
+            ],
+            [
+                '/* testImplementsInAnonymousClassIsKeyword */',
+                'T_IMPLEMENTS',
+            ],
+            [
+                '/* testClassInstantiationParentIsKeyword */',
+                'T_PARENT',
+            ],
+            [
+                '/* testClassInstantiationSelfIsKeyword */',
+                'T_SELF',
+            ],
+            [
+                '/* testClassInstantiationStaticIsKeyword */',
+                'T_STATIC',
+            ],
+            [
+                '/* testNamespaceInNameIsKeyword */',
+                'T_NAMESPACE',
             ],
         ];
 
