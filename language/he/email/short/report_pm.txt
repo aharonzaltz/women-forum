@@ -1,4 +1,4 @@
-Subject: דיווח בנוגע להודעה פרטית- "{SUBJECT}"
+Subject: דיווח בנוגע להודעה פרטית- "{TOPIC_TITLE}"
 
 שלום {USERNAME},
 

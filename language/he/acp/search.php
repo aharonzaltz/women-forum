@@ -48,8 +48,6 @@ $lang = array_merge($lang, array(
 	'CONTINUE_INDEXING'						=> 'המשך בביצוע האגירה הקודם',
 	'CONTINUE_INDEXING_EXPLAIN'				=> 'תהליך אגירה התחיל. כדי לגשת לעמוד מאגר החיפוש תצטרך להשלים את הביצוע או לבטל אותו.',
 	'CREATE_INDEX'							=> 'צור מאגר',
-	'DEFAULT_SEARCH_RETURN_CHARS'			=> 'מספר ברירת מחדל של התווים שחיפוש יפעל',
-	'DEFAULT_SEARCH_RETURN_CHARS_EXPLAIN'	=> 'The default number of characters that will be returned while searching. A value of 0 will return the entire post.',
 
 	'DELETE_INDEX'							=> 'מחק מאגר',
 	'DELETING_INDEX_IN_PROGRESS'			=> 'מחיקת המאגר בביצוע',

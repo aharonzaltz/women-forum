@@ -4149,7 +4149,7 @@ class phpbb_cache_container extends \Symfony\Component\DependencyInjection\Conta
      */
     protected function getViewonlineHelperService()
     {
-        return $this->services['viewonline_helper'] = new \phpbb\viewonline_helper(${($_ = isset($this->services['filesystem']) ? $this->services['filesystem'] : ($this->services['filesystem'] = new \phpbb\filesystem\filesystem())) && false ?: '_'}, ${($_ = isset($this->services['dbal.conn']) ? $this->services['dbal.conn'] : ($this->services['dbal.conn'] = new \phpbb\db\driver\factory($this))) && false ?: '_'});
+        return $this->services['viewonline_helper'] = new \phpbb\viewonline_helper(${($_ = isset($this->services['filesystem']) ? $this->services['filesystem'] : ($this->services['filesystem'] = new \phpbb\filesystem\filesystem())) && false ?: '_'});
     }
 
     public function getParameter($name)
@@ -4444,32 +4444,38 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
     /**
      * @var \Closure|null initializer responsible for generating the wrapped object
      */
-    private $valueHolder685f0 = null;
+    private $valueHolder6d586c2 = null;
 
     /**
      * @var \Closure|null initializer responsible for generating the wrapped object
      */
-    private $initializer05bf8 = null;
+    private $initializer6d586c2 = null;
 
     /**
      * @var bool[] map of public properties of the parent class
      */
-    private static $publicProperties2f672 = [
+    private static $publicProperties6d586c2 = [
         
     ];
 
+    /**
+     * {@inheritDoc}
+     */
     public function tokenize(\Twig\Source $source)
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, 'tokenize', array('source' => $source), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, 'tokenize', array('source' => $source), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
-        return $this->valueHolder685f0->tokenize($source);
+        return $this->valueHolder6d586c2->tokenize($source);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function fix_begin_tokens($code, $parent_nodes = [])
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, 'fix_begin_tokens', array('code' => $code, 'parent_nodes' => $parent_nodes), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, 'fix_begin_tokens', array('code' => $code, 'parent_nodes' => $parent_nodes), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
-        return $this->valueHolder685f0->fix_begin_tokens($code, $parent_nodes);
+        return $this->valueHolder6d586c2->fix_begin_tokens($code, $parent_nodes);
     }
 
     /**
@@ -4481,46 +4487,52 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
     {
         static $reflection;
 
-        $reflection = $reflection ?? $reflection = new \ReflectionClass(__CLASS__);
-        $instance = $reflection->newInstanceWithoutConstructor();
+        $reflection = $reflection ?: $reflection = new \ReflectionClass(__CLASS__);
+        $instance = (new \ReflectionClass(get_class()))->newInstanceWithoutConstructor();
 
         \Closure::bind(function (\Twig\Lexer $instance) {
-            unset($instance->isInitialized, $instance->tokens, $instance->code, $instance->cursor, $instance->lineno, $instance->end, $instance->state, $instance->states, $instance->brackets, $instance->env, $instance->source, $instance->options, $instance->regexes, $instance->position, $instance->positions, $instance->currentVarBlockLine);
+            unset($instance->tokens, $instance->code, $instance->cursor, $instance->lineno, $instance->end, $instance->state, $instance->states, $instance->brackets, $instance->env, $instance->source, $instance->options, $instance->regexes, $instance->position, $instance->positions, $instance->currentVarBlockLine);
         }, $instance, 'Twig\\Lexer')->__invoke($instance);
 
-        $instance->initializer05bf8 = $initializer;
+        $instance->initializer6d586c2 = $initializer;
 
         return $instance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function __construct(\Twig\Environment $env, array $options = [])
     {
         static $reflection;
 
-        if (! $this->valueHolder685f0) {
+        if (! $this->valueHolder6d586c2) {
             $reflection = $reflection ?: new \ReflectionClass('phpbb\\template\\twig\\lexer');
-            $this->valueHolder685f0 = $reflection->newInstanceWithoutConstructor();
+            $this->valueHolder6d586c2 = $reflection->newInstanceWithoutConstructor();
         \Closure::bind(function (\Twig\Lexer $instance) {
-            unset($instance->isInitialized, $instance->tokens, $instance->code, $instance->cursor, $instance->lineno, $instance->end, $instance->state, $instance->states, $instance->brackets, $instance->env, $instance->source, $instance->options, $instance->regexes, $instance->position, $instance->positions, $instance->currentVarBlockLine);
+            unset($instance->tokens, $instance->code, $instance->cursor, $instance->lineno, $instance->end, $instance->state, $instance->states, $instance->brackets, $instance->env, $instance->source, $instance->options, $instance->regexes, $instance->position, $instance->positions, $instance->currentVarBlockLine);
         }, $this, 'Twig\\Lexer')->__invoke($this);
 
         }
 
-        $this->valueHolder685f0->__construct($env, $options);
+        $this->valueHolder6d586c2->__construct($env, $options);
     }
 
+    /**
+     * @param string $name
+     */
     public function & __get($name)
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, '__get', ['name' => $name], $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, '__get', ['name' => $name], $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
-        if (isset(self::$publicProperties2f672[$name])) {
-            return $this->valueHolder685f0->$name;
+        if (isset(self::$publicProperties6d586c2[$name])) {
+            return $this->valueHolder6d586c2->$name;
         }
 
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
 
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder685f0;
+            $targetObject = $this->valueHolder6d586c2;
 
             $backtrace = debug_backtrace(false);
             trigger_error(
@@ -4537,7 +4549,7 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
             return;
         }
 
-        $targetObject = $this->valueHolder685f0;
+        $targetObject = $this->valueHolder6d586c2;
         $accessor = function & () use ($targetObject, $name) {
             return $targetObject->$name;
         };
@@ -4549,20 +4561,24 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
         return $returnValue;
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
     public function __set($name, $value)
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, '__set', array('name' => $name, 'value' => $value), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, '__set', array('name' => $name, 'value' => $value), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
 
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder685f0;
+            $targetObject = $this->valueHolder6d586c2;
 
             return $targetObject->$name = $value;
             return;
         }
 
-        $targetObject = $this->valueHolder685f0;
+        $targetObject = $this->valueHolder6d586c2;
         $accessor = function & () use ($targetObject, $name, $value) {
             return $targetObject->$name = $value;
         };
@@ -4574,20 +4590,23 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
         return $returnValue;
     }
 
+    /**
+     * @param string $name
+     */
     public function __isset($name)
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, '__isset', array('name' => $name), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, '__isset', array('name' => $name), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
 
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder685f0;
+            $targetObject = $this->valueHolder6d586c2;
 
             return isset($targetObject->$name);
             return;
         }
 
-        $targetObject = $this->valueHolder685f0;
+        $targetObject = $this->valueHolder6d586c2;
         $accessor = function () use ($targetObject, $name) {
             return isset($targetObject->$name);
         };
@@ -4599,20 +4618,23 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
         return $returnValue;
     }
 
+    /**
+     * @param string $name
+     */
     public function __unset($name)
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, '__unset', array('name' => $name), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, '__unset', array('name' => $name), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
         $realInstanceReflection = new \ReflectionClass(get_parent_class($this));
 
         if (! $realInstanceReflection->hasProperty($name)) {
-            $targetObject = $this->valueHolder685f0;
+            $targetObject = $this->valueHolder6d586c2;
 
             unset($targetObject->$name);
             return;
         }
 
-        $targetObject = $this->valueHolder685f0;
+        $targetObject = $this->valueHolder6d586c2;
         $accessor = function () use ($targetObject, $name) {
             unset($targetObject->$name);
         };
@@ -4626,48 +4648,63 @@ class lexer_6d586c2 extends \phpbb\template\twig\lexer implements \ProxyManager\
 
     public function __clone()
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, '__clone', array(), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, '__clone', array(), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
-        $this->valueHolder685f0 = clone $this->valueHolder685f0;
+        $this->valueHolder6d586c2 = clone $this->valueHolder6d586c2;
     }
 
     public function __sleep()
     {
-        $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, '__sleep', array(), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, '__sleep', array(), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
 
-        return array('valueHolder685f0');
+        return array('valueHolder6d586c2');
     }
 
     public function __wakeup()
     {
         \Closure::bind(function (\Twig\Lexer $instance) {
-            unset($instance->isInitialized, $instance->tokens, $instance->code, $instance->cursor, $instance->lineno, $instance->end, $instance->state, $instance->states, $instance->brackets, $instance->env, $instance->source, $instance->options, $instance->regexes, $instance->position, $instance->positions, $instance->currentVarBlockLine);
+            unset($instance->tokens, $instance->code, $instance->cursor, $instance->lineno, $instance->end, $instance->state, $instance->states, $instance->brackets, $instance->env, $instance->source, $instance->options, $instance->regexes, $instance->position, $instance->positions, $instance->currentVarBlockLine);
         }, $this, 'Twig\\Lexer')->__invoke($this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setProxyInitializer(\Closure $initializer = null)
     {
-        $this->initializer05bf8 = $initializer;
+        $this->initializer6d586c2 = $initializer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getProxyInitializer()
     {
-        return $this->initializer05bf8;
+        return $this->initializer6d586c2;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function initializeProxy() : bool
     {
-        return $this->initializer05bf8 && ($this->initializer05bf8->__invoke($valueHolder685f0, $this, 'initializeProxy', array(), $this->initializer05bf8) || 1) && $this->valueHolder685f0 = $valueHolder685f0;
+        return $this->initializer6d586c2 && ($this->initializer6d586c2->__invoke($valueHolder6d586c2, $this, 'initializeProxy', array(), $this->initializer6d586c2) || 1) && $this->valueHolder6d586c2 = $valueHolder6d586c2;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function isProxyInitialized() : bool
     {
-        return null !== $this->valueHolder685f0;
+        return null !== $this->valueHolder6d586c2;
     }
 
-    public function getWrappedValueHolderValue() : ?object
+    /**
+     * {@inheritDoc}
+     */
+    public function getWrappedValueHolderValue()
     {
-        return $this->valueHolder685f0;
+        return $this->valueHolder6d586c2;
     }
 
 

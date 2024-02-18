@@ -87,8 +87,6 @@ $lang = array_merge($lang, array(
 	'RESULT_DAYS'		=> 'הגבל תוצאות לפי זמן כתיבה',
 	'RESULT_SORT'		=> 'סדר את התוצאות עפ"י',
 	'RETURN_FIRST'		=> 'מספר התווים אשר יוצגו מכל הודעה שתימצא',
-	'RETURN_FIRST_EXPLAIN'	=> 'קבע 0 כדי להציג את כל הנושא.',
-
 	'GO_TO_SEARCH_ADV'	=> 'עבור לחיפוש מתקדם',
 
 	'SEARCHED_FOR'		=> 'חפש לפי התנאים',

@@ -15,7 +15,7 @@ namespace phpbb\db\migration\data\v33x;
 
 class profilefield_youtube_update extends \phpbb\db\migration\migration
 {
-	public static $youtube_url_matcher = 'https:\\/\\/(www\\.)?youtube\\.com\\/.+';
+	protected $youtube_url_matcher = 'https:\\/\\/(www\\.)?youtube\\.com\\/.+';
 
 	public function effectively_installed()
 	{
@@ -30,7 +30,7 @@ class profilefield_youtube_update extends \phpbb\db\migration\migration
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		return !$row || $row['field_validation'] === self::$youtube_url_matcher;
+		return !$row || $row['field_validation'] === $this->youtube_url_matcher;
 	}
 
 	public static function depends_on()
@@ -48,18 +48,19 @@ class profilefield_youtube_update extends \phpbb\db\migration\migration
 		$profile_fields = $this->table_prefix . 'profile_fields';
 		$profile_fields_data = $this->table_prefix . 'profile_fields_data';
 
-		$field_data = [
-			'field_length'		=> 40,
-			'field_minlen'		=> strlen('https://youtube.com/c/') + 1,
-			'field_maxlen'		=> 255,
-			'field_validation'	=> self::$youtube_url_matcher,
-			'field_contact_url'	=> '%s'
-		];
+		$field_validation = $this->db->sql_escape($this->youtube_url_matcher);
 
-		$sql = 'UPDATE ' . $profile_fields . '
-			SET ' . $this->db->sql_build_array('UPDATE', $field_data) . "
-			WHERE field_name = 'phpbb_youtube'";
-		$this->db->sql_query($sql);
+		$min_length = strlen('https://youtube.com/c/') + 1;
+
+		$this->db->sql_query(
+			"UPDATE $profile_fields SET
+				field_length = '40',
+				field_minlen = '$min_length',
+				field_maxlen = '255',
+				field_validation = '$field_validation',
+				field_contact_url = '%s'
+				WHERE field_name = 'phpbb_youtube'"
+		);
 
 		$yt_profile_field = 'pf_phpbb_youtube';
 		$prepend_legacy_youtube_url = $this->db->sql_concatenate(

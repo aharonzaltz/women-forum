@@ -420,7 +420,7 @@ class container_builder
 	 *
 	 * @return string Path to the cache directory.
 	 */
-	public function get_cache_dir()
+	protected function get_cache_dir()
 	{
 		return $this->cache_dir ?: $this->phpbb_root_path . 'cache/' . $this->get_environment() . '/';
 	}

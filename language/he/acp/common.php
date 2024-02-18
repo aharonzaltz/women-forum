@@ -226,6 +226,16 @@ $lang = array_merge($lang, array(
 
 	'BACK'					=> 'חזור',
 
+	'CANNOT_CHANGE_FILE_GROUP'	=> 'לא ניתן לשנות את הקבוצה של הקובץ',
+	'CANNOT_CHANGE_FILE_PERMISSIONS'	=> 'לא ניתן לשנות את ההרשאות של הקובץ',
+	'CANNOT_COPY_FILES'		=> 'לא ניתן להעתיק קבצים',
+	'CANNOT_CREATE_SYMLINK'	=> 'לא ניתן ליצור קישור סימבולי',
+	'CANNOT_DELETE_FILES'	=> 'לא ניתן למחוק קבצים מהמערכת',
+	'CANNOT_DUMP_FILE'		=> 'לא ניתן לייצר קובץ dump',
+	'CANNOT_MIRROR_DIRECTORY'	=> 'לא ניתן לשכפל תיקייה',
+	'CANNOT_RENAME_FILE'	=> 'לא ניתן לשנות שם קובץ במערכת',
+	'CANNOT_TOUCH_FILES'	=> 'לא ניתן להסיק אם הקובץ קיים',
+
 	'CONTAINER_EXCEPTION' => 'אירעה תקלה בבנייה של המכולה עקב הרחבה מותקנת. מסיבה זו, כל ההרחבות נוטרלו באופן זמני. נא לנסות לטהר את מטמון הפורום. כל ההרחבות יופעלו מחדש באופן אוטומטי ברגע שתיפתר הבעיה במכולה. אם תקלה זו ממשיכה, נא לבקר ב־<a href="https://www.phpbb.com/support">phpBB.com</a> לתמיכה.',
 	'EXCEPTION' => 'חריגה',
 
@@ -235,7 +245,6 @@ $lang = array_merge($lang, array(
 	'CRON_NO_SUCH_TASK'		=> 'Could not find cron task “%s”.',
 	'CRON_NO_TASK'			=> 'No cron tasks need to be run right now.',
 	'CRON_NO_TASKS'			=> 'No cron tasks could be found.',
-	'CSV_INVALID'			=> 'The provided comma-separated setting “%1$s” is invalid. The values should be delimited by comma only, it should not contain any leading or trailing delimiters.',
 	'CURRENT_VERSION'		=> 'גרסה נוכחית',
 
 	'DEACTIVATE'				=> 'הפסק',
@@ -316,8 +325,6 @@ $lang = array_merge($lang, array(
 	'TOTAL_SIZE'			=> 'גודל מוחלט',
 
 	'UCP'					=> 'לוח בקרה למשתמש',
-	'URL_INVALID'			=> 'כתובת הURL שסופקה להגדרות ה- “%1$s” אינה זמינה.',
-	'URL_SCHEME_INVALID'	=> 'The provided scheme “%2$s” in comma-separated setting “%1$s” is invalid. Scheme should start with a latin character followed by alphanumeric characters, hyphens or dots.',	
 	'USERNAMES_EXPLAIN'		=> 'הכנס כל שם משתמש בשורה נפרדת.',
 	'USER_CONTROL_PANEL'	=> 'לוח בקרה למשתמש',
 
@@ -365,7 +372,7 @@ $lang = array_merge($lang, array(
 	'DATABASE_SERVER_INFO'	=> 'שרת בסיס נתונים',
 	'DATABASE_SIZE'			=> 'גודל בסיס נתונים',
 
-	// Environment configuration checks, mbstring related
+	// Enviroment configuration checks, mbstring related
 	'ERROR_MBSTRING_FUNC_OVERLOAD'					=> 'פנקציית overloading הוגדרה לא נכון',
 	'ERROR_MBSTRING_FUNC_OVERLOAD_EXPLAIN'			=> '<var>mbstring.func_overload</var> חייב להיות מוגדר ל0 או ל4. אתה יכול לבדוק את הערך הנוכחי בעמוד <samp>פרטי PHP</samp>.',
 	'ERROR_MBSTRING_ENCODING_TRANSLATION'			=> 'קידוד תכונת השקיפות הוגדר לא נכון',
@@ -374,9 +381,7 @@ $lang = array_merge($lang, array(
 	'ERROR_MBSTRING_HTTP_INPUT_EXPLAIN'				=> '<var>mbstring.http_input</var> חייב להיות מוגדר ל־<samp>pass</samp>. אתה יכול לבדוק את הערך הנוכחי בעמוד <samp>פרטי PHP</samp>.',
 	'ERROR_MBSTRING_HTTP_OUTPUT'					=> 'ממיר תכונת הפלט של HTTP הוגדר לא נכון',
 	'ERROR_MBSTRING_HTTP_OUTPUT_EXPLAIN'			=> '<var>mbstring.http_output</var> חייב להיות מוגדר ל־<samp>pass</samp>. אתה יכול לבדוק את הערך הנוכחי בעמוד <samp>פרטי PHP</samp>.',
-	'ERROR_DEFAULT_CHARSET'							=> 'Default charset is improperly configured',
-	'ERROR_DEFAULT_CHARSET_EXPLAIN'					=> '<var>default_charset</var> must be set to <samp>UTF-8</samp>. You can check the current value on the <samp>PHP information</samp> page.',
-	
+
 	'FILES_PER_DAY'		=> 'קבצים מצורפים ליום',
 	'FORUM_STATS'		=> 'סטטיסטיקות המערכת',
 
@@ -504,13 +509,13 @@ $lang = array_merge($lang, array(
 	'LOG_ACL_ADD_ADMIN_GLOBAL_A_'		=> '<strong>הוסיף או ערך מנהלים ראשיים</strong><br />» %s',
 	'LOG_ACL_ADD_MOD_GLOBAL_M_'			=> '<strong>הוסיף או ערך מנהלים גלובליים</strong><br />» %s',
 
-	'LOG_ACL_ADD_USER_LOCAL_F_'			=> '<strong>הוסיף או ערך הרשאת פורום של משתמשים</strong> %1$s$<br />» %2$s',
-	'LOG_ACL_ADD_USER_LOCAL_M_'			=> '<strong>הוסיף או ערך הרשאת מנהל פורום של משתמשים</strong> %1$s-ל<br />» %2$s',
-	'LOG_ACL_ADD_GROUP_LOCAL_F_'		=> '<strong>הוסיף או ערך הרשאת פורום של קבוצות</strong> %1$s-ל<br />» %2$s',
-	'LOG_ACL_ADD_GROUP_LOCAL_M_'		=> '<strong>הוסיף או ערך הרשאת מנהל פורום של קבוצות</strong> %1$s-ל<br />» %2$s',
+	'LOG_ACL_ADD_USER_LOCAL_F_'			=> '<strong>הוסיף או ערך הרשאת פורום של משתמשים</strong> מ־%1$s<br />» %2$s',
+	'LOG_ACL_ADD_USER_LOCAL_M_'			=> '<strong>הוסיף או ערך הרשאת מנהל פורום של משתמשים</strong> מ־%1$s<br />» %2$s',
+	'LOG_ACL_ADD_GROUP_LOCAL_F_'		=> '<strong>הוסיף או ערך הרשאת פורום של קבוצות</strong> מ־%1$s<br />» %2$s',
+	'LOG_ACL_ADD_GROUP_LOCAL_M_'		=> '<strong>הוסיף או ערך הרשאת מנהל פורום של קבוצות</strong> מ־%1$s<br />» %2$s',
 
-	'LOG_ACL_ADD_MOD_LOCAL_M_'			=> '<strong>הוסיף או ערך מנהלים</strong> %1$s עבור<br />» %2$s',
-	'LOG_ACL_ADD_FORUM_LOCAL_F_'		=> '<strong>הוסיף או ערך הרשאות פורומים</strong> %1$s עבור<br />» %2$s',
+	'LOG_ACL_ADD_MOD_LOCAL_M_'			=> '<strong>הוסיף או ערך מנהלים</strong> מ־%1$s<br />» %2$s',
+	'LOG_ACL_ADD_FORUM_LOCAL_F_'		=> '<strong>הוסיף או ערך הרשאות פורומים</strong> מ־%1$s<br />» %2$s',
 
 	'LOG_ACL_DEL_ADMIN_GLOBAL_A_'		=> '<strong>הסיר מנהלים ראשיים</strong><br />» %s',
 	'LOG_ACL_DEL_MOD_GLOBAL_M_'			=> '<strong>הסיר מנהלים גלובליים</strong><br />» %s',
@@ -738,8 +743,6 @@ $lang = array_merge($lang, array(
 	'LOG_SEARCH_INDEX_CREATED'	=> '<strong>צור חבילת חיפוש עבור</strong><br />» %s',
 	'LOG_SEARCH_INDEX_REMOVED'	=> '<strong>מחק חבילת חיפוש עבור</strong><br />» %s',
 	'LOG_SPHINX_ERROR'			=> '<strong>Sphinx Error</strong><br />» %s',
-	'LOG_SPAMHAUS_OPEN_RESOLVER'		=> 'Spamhaus does not allow queries using an open resolver. Blacklist checking has been disabled. For more information, see https://www.spamhaus.com/product/help-for-spamhaus-public-mirror-users/.',
-	'LOG_SPAMHAUS_VOLUME_LIMIT'			=> 'Spamhaus query volume limit has been exceeded. Blacklist checking has been disabled. For more information, see https://www.spamhaus.com/product/help-for-spamhaus-public-mirror-users/.',
 	'LOG_STYLE_ADD'				=> '<strong>הוסיף עיצוב חדש</strong><br />» %s',
 	'LOG_STYLE_DELETE'			=> '<strong>מחק עיצוב</strong><br />» %s',
 	'LOG_STYLE_EDIT_DETAILS'	=> '<strong>ערך עיצוב</strong><br />» %s',

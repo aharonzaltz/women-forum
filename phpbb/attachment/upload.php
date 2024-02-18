@@ -48,9 +48,6 @@ class upload
 	/** @var dispatcher */
 	protected $phpbb_dispatcher;
 
-	/** @var string */
-	protected $phpbb_root_path;
-
 	/** @var plupload Plupload */
 	protected $plupload;
 

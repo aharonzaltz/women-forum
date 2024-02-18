@@ -111,7 +111,7 @@ $lang = array_merge($lang, array(
 	'GROUP_USERS_ADDED'				=> 'New users added to group successfully.',
 	'GROUP_USERS_EXIST'				=> 'The selected users are already members.',
 	'GROUP_USERS_REMOVE'			=> 'Users removed from group and new defaults set successfully.',
-	'GROUP_USERS_INVALID'			=> 'לא נוספו משתמשים לבקוצה משום שהמשתמשים הבאים אינם קימים: %s',
+
 	'LEGEND_EXPLAIN'				=> 'These are the groups which are displayed in the group legend:',
 	'LEGEND_SETTINGS'				=> 'Legend settings',
 	'LEGEND_SORT_GROUPNAME'			=> 'Sort legend by group name',

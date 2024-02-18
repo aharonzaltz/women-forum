@@ -42,7 +42,7 @@ $lang = array_merge($lang, array(
 	'ACP_BBCODES_EXPLAIN'		=> 'BBCode -פונקציה מיוחדת של HTML, המאפשרת לצור שליטה על הצורה בה משהו מוצג. מעמוד זה אתה יכול להוסיף, למחוק וערוך BBCode מותאם אישית.',
 	'ADD_BBCODE'				=> 'הוסף BBCode חדש',
 
-	'BBCODE_DANGER'				=> 'ככל הנראה ה־BBCode אותו אתה מנסה להוסיף אינו בטוח. אם ה-BBCode משתמש באפשרות {TEXT} בהקשר רגיש, נסה להשתמש באפשרות מגבילה יותר. המשך רק אם אתה מבין את הסיכון הקיים.',
+	'BBCODE_DANGER'				=> 'ככל הנראה ה־BBCode אותו אתה מנסה להוסיף משתמש בתג {TEXT} בתוך תכונת HTML. קיימת אפשרות לאירוע אבטחה מסוג XSS. נסה להשתמש באפשרויות מגבילות יותר כמו {SIMPLETEXT} או {INTTEXT} במקום. המשך רק אם אתה מבין את הסיכון הקיים ואתה מבין שהשימוש ב־{TEXT} הוא בלתי נמנע.',
 	'BBCODE_DANGER_PROCEED'		=> 'המשך\', //\'אני מבין את הסיכון',
 
 	'BBCODE_ADDED'				=> 'BBCode נוסף בהצלחה.',
@@ -53,9 +53,10 @@ $lang = array_merge($lang, array(
 	'BBCODE_HELPLINE_EXPLAIN'	=> 'שדה זה הוא הטקסט שיופיע במעבר עכבר על הBBCode.',
 	'BBCODE_HELPLINE_TEXT'		=> 'הטקסט של שורת העזר',
 	'BBCODE_HELPLINE_TOO_LONG'	=> 'הטקסט של שורת העזר שהזנת ארוך מדי.',
-	'BBCODE_INVALID_TEMPLATE'	=> 'תבנית ה-BBCode אינה זמינה.',
+
 	'BBCODE_INVALID_TAG_NAME'	=> 'השם שבחרת כבר קיים.',
 	'BBCODE_INVALID'			=> 'הBBCode בנוי בצורה לא תקינה.',
+	'BBCODE_OPEN_ENDED_TAG'		=> 'התגית צריכה להכיל גם תג פותח וגם תג סוגר.',
 	'BBCODE_TAG'				=> 'תגית',
 	'BBCODE_TAG_TOO_LONG'		=> 'השם שבחרת לתגית ארוך מדי.',
 	'BBCODE_TAG_DEF_TOO_LONG'	=> 'ההגדרה שציינת לתגית ארוכה מדי, אנא כתוב הגדרה קצרה יותר.',
@@ -77,13 +78,13 @@ $lang = array_merge($lang, array(
 	'TOO_MANY_BBCODES'		=> 'אינך יכול ליצור עוד BBCode, אנא מחק אחד או יותר על מנת ליצור BBCode חדש.',
 
 	'tokens'	=>	array(
-		'TEXT'			=> 'Any text, including foreign characters, numbers, etc…',
+		'TEXT'			=> 'Any text, including foreign characters, numbers, etc… You should not use this token in HTML tags. Instead try to use IDENTIFIER, INTTEXT or SIMPLETEXT.',
 		'SIMPLETEXT'	=> 'Characters from the latin alphabet (A-Z), numbers, spaces, commas, dots, minus, plus, hyphen and underscore',
 		'INTTEXT'		=> 'Unicode letter characters, numbers, spaces, commas, dots, minus, plus, hyphen, underscore and whitespaces.',
 		'IDENTIFIER'	=> 'Characters from the latin alphabet (A-Z), numbers, hyphen and underscore',
 		'NUMBER'		=> 'Any series of digits',
 		'EMAIL'			=> 'A valid email address',
-		'URL'			=> 'A valid URL using any allowed protocol (http, ftp, etc… cannot be used for javascript exploits). If none is given, “http://” is prefixed to the string.',
+		'URL'			=> 'A valid URL using any protocol (http, ftp, etc… cannot be used for javascript exploits). If none is given, “http://” is prefixed to the string.',
 		'LOCAL_URL'		=> 'A local URL. The URL must be relative to the topic page and cannot contain a server name or protocol, as links are prefixed with “%s”',
 		'RELATIVE_URL'	=> 'A relative URL. You can use this to match parts of a URL, but be careful: a full URL is a valid relative URL. When you want to use relative URLs of your board, use the LOCAL_URL token.',
 		'COLOR'			=> 'A HTML colour, can be either in the numeric form <samp>#FF1234</samp> or a <a href="http://www.w3.org/TR/CSS21/syndata.html#value-def-color">CSS colour keyword</a> such as <samp>fuchsia</samp> or <samp>InactiveBorder</samp>',

@@ -62,7 +62,7 @@ class remote extends \phpbb\avatar\driver\driver
 
 		if (!preg_match('#^(http|https|ftp)://#i', $url))
 		{
-			$url = 'https://' . $url;
+			$url = 'http://' . $url;
 		}
 
 		if (!function_exists('validate_data'))

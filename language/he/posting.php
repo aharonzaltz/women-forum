@@ -43,7 +43,6 @@ $lang = array_merge($lang, array(
 	'ADD_POLL'					=> 'יצירת סקר',
 	'ADD_POLL_EXPLAIN'			=> 'אם אינך מעוניין להוסיף סקר לנושא שלך, השאר את השדות ריקים.',
 	'ALREADY_DELETED'			=> 'סליחה אך ההודעה כבר נמחקה.',
-	'ATTACH_COMMENT_NO_EMOJIS'	=> 'ההערת הצורפה מכילה תווים לא חוקיים )אימוג׳י).',
 	'ATTACH_DISK_FULL'			=> 'אין מספיק מקום פנוי בכונן על מנת לצרף את הקובץ המצורף.',
 	'ATTACH_QUOTA_REACHED'		=> 'סליחה אך מכסת הקבצים המצורפים של המערכת התמלאה.',
 	'ATTACH_SIG'				=> 'צרף חתימה (חתימות ניתנות לשינוי דרך לוח הבקרה למשתמש)',
@@ -146,11 +145,9 @@ $lang = array_merge($lang, array(
 	'LOAD_DRAFT_EXPLAIN'		=> 'כאן אתה יכול לבחור את הטיוטה שאתה רוצה להמשיך לכתוב. ההודעה הנוכחית שלך תבוטל, כל תוכן ההודעה הנוכחית ימחק. צפייה, עריכה ומחיקת טיוטות בלוח הבקרה למשתמש שלך.',
 	'LOGIN_EXPLAIN_BUMP'		=> 'אתה צריך להתחבר כדי להבליט נושאים בפורום זה.',
 	'LOGIN_EXPLAIN_DELETE'		=> 'אתה צריך להתחבר כדי למחוק הודעות בפורום זה.',
-	'LOGIN_EXPLAIN_SOFT_DELETE'	=> 'עליך להיות מחובר על מנת לבצע מחיקה רכה בפורום זה.',
 	'LOGIN_EXPLAIN_POST'		=> 'אתה צריך להתחבר כדי לשלוח הודעות בפורום זה.',
 	'LOGIN_EXPLAIN_QUOTE'		=> 'אתה צריך להתחבר כדי לצטט הודעות בפורום זה.',
 	'LOGIN_EXPLAIN_REPLY'		=> 'אתה צריך להתחבר כדי להגיב לנושאים בפורום זה.',
-	'MAX_ATTACHMENT_FILESIZE'	=> 'גודל קובץ מירבי לצורפה: %s.',
 
 	'MAX_FONT_SIZE_EXCEEDED'	=> 'אפשר להשתמש בפונט עד לגודל %d',
 	'MAX_FLASH_HEIGHT_EXCEEDED'	=> array(
@@ -268,6 +265,7 @@ $lang = array_merge($lang, array(
 	'TOPIC_BUMPED'				=> 'הנושא הוקפץ בהצלחה.',
 
 	'UNAUTHORISED_BBCODE'		=> 'אתה לא יכול להשתמש בתגי ה־BBCode הבאים: %s.',
+	'UNGLOBALISE_EXPLAIN'		=> 'כדי להחליף את מצב הנושא מגלובלי לרגיל, אתה צריך לבחור את הפורום אשר אתה רוצה שבו הנושא יוצג.',
 	'UNSUPPORTED_CHARACTERS_MESSAGE'	=> 'ההודעה שלך מכילה את התווים הלא נתמכים הבאים:<br />%s',
 	'UNSUPPORTED_CHARACTERS_SUBJECT'	=> 'הנושא שלך מכיל את התווים הלא נתמכים הבאים:<br />%s',
 	'UPDATE_COMMENT'			=> 'עדכן תיאור',

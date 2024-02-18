@@ -1,8 +1,8 @@
-Subject: דיווח בנוגע להודעה פרטית- "{SUBJECT}"
+Subject: דיווח בנוגע להודעה פרטית- "{TOPIC_TITLE}"
 
 שלום {USERNAME},
 
-הודעה פרטית עם הכותרת "{SUBJECT}" מ־ "{AUTHOR_NAME}" ב־ "{SITENAME}" דווחה.
+אתה מקבל התראה זו, מכיוון שהודעה פרטית המכילה את הכותרת "{SUBJECT}" מ־ "{AUTHOR_NAME}" ב־ "{SITENAME}" דווחה.
 
 אם ברצונך לראות את הדיווח, לחץ על הקישור הבא:
 {U_VIEW_REPORT}

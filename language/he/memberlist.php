@@ -149,4 +149,5 @@ $lang = array_merge($lang, array(
 	'VIEW_SKYPE_PROFILE'	=> 'צפה בפרופיל סקייפ',
 	'VIEW_TWITTER_PROFILE'	=> 'צפה בפרופיל טוויטר',
 	'VIEW_YOUTUBE_CHANNEL'	=> 'צפה בערוץ יוטיוב',
+	'VIEW_GOOGLEPLUS_PROFILE' => 'צפה בפרופיל גוגל+',
 ));

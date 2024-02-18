@@ -71,7 +71,7 @@ $lang = array_merge($lang, array(
 
 	<p>phpBB3 תומך בבסיסי הנתונים הבאים:</p>
 	<ul>
-		<li>MySQL 4.1.3 או מעל (MySQLi נדרש)</li>
+		<li>MySQL 3.23 או מעל (MySQLi נתמך)</li>
 		<li>PostgreSQL 8.3+</li>
 		<li>SQLite 2.8.2+</li>
 		<li>SQLite 3.6.15+</li>
@@ -107,15 +107,13 @@ $lang = array_merge($lang, array(
 
 	// Server requirements
 	'PHP_VERSION_REQD'					=> 'גרסת PHP',
-	'PHP_VERSION_REQD_EXPLAIN'			=> 'phpBB requires PHP version 7.1.3 or higher.',
+	'PHP_VERSION_REQD_EXPLAIN'			=> 'phpBB requires PHP version 5.4.0 or higher.',
 	'PHP_GETIMAGESIZE_SUPPORT'			=> 'פונקציית ה־PHP getimagesize() זמינה',
 	'PHP_GETIMAGESIZE_SUPPORT_EXPLAIN'	=> '<strong>נדרש</strong> - כדי ש־phpBB3 תעבוד כראוי, הפונקציה getimagesize צריכה להיות זמינה.',
 	'PCRE_UTF_SUPPORT'				=> 'תמיכה ב־PCRE UTF-8',
 	'PCRE_UTF_SUPPORT_EXPLAIN'		=> 'phpBB <strong>לא</strong> תפעל אם התקן ה־PHP שלך אינו מותאם לתמיכה ב־UTF-8 בסיומת PCRE.',
 	'PHP_JSON_SUPPORT'				=> 'תמיכה ב-PHP JSON',
 	'PHP_JSON_SUPPORT_EXPLAIN'		=> '<strong>נדרש</strong> - על מנת שphpBB יפעל באופן תקין, הסיומת PHP JSON צריכה להיות זמינה.',
-	'PHP_MBSTRING_SUPPORT'				=> 'PHP mbstring תמיכה ב-',
-	'PHP_MBSTRING_SUPPORT_EXPLAIN'		=> 'כדי שמערכת phpBB תעבוד כראוי, התוספת PHP mbstring צריכה להיות זמינה.',
 	'PHP_XML_SUPPORT'					=> 'תמיכה ב-PHP XML/DOM',
 	'PHP_XML_SUPPORT_EXPLAIN'			=> 'In order for phpBB to function correctly, the PHP XML/DOM extension needs to be available.',
 	'PHP_SUPPORTED_DB'				=> 'בסיסי נתונים נתמכים',
@@ -190,6 +188,7 @@ $lang = array_merge($lang, array(
 	// Database options
 	'DB_OPTION_MSSQL_ODBC'	=> 'MSSQL Server 2000+ via ODBC',
 	'DB_OPTION_MSSQLNATIVE'	=> 'MSSQL Server 2005+ [ Native ]',
+	'DB_OPTION_MYSQL'		=> 'MySQL',
 	'DB_OPTION_MYSQLI'		=> 'MySQL with MySQLi Extension',
 	'DB_OPTION_ORACLE'		=> 'Oracle',
 	'DB_OPTION_POSTGRES'	=> 'PostgreSQL',
@@ -239,7 +238,9 @@ $lang = array_merge($lang, array(
 	'CONFIG_BOARD_EMAIL_SIG'		=> 'בתודה, ההנהלה',
 	'CONFIG_SITE_DESC'				=> 'טקסט קצר שמתאר את הפורום',
 	'CONFIG_SITENAME'				=> 'שם האתר',
+
 	'DEFAULT_INSTALL_POST'			=> 'זוהי הודעת הדגמה בהתקנת phpBB3. הכול נראה עובד כשורה. אתה רשאי למחוק את הודעה זו אם אתה רוצה להמשיך להגדיר את המערכת. במהלך תהליך ההתקנה הקטגוריה הראשונה והפורום הראשון נוצרו והרשאות מתאימות לקבוצות המנהלים הראשיים, הבוטים, המנהלים הגלובליים, האורחים ומשתמשים רשומים. אם אתה רוצה גם למחוק את הקטגוריה הראשונה והפורום הראשון, אל תשכח להעניק הרשאות לכל קבוצות המשתמשים הללו לכל הקטגוריות החדשות והפורומים שאתה תיצור. מומלץ לשנות את השם של הקטגוריה הראשונה והפורום הראשון ולהעתיק את ההרשאות מהם שאתה יוצר קטגוריות חדשות ופורומים חדשים. תהנה!',
+
 	'FORUMS_FIRST_CATEGORY'			=> 'הקטגוריה הראשונה שלך',
 	'FORUMS_TEST_FORUM_DESC'		=> 'התיאור של הפורום הראשון שלך.',
 	'FORUMS_TEST_FORUM_TITLE'		=> 'הפורום הראשון שלך',
@@ -564,7 +565,7 @@ $lang = array_merge($lang, array(
 
 	// Finish conversion
 	'CONVERT_COMPLETE'			=> 'ההמרה הושלמה',
-	'CONVERT_COMPLETE_EXPLAIN'	=> 'המרת בהצלחה עכשיו את מערכת הפורומים שלך ל-phpBB 3.3. עכשיו אתה יכול להתחבר ו<a href="../"> לגשת </a> למערכת שלך. אנא ודא שההגדרות הועברו בצורה נכונה לפני הפעלת המערכת שלך על-ידי מחיקת התיקיה install. זכור שעזרה בנוגע לשימוש ב-phpBB זמינה באופן מקוון באיזורי ה<a href="https://www.phpbb.com/support/docs/en/3.1/ug/">תיעוד</a> (אנגלית) וב<a href="http://phpbb.co.il/viewforum.php?f=21">פורום התמיכה בעברית</a> או <a href="https://www.phpbb.com/community/viewforum.php?f=46">באנגלית</a>.',
+	'CONVERT_COMPLETE_EXPLAIN'	=> 'המרת בהצלחה עכשיו את מערכת הפורומים שלך ל-phpBB 3.1. עכשיו אתה יכול להתחבר ו<a href="../"> לגשת </a> למערכת שלך. אנא ודא שההגדרות הועברו בצורה נכונה לפני הפעלת המערכת שלך על-ידי מחיקת התיקיה install. זכור שעזרה בנוגע לשימוש ב-phpBB זמינה באופן מקוון באיזורי ה<a href="https://www.phpbb.com/support/docs/en/3.1/ug/">תיעוד</a> (אנגלית) וב<a href="http://phpbb.co.il/viewforum.php?f=21">פורום התמיכה בעברית</a> או <a href="https://www.phpbb.com/community/viewforum.php?f=46">באנגלית</a>.',
 
 	'CONV_ERROR_ATTACH_FTP_DIR'			=> 'העלאת FTP לקבצים מצורפים פעילה בפורום הישן. כבה את אפשרות העלאת FTP וודא שתיקיית העלאה חוקית צוינה, ולאחר מכן העתק את כל הקבצים המצורפים לתיקייה הנגישה לרשת החדשה הזו. לאחר שביצעת זאת, התחל מחדש את ההמרה.',
 	'CONV_ERROR_CONFIG_EMPTY'			=> 'אין פרטי הגדרות זמינים להמרה.',

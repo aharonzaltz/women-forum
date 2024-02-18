@@ -46,7 +46,7 @@ $lang = array_merge($lang, array(
 	'MIGRATION_DATA_IN_PROGRESS'		=> 'מתקין מידע: %1$s; זמן: %2$.2f שניות',
 	'MIGRATION_DATA_RUNNING'			=> 'מתקין מידע: %s.',
 	'MIGRATION_EFFECTIVELY_INSTALLED'	=> 'ההגירה כבר התקינה בצורה אפקטיבית (דולג) את: %s',
-	'MIGRATION_EXCEPTION_ERROR'			=> 'משהו לא עלה יפה במהלך הבקשה, וחריגה הוגשה. השינויים שבוצעו לפני השגיאה שוחזרו כמיטב יכולתנו,אבל כדאי שתבדוק את המערכת לשגיאות.',
+	'MIGRATION_EXCEPTION_ERROR'			=> 'משהו לא עלה יפה במהלך הבקשה, וחריגה הוגשה..השינויים שבוצעו לפני השגיאה שוחזרו כמיטב יכולתנו,אבל כדאי שתבדוק את המערכת עבור שגיאות.',
 	'MIGRATION_NOT_FULFILLABLE'			=> 'ההגירה של "%1$s" לא אפשרית, חסרה ההגירה "%2$s".',
 	'MIGRATION_NOT_INSTALLED'			=> 'The migration "%s" is not installed.',
 	'MIGRATION_NOT_VALID'				=> '%s היא לא הגירה תקינה.',
@@ -73,8 +73,9 @@ $lang = array_merge($lang, array(
 	'MODULE_EXIST_MULTIPLE'				=> 'Several modules with the given parent module langname already exist: %s. Try using before/after keys to clarify the module placement.',
 	'MODULE_INFO_FILE_NOT_EXIST'		=> 'קובץ מידע חשוב  של מודול חסר: %2$s',
 	'MODULE_NOT_EXIST'					=> 'מודול חיוני לא קיים: %s',
+
 	'PARENT_MODULE_FIND_ERROR'			=> 'Unable to determine the parent module identifier: %s',
 	'PERMISSION_NOT_EXIST'				=> 'הגדרות ההרשאה "%s" לא קיימות בצורה חריגה.',
-	'ROLE_ASSIGNED_NOT_EXIST'			=> 'The permission role assigned to group "%1$s" unexpectedly does not exist. Role id: "%2$s"',
+
 	'ROLE_NOT_EXIST'					=> 'תפקיד ההרשאות "%s" לא קיים בצורה חריגה.',
 ));

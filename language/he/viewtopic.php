@@ -49,6 +49,7 @@ $lang = array_merge($lang, array(
 	'BUMPED_BY'				=> 'הוקפץ לאחרונה על ידי %1$s בתאריך %2$s.',
 	'BUMP_TOPIC'			=> 'הקפץ נושא',
 
+	'CODE'					=> 'קוד',
 
 	'DELETE_TOPIC'			=> 'מחק נושא',
 	'DELETED_INFORMATION'	=> 'נמחק על ידי %1$s ב %2$s',
@@ -59,12 +60,12 @@ $lang = array_merge($lang, array(
 		1	=> 'נערך לאחרונה על ידי %2$s ב %3$s, נערך פעם %1$d בסך הכל.',
 		2	=> 'נערך לאחרונה על ידי %2$s ב %3$s, נערך %1$d פעמים בסך הכל.',
 	),
-	'EMAIL_TOPIC'			=> 'שלח נושא באימייל',
+	'EMAIL_TOPIC'			=> 'Email topic',
 	'ERROR_NO_ATTACHMENT'	=> 'הקובץ המצורף שנבחר לא קיים יותר.',
 
 	'FILE_NOT_FOUND_404'	=> 'הקובץ <strong>%s</strong> לא קיים.',
 	'FORK_TOPIC'			=> 'העתק נושא',
-	'FULL_EDITOR'			=> 'עורך מלא &amp; Preview',
+	'FULL_EDITOR'			=> 'עורך מלא ותצוגה מקדימה',
 
 	'LINKAGE_FORBIDDEN'		=> 'אינך מורשה לצפות, להוריד או לתת קישור ל/מאתר זה.',
 	'LOGIN_NOTIFY_TOPIC'	=> 'קיבלת הודעה על נושא זה, אנא התחבר על מנת לצפות בו.',
@@ -97,6 +98,7 @@ $lang = array_merge($lang, array(
 
 	'QUICK_MOD'				=> 'כלים מהירים',
 	'QUICKREPLY'			=> 'תגובה מהירה',
+	'QUOTE'					=> 'ציטוט',
 
 	'REPLY_TO_TOPIC'		=> 'הגב לנושא',
 	'RESTORE'				=> 'שחזר',

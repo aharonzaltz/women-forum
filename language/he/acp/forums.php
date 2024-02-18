@@ -97,7 +97,6 @@ $lang = array_merge($lang, array(
 	'FORUM_LINK_TRACK_EXPLAIN'			=> 'סופר את מספר הפעמים שהפורום המקושר נלחץ.',
 	'FORUM_NAME'						=> 'שם הפורום',
 	'FORUM_NAME_EMPTY'					=> 'אתה חייב להכניס שם לפורום זה.',
-	'FORUM_NAME_EMOJI'					=> 'שם הפורום שהוזן אינו זמין. <br>הוא מכיל את התווים הלא חויקיים הבאים:<br>%s',
 	'FORUM_PARENT'						=> 'הפורום הראשי',
 	'FORUM_PASSWORD'					=> 'ססמת הפורום',
 	'FORUM_PASSWORD_CONFIRM'			=> 'אימות ססמת הפורום',
@@ -129,8 +128,6 @@ $lang = array_merge($lang, array(
 	'GENERAL_FORUM_SETTINGS'	=> 'הגדרות פורום כלליות',
 
 	'LINK'						=> 'קישור',
-	'LIMIT_SUBFORUMS'			=> 'הגבל מקרא לתתי פורומים בנים',
-	'LIMIT_SUBFORUMS_EXPLAIN'	=> 'Limits the subforums to be displayed to subforums that are direct descendants (children) of the current forum. Disabling this will display all subforums with the “List subforums in legend” option enabled, regardless of depth.',
 	'LIST_INDEX'				=> 'רשום תת פורום ברשימת הפורומים הראשית',
 	'LIST_INDEX_EXPLAIN'		=> 'הצג את פורום זה בעמוד הראשי ובכל מקום אחר כקישור באזור של פורום האב שלו אם פורום האב מוגדר כ”רשום תת פורום ברשימה“ האפשרות מאושרת.',
 	'LIST_SUBFORUMS'			=> 'רשום תת פורום ברשימה',

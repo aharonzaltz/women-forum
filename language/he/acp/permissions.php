@@ -53,7 +53,7 @@ $lang = array_merge($lang, array(
 
 		<br />
 
-		<p>למידע נוסף על קביעה וניהול הרשאות במערכת phpBB, קרא את <a href="https://www.phpbb.com/support/docs/en/3.3/ug/quickstart/permissions/">Setting permissions of our Quick Start Guide</a> — שתורגם על־ידי Berlo.</p>
+		<p>למידע נוסף על קביעה וניהול הרשאות במערכת phpBB, קרא את <a href="http://www.phpbb.co.il/viewtopic.php?f=28&t=21412">המדריך לקביעת הרשאות</a> — שתורגם על־ידי Berlo.</p>
 	',
 
 	'ACL_NEVER'				=> 'לעולם לא',

@@ -68,6 +68,7 @@ $lang = array_merge($lang, array(
 	'ATTACH_QUOTA_EXPLAIN'				=> 'שטח אחסון מרבי זמין לקבצים מצורפים למערכת השלמה, כאשר 0 הנו בלתי מוגבל.',
 	'ATTACH_TO_POST'					=> 'צרף קובץ להודעה',
 
+	'CAT_FLASH_FILES'			=> 'קבצי פלאש',
 	'CAT_IMAGES'				=> 'תמונות',
 	'CHECK_CONTENT'				=> 'בדוק קבצים מצורפים',
 	'CHECK_CONTENT_EXPLAIN'		=> 'בדפדפנים מסוימים ניתנת האפשרות לגרום לדפדפן לטעות בסוג הקובץ של הקבצים שמעלים לשרת. סימון אפשרות זו תוודא שקבצים ידועים שעשויים לגרום למצב כזה ידחו באופן אוטומטי.',
@@ -98,6 +99,7 @@ $lang = array_merge($lang, array(
 	'EXT_GROUP_ARCHIVES'			=> 'ארכיונים',
 	'EXT_GROUP_DOCUMENTS'			=> 'מסמכים',
 	'EXT_GROUP_DOWNLOADABLE_FILES'	=> 'קבצים הניתנים להורדה',
+	'EXT_GROUP_FLASH_FILES'			=> 'קבצי פלאש',
 	'EXT_GROUP_IMAGES'				=> 'תמונות',
 	'EXT_GROUP_PLAIN_TEXT'			=> 'טקסט רגיל',
 
@@ -109,10 +111,6 @@ $lang = array_merge($lang, array(
 
 	'IMAGE_LINK_SIZE'			=> 'ממדים לקישור תמונה',
 	'IMAGE_LINK_SIZE_EXPLAIN'	=> 'הצג תמונה מצורפת כטקסט מקושר אם תמונה גדולה יותר מגודל זה. כדי לכבות אפשרות זו, קבע את הערכים ל־0 פיקסלים על 0 פיקסלים.',
-	'IMAGE_QUALITY'				=> 'איכות של תמונות מצורפות (JPEG רק מסוג)',
-	'IMAGE_QUALITY_EXPLAIN'		=> 'Specify value between 50% (smaller file size) and 90% (higher quality). Quality higher than 90% increases filesize and is disabled. Setting only applies if maximum image dimensions are set to a value other than 0px by 0px.',
-	'IMAGE_STRIP_METADATA'		=> 'Strip image metadata (JPEG only)',
-	'IMAGE_STRIP_METADATA_EXPLAIN'	=> 'Strip Exif metadata, e.g. author name, GPS coordinates and camera details. Setting only applies if maximum image dimensions are set to a value other than 0px by 0px.',
 
 	'MAX_ATTACHMENTS'				=> 'מספר מרבי של קבצים מצורפים לכל הודעה',
 	'MAX_ATTACHMENTS_PM'			=> 'מספר מרבי של קבצים מצורפים לכל הודעה פרטית',
@@ -131,9 +129,6 @@ $lang = array_merge($lang, array(
 	'NOT_ASSIGNED'				=> 'לא נקבע',
 	'NO_ATTACHMENTS'			=> 'לא נמצאו קבצים מצורפים בקבוצה זו.',
 	'NO_EXT_GROUP'				=> 'ללא',
-	'NO_EXT_GROUP_ALLOWED_PM'	=> 'There are no <a href="%s">allowed extension groups</a> for private messages.',
-	'NO_EXT_GROUP_ALLOWED_POST'	=> 'There are no <a href="%s">allowed extension groups</a> for posts.',
-
 	'NO_EXT_GROUP_NAME'			=> 'לא הוזנה קבוצת משתמשים',
 	'NO_EXT_GROUP_SPECIFIED'	=> 'לא צוינה קבוצת סיומות.',
 	'NO_FILE_CAT'				=> 'ללא',
@@ -171,5 +166,4 @@ $lang = array_merge($lang, array(
 	'UPLOAD_DIR_EXPLAIN'			=> 'נתיב לאחסון הקבצים המצורפים. שים לב שאם תשנה את התיקייה לאחר שיש בה כבר קבצים מצורפים, תצטרך להעביר אותם למיקום החדש ידנית.',
 	'UPLOAD_ICON'					=> 'סמל העלאה',
 	'UPLOAD_NOT_DIR'				=> 'המיקום לקבצים שציינת אינו נראה כתיקייה.',
-	'UPLOAD_POST_NOT_EXIST'			=> 'File “%1$s” can not be uploaded to post number %2$d as the post does not exist.',
 ));

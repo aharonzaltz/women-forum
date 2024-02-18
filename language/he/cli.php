@@ -35,7 +35,6 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'CLI_APCU_CACHE_NOTICE'				=> 'יש לטהר את המטמון דרך לוח בקרה למנהל ראשי.',
 	'CLI_CONFIG_CANNOT_CACHED'			=> 'הדלק את הגדרה זו, אם אפשרויות ההגדרה משתנות תדיר עד כדי כך, שזה לא יעיל לשמור את מטמונן.',
 	'CLI_CONFIG_CURRENT'				=> 'ערך ההגדרה הנוכחי, השתמש ב-0 ו-1 על מנת לציין ערכים בוליאניים',
 	'CLI_CONFIG_DELETE_SUCCESS'			=> 'ההגדרה %s נמחקה בהצלחה .',
@@ -79,6 +78,7 @@ $lang = array_merge($lang, array(
 	'CLI_DESCRIPTION_REPARSER_REPARSE_OPT_RANGE_SIZE'	=> 'Approximate number of records to process at a time',
 	'CLI_DESCRIPTION_REPARSER_REPARSE_OPT_RESUME'		=> 'Start reparsing where the last execution stopped',
 
+	'CLI_DESCRIPTION_RECALCULATE_EMAIL_HASH'			=> 'מחשב מחדש את ה-user_email_hash column של טבלת users',
 
 	'CLI_DESCRIPTION_SET_ATOMIC_CONFIG'					=> 'מציב ערך של אפשרות של הגדרה רק אם הישן תואם את הערך הנוכחי',
 	'CLI_DESCRIPTION_SET_CONFIG'						=> 'מציב ערך של אפשרות של הגדרה',
@@ -128,6 +128,7 @@ $lang = array_merge($lang, array(
 	'CLI_EXTENSIONS_ENABLED'			=> 'דלוק',
 
 	'CLI_FIXUP_FIX_LEFT_RIGHT_IDS_SUCCESS'		=> 'מבנה הספרייה של הפורומים והמודלים תוקן בהצלחה.',
+	'CLI_FIXUP_RECALCULATE_EMAIL_HASH_SUCCESS'	=> 'גיבובי המיילים חושבו מחדש בהצלחה.',
 	'CLI_FIXUP_UPDATE_HASH_BCRYPT_SUCCESS'		=> 'הצפנת סיסמאות מיושנות עודכן בהצלחה ל bcrypt.',
 	
 	'CLI_MIGRATION_NAME'					=> 'Migration name, including the namespace (use forward slashes instead of backslashes to avoid problems).',
