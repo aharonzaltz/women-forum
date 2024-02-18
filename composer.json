@@ -74,7 +74,7 @@
 	},
 	"config": {
 		"platform": {
-			"php": "7.3"
+			"php": "2.243.4"
 		},
 		"allow-plugins": {
 			"composer/installers": true
