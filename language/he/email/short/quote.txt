@@ -1,0 +1,14 @@
+Subject: צוטטת בנושא "{TOPIC_TITLE}"
+
+שלום {USERNAME},
+
+"{AUTHOR_NAME}"  ציטט אותך בנושא  "{TOPIC_TITLE}" ב-{SITENAME}".
+
+לצפייה בהודעה שצוטטה לחץ על הקישור הבא:
+{U_VIEW_POST}
+
+אם אין עוד ברצונך לקבל עדכונים בנוגע לתגובות המצטטות אותך, אנא עדכן את הגדרות ההתראה שלך כאן:
+
+{U_NOTIFICATION_SETTINGS}
+
+{EMAIL_SIG}

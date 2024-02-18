@@ -1,0 +1,13 @@
+Subject: נושא חדש בפורום "{FORUM_NAME}"
+
+שלום {USERNAME},
+
+בפורום "{FORUM_NAME}" נוסף נושא חדש "{TOPIC_TITLE}"<!-- IF AUTHOR_NAME != '' --> על-ידי {AUTHOR_NAME}<!-- ENDIF --> מאז הביקור האחרון ב "{SITENAME}". לא ישלחו התראות נוספות עד לביקור בפורום.
+
+{U_FORUM}
+
+אם אינך מעוניין יותר לעקוב אחר הפורום, לחץ על הקישור הבא:
+
+{U_STOP_WATCHING_FORUM}
+
+{EMAIL_SIG}

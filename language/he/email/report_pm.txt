@@ -1,0 +1,10 @@
+Subject: דיווח בנוגע להודעה פרטית- "{SUBJECT}"
+
+שלום {USERNAME},
+
+הודעה פרטית עם הכותרת "{SUBJECT}" מ־ "{AUTHOR_NAME}" ב־ "{SITENAME}" דווחה.
+
+אם ברצונך לראות את הדיווח, לחץ על הקישור הבא:
+{U_VIEW_REPORT}
+
+{EMAIL_SIG}

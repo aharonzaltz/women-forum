@@ -1,0 +1,7 @@
+Subject: דיווח נמחק - "{PM_SUBJECT}"
+
+שלום {USERNAME},
+
+הדיווח שלך אודות ההודעה הפרטית "{PM_SUBJECT}" ב"{SITENAME}" נמחק על ידי מנהל או מנהל ראשי.
+
+{EMAIL_SIG}

@@ -1,0 +1,19 @@
+Subject: תגובה ב "{FORUM_NAME}"
+List-Unsubscribe: <{U_STOP_WATCHING_FORUM}>
+
+שלום {USERNAME},
+
+בפורום "{FORUM_NAME}" נוספה תגובה חדשה לנושא "{TOPIC_TITLE}"<!-- IF AUTHOR_NAME != '' --> על-ידי {AUTHOR_NAME}<!-- ENDIF --> מאז שביקרת לאחרונה ב "{SITENAME}". לא ישלחו התראות נוספות עד לביקור בנושא.
+{U_NEWEST_POST}
+
+אם אתה מעוניין לצפות בנושא, לחץ על הקישור הבא:
+{U_TOPIC}
+
+אם אתה מעוניין לצפות בפורום, לחץ על הקישור הבא:
+{U_FORUM}
+
+אם אינך מעוניין יותר לעקוב אחר הפורום לחץ על הקישור הבא:
+
+{U_STOP_WATCHING_FORUM}
+
+{EMAIL_SIG}

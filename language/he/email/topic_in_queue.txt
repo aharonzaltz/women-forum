@@ -1,0 +1,12 @@
+Subject: נושא הממתין לאישור "{TOPIC_TITLE}"
+
+שלום {USERNAME},
+
+הנושא  "{TOPIC_TITLE}" ב-"{SITENAME}" ממתין לאישור.
+כדי לראות הנושא, לחץ כאן:
+{U_VIEW_TOPIC}
+
+כדי לראות את הפורום, לחץ כאן:
+{U_FORUM}
+
+{EMAIL_SIG}

@@ -1,0 +1,11 @@
+Subject: הנושא שלך נדחה - "{TOPIC_TITLE}"
+
+שלום {USERNAME},
+
+הנושא שלך "{TOPIC_TITLE}" ב־"{SITENAME}" נדחה על־ידי מנהל ראשי.
+
+להלן הסיבה לדחייה:
+
+{REASON}
+
+{EMAIL_SIG}
