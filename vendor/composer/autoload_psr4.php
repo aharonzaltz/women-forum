@@ -9,7 +9,7 @@ return array(
     's9e\\TextFormatter\\' => array($vendorDir . '/s9e/text-formatter/src'),
     's9e\\SweetDOM\\' => array($vendorDir . '/s9e/sweetdom/src'),
     's9e\\RegexpBuilder\\' => array($vendorDir . '/s9e/regexp-builder/src'),
-    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/type-resolver/src', $vendorDir . '/phpdocumentor/reflection-docblock/src'),
+    'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src'),
     'bantu\\IniGetWrapper\\' => array($vendorDir . '/bantu/ini-get-wrapper/src'),
     'Zend\\EventManager\\' => array($vendorDir . '/zendframework/zend-eventmanager/src'),
     'Zend\\Code\\' => array($vendorDir . '/zendframework/zend-code/src'),
