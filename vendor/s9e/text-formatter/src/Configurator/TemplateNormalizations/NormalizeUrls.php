@@ -2,13 +2,13 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Attr;
-use s9e\SweetDOM\Element;
+use DOMAttr;
+use DOMElement;
 use s9e\TextFormatter\Configurator\Helpers\AVTHelper;
 use s9e\TextFormatter\Configurator\Helpers\NodeLocator;
 use s9e\TextFormatter\Parser\AttributeFilters\UrlFilter;
@@ -21,7 +21,7 @@ class NormalizeUrls extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected function getNodes(): array
+	protected function getNodes()
 	{
 		return NodeLocator::getURLNodes($this->ownerDocument);
 	}
@@ -29,7 +29,7 @@ class NormalizeUrls extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeAttribute(Attr $attribute): void
+	protected function normalizeAttribute(DOMAttr $attribute)
 	{
 		// Trim the URL and parse it
 		$tokens = AVTHelper::parse(trim($attribute->value));
@@ -57,10 +57,10 @@ class NormalizeUrls extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		$query = './/text()[normalize-space() != ""]';
-		foreach ($element->query($query) as $i => $node)
+		foreach ($this->xpath($query, $element) as $i => $node)
 		{
 			$value = UrlFilter::sanitizeUrl($node->nodeValue);
 

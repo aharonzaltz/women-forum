@@ -6,7 +6,7 @@
 */
 function parseAbstractScript(tagName, syntaxChar, shortRegexp, longRegexp)
 {
-	let pos = text.indexOf(syntaxChar);
+	var pos = text.indexOf(syntaxChar);
 	if (pos === -1)
 	{
 		return;
@@ -30,20 +30,18 @@ function parseAbstractScript(tagName, syntaxChar, shortRegexp, longRegexp)
 			return;
 		}
 
-		let m, regexp = longRegexp, hasMatched = false;
+		var m, regexp = longRegexp;
 		regexp.lastIndex = pos;
 		while (m = regexp.exec(text))
 		{
-			let match    = m[0],
+			var match    = m[0],
 				matchPos = m.index,
 				matchLen = match.length;
 
 			addTagPair(tagName, matchPos, 2, matchPos + matchLen - 1, 1);
 			overwrite(matchPos, matchLen);
-
-			hasMatched = true;
 		}
-		if (hasMatched)
+		if (match)
 		{
 			parseLongForm(pos);
 		}
@@ -58,11 +56,11 @@ function parseAbstractScript(tagName, syntaxChar, shortRegexp, longRegexp)
 	*/
 	function parseShortForm(pos)
 	{
-		let m, regexp = shortRegexp;
+		var m, regexp = shortRegexp;
 		regexp.lastIndex = pos;
 		while (m = regexp.exec(text))
 		{
-			let match    = m[0],
+			var match    = m[0],
 				matchPos = m.index,
 				matchLen = match.length,
 				startPos = matchPos,

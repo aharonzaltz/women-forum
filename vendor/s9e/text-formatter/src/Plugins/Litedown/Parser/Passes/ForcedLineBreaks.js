@@ -1,6 +1,6 @@
 function parse()
 {
-	let pos = text.indexOf("  \n");
+	var pos = text.indexOf("  \n");
 	while (pos > 0)
 	{
 		addBrTag(pos + 2).cascadeInvalidationTo(

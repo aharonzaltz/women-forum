@@ -1,11 +1,22 @@
-let xslt = {
+var MSXML = (typeof DOMParser === 'undefined' || typeof XSLTProcessor === 'undefined');
+var xslt = {
 	/**
 	* @param {string} xsl
 	*/
 	init: function(xsl)
 	{
-		xslt.proc = new XSLTProcessor;
-		xslt.proc['importStylesheet'](xslt.loadXML(xsl));
+		var stylesheet = xslt.loadXML(xsl);
+		if (MSXML)
+		{
+			var generator = new ActiveXObject('MSXML2.XSLTemplate.6.0');
+			generator['stylesheet'] = stylesheet;
+			xslt.proc = generator['createProcessor']();
+		}
+		else
+		{
+			xslt.proc = new XSLTProcessor;
+			xslt.proc['importStylesheet'](stylesheet);
+		}
 	},
 
 	/**
@@ -14,7 +25,19 @@ let xslt = {
 	*/
 	loadXML: function(xml)
 	{
-		const dom = (new DOMParser).parseFromString(xml, 'text/xml');
+		var dom;
+		if (MSXML)
+		{
+			dom = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.6.0');
+			dom['async'] = false;
+			dom['validateOnParse'] = false;
+			dom['loadXML'](xml);
+		}
+		else
+		{
+			dom = (new DOMParser).parseFromString(xml, 'text/xml');
+		}
+
 		if (!dom)
 		{
 			throw 'Cannot parse ' + xml;
@@ -29,7 +52,14 @@ let xslt = {
 	*/
 	setParameter: function(paramName, paramValue)
 	{
-		xslt.proc['setParameter'](null, paramName, paramValue);
+		if (MSXML)
+		{
+			xslt.proc['addParameter'](paramName, paramValue, '');
+		}
+		else
+		{
+			xslt.proc['setParameter'](null, paramName, paramValue);
+		}
 	},
 
 	/**
@@ -39,6 +69,22 @@ let xslt = {
 	*/
 	transformToFragment: function(xml, targetDoc)
 	{
+		if (MSXML)
+		{
+			var div = targetDoc.createElement('div'),
+				fragment = targetDoc.createDocumentFragment();
+
+			xslt.proc['input'] = xslt.loadXML(xml);
+			xslt.proc['transform']();
+			div.innerHTML = xslt.proc['output'];
+			while (div.firstChild)
+			{
+				fragment.appendChild(div.firstChild);
+			}
+
+			return fragment;
+		}
+
 		return xslt.proc['transformToFragment'](xslt.loadXML(xml), targetDoc);
 	}
 };
@@ -53,13 +99,13 @@ xslt.init(xsl);
 */
 function preview(text, target)
 {
-	let targetDoc = target.ownerDocument;
+	var targetDoc = target.ownerDocument;
 	if (!targetDoc)
 	{
 		throw 'Target does not have a ownerDocument';
 	}
 
-	let resultFragment = xslt.transformToFragment(parse(text).replace(/<[eis]>[^<]*<\/[eis]>/g, ''), targetDoc),
+	var resultFragment = xslt.transformToFragment(parse(text).replace(/<[eis]>[^<]*<\/[eis]>/g, ''), targetDoc),
 		lastUpdated    = target;
 
 	// https://bugs.chromium.org/p/chromium/issues/detail?id=266305
@@ -99,7 +145,7 @@ function preview(text, target)
 	*/
 	function computeHashes(fragment)
 	{
-		let nodes = fragment.querySelectorAll('[data-s9e-livepreview-hash]'),
+		var nodes = fragment.querySelectorAll('[data-s9e-livepreview-hash]'),
 			i     = nodes.length;
 		while (--i >= 0)
 		{
@@ -115,14 +161,14 @@ function preview(text, target)
 	*/
 	function executeEvent(node, eventName)
 	{
-		let code     = node.getAttribute('data-s9e-livepreview-on' + eventName),
-			codeHash = hash(code);
-		if (!functionCache[codeHash])
+		/** @type {string} */
+		var code = node.getAttribute('data-s9e-livepreview-on' + eventName);
+		if (!functionCache[code])
 		{
-			functionCache[codeHash] = new Function(code);
+			functionCache[code] = new Function(code);
 		}
 
-		functionCache[codeHash]['call'](node);
+		functionCache[code]['call'](node);
 	}
 
 	/**
@@ -139,7 +185,7 @@ function preview(text, target)
 			executeEvent(root, eventName);
 		}
 
-		let nodes = root.querySelectorAll('[data-s9e-livepreview-on' + eventName + ']'),
+		var nodes = root.querySelectorAll('[data-s9e-livepreview-on' + eventName + ']'),
 			i     = nodes.length;
 		while (--i >= 0)
 		{
@@ -155,7 +201,7 @@ function preview(text, target)
 	*/
 	function refreshElementContent(oldParent, newParent)
 	{
-		let oldNodes = oldParent.childNodes,
+		var oldNodes = oldParent.childNodes,
 			newNodes = newParent.childNodes,
 			oldCnt   = oldNodes.length,
 			newCnt   = newNodes.length,
@@ -178,7 +224,7 @@ function preview(text, target)
 		}
 
 		// Skip the rightmost matching nodes
-		let maxRight = Math.min(oldCnt - left, newCnt - left);
+		var maxRight = Math.min(oldCnt - left, newCnt - left);
 		while (right < maxRight)
 		{
 			oldNode = oldNodes[oldCnt - (right + 1)];
@@ -192,7 +238,7 @@ function preview(text, target)
 		}
 
 		// Remove the old dirty nodes in the middle of the tree
-		let i = oldCnt - right;
+		var i = oldCnt - right;
 		while (--i >= left)
 		{
 			oldParent.removeChild(oldNodes[i]);
@@ -201,14 +247,14 @@ function preview(text, target)
 
 		// Test whether there are any nodes in the new tree between the matching nodes at the left
 		// and the matching nodes at the right
-		let rightBoundary = newCnt - right;
+		var rightBoundary = newCnt - right;
 		if (left >= rightBoundary)
 		{
 			return;
 		}
 
 		// Clone the new nodes
-		let newNodesFragment = targetDoc.createDocumentFragment();
+		var newNodesFragment = targetDoc.createDocumentFragment();
 		i = left;
 		do
 		{
@@ -298,7 +344,7 @@ function preview(text, target)
 	*/
 	function hash(text)
 	{
-		let pos = text.length, s1 = 0, s2 = 0;
+		var pos = text.length, s1 = 0, s2 = 0;
 		while (--pos >= 0)
 		{
 			s1 = (s1 + text.charCodeAt(pos)) % 0xFFFF;
@@ -316,7 +362,7 @@ function preview(text, target)
 	*/
 	function syncElementAttributes(oldEl, newEl)
 	{
-		let oldAttributes = oldEl['attributes'],
+		var oldAttributes = oldEl['attributes'],
 			newAttributes = newEl['attributes'],
 			oldCnt        = oldAttributes.length,
 			newCnt        = newAttributes.length,
@@ -325,7 +371,7 @@ function preview(text, target)
 
 		while (--i >= 0)
 		{
-			let oldAttr      = oldAttributes[i],
+			var oldAttr      = oldAttributes[i],
 				namespaceURI = oldAttr['namespaceURI'],
 				attrName     = oldAttr['name'];
 
@@ -343,7 +389,7 @@ function preview(text, target)
 		i = newCnt;
 		while (--i >= 0)
 		{
-			let newAttr      = newAttributes[i],
+			var newAttr      = newAttributes[i],
 				namespaceURI = newAttr['namespaceURI'],
 				attrName     = newAttr['name'],
 				attrValue    = newAttr['value'];

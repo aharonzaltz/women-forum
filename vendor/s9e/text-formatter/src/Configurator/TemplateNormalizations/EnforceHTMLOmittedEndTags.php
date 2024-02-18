@@ -2,12 +2,12 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Element;
+use DOMElement;
 use s9e\TextFormatter\Configurator\Helpers\ElementInspector;
 
 /**
@@ -23,12 +23,12 @@ class EnforceHTMLOmittedEndTags extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = ['//*[namespace-uri() = ""]/*[namespace-uri() = ""]'];
+	protected $queries = ['//*[namespace-uri() = ""]/*[namespace-uri() = ""]'];
 
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		$parentNode = $element->parentNode;
 		if (ElementInspector::isVoid($parentNode) || ElementInspector::closesParent($element, $parentNode))
@@ -40,10 +40,10 @@ class EnforceHTMLOmittedEndTags extends AbstractNormalization
 	/**
 	* Move given element and its following siblings after its parent element
 	*
-	* @param  Element $element First element to move
+	* @param  DOMElement $element First element to move
 	* @return void
 	*/
-	protected function reparentElement(Element $element)
+	protected function reparentElement(DOMElement $element)
 	{
 		$parentNode = $element->parentNode;
 		do

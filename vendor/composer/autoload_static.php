@@ -35,10 +35,14 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         array (
             'bantu\\IniGetWrapper\\' => 20,
         ),
+        'Z' => 
+        array (
+            'Zend\\EventManager\\' => 18,
+            'Zend\\Code\\' => 10,
+        ),
         'W' => 
         array (
             'Webmozart\\Assert\\' => 17,
-            'Webimpress\\SafeWriter\\' => 22,
         ),
         'T' => 
         array (
@@ -78,10 +82,8 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
-            'ProxyManager\\' => 13,
             'Prophecy\\' => 9,
             'PackageVersions\\' => 16,
-            'PHPStan\\PhpDocParser\\' => 21,
         ),
         'O' => 
         array (
@@ -90,7 +92,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         'L' => 
         array (
             'Laravel\\Homestead\\' => 18,
-            'Laminas\\Code\\' => 13,
         ),
         'G' => 
         array (
@@ -107,7 +108,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
-            'Doctrine\\Deprecations\\' => 22,
             'DeepCopy\\' => 9,
         ),
     );
@@ -135,13 +135,17 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         array (
             0 => __DIR__ . '/..' . '/bantu/ini-get-wrapper/src',
         ),
+        'Zend\\EventManager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-eventmanager/src',
+        ),
+        'Zend\\Code\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-code/src',
+        ),
         'Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'Webimpress\\SafeWriter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/webimpress/safe-writer/src',
         ),
         'Twig\\' => 
         array (
@@ -251,10 +255,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'ProxyManager\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src/ProxyManager',
-        ),
         'Prophecy\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
@@ -263,10 +263,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         array (
             0 => __DIR__ . '/..' . '/composer/package-versions-deprecated/src/PackageVersions',
         ),
-        'PHPStan\\PhpDocParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
-        ),
         'OAuth\\' => 
         array (
             0 => __DIR__ . '/..' . '/carlos-mg89/oauth/src/OAuth',
@@ -274,10 +270,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         'Laravel\\Homestead\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/homestead/src',
-        ),
-        'Laminas\\Code\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laminas/laminas-code/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
@@ -307,10 +299,6 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
-        'Doctrine\\Deprecations\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
-        ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
@@ -323,6 +311,13 @@ class ComposerStaticInit1ce43ff815a322cce696ae3f305868d0
             'Twig_' => 
             array (
                 0 => __DIR__ . '/..' . '/twig/twig/lib',
+            ),
+        ),
+        'P' => 
+        array (
+            'ProxyManager\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src',
             ),
         ),
     );

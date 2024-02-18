@@ -2,13 +2,13 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Element;
-use s9e\SweetDOM\Text;
+use DOMElement;
+use DOMText;
 
 class OptimizeChooseText extends AbstractChooseOptimization
 {
@@ -26,10 +26,6 @@ class OptimizeChooseText extends AbstractChooseOptimization
 		{
 			$node            = $branch->$childType;
 			$node->nodeValue = substr($node->textContent, $pos, $len);
-			if ($node->nodeValue === '')
-			{
-				$node->remove();
-			}
 		}
 	}
 
@@ -71,7 +67,7 @@ class OptimizeChooseText extends AbstractChooseOptimization
 		$strings = [];
 		foreach ($this->getBranches() as $branch)
 		{
-			if (!($branch->$childType instanceof Text))
+			if (!($branch->$childType instanceof DOMText))
 			{
 				return [];
 			}
@@ -112,7 +108,10 @@ class OptimizeChooseText extends AbstractChooseOptimization
 		if ($len)
 		{
 			$this->adjustTextNodes('firstChild', $len);
-			$this->choose->before($this->createPolymorphicText(substr($strings[0], 0, $len)));
+			$this->choose->parentNode->insertBefore(
+				$this->createText(substr($strings[0], 0, $len)),
+				$this->choose
+			);
 		}
 	}
 
@@ -134,7 +133,10 @@ class OptimizeChooseText extends AbstractChooseOptimization
 		if ($len)
 		{
 			$this->adjustTextNodes('lastChild', 0, -$len);
-			$this->choose->after($this->createPolymorphicText(substr($strings[0], -$len)));
+			$this->choose->parentNode->insertBefore(
+				$this->createText(substr($strings[0], -$len)),
+				$this->choose->nextSibling
+			);
 		}
 	}
 }

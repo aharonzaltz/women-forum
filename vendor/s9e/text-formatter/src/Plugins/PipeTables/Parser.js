@@ -1,4 +1,4 @@
-let pos, table = null, tableTag, tables, _text = text;
+var pos, table = null, tableTag, tables, _text = text;
 
 if (config.overwriteMarkdown)
 {
@@ -19,7 +19,7 @@ processTables();
 */
 function addLine(line)
 {
-	let ignoreLen = 0;
+	var ignoreLen = 0;
 
 	if (!table)
 	{
@@ -41,7 +41,7 @@ function addLine(line)
 */
 function addTableBody()
 {
-	let i   = 1,
+	var i   = 1,
 		cnt = table.rows.length;
 	while (++i < cnt)
 	{
@@ -60,12 +60,12 @@ function addTableBody()
 */
 function addTableCell(tagName, align, content)
 {
-	let startPos  = pos,
+	var startPos  = pos,
 		endPos    = startPos + content.length,
 		ignoreLen;
 	pos = endPos;
 
-	let m = /^( *).*?( *)$/.exec(content);
+	var m = /^( *).*?( *)$/.exec(content);
 	if (m[1])
 	{
 		ignoreLen = m[1].length;
@@ -100,7 +100,7 @@ function addTableHead()
 function addTableRow(tagName, row)
 {
 	pos = row.pos;
-	row.line.split('|').forEach((str, i) =>
+	row.line.split('|').forEach(function(str, i)
 	{
 		if (i > 0)
 		{
@@ -108,7 +108,7 @@ function addTableRow(tagName, row)
 			++pos;
 		}
 
-		let align = (!table.cols[i]) ? '' : table.cols[i];
+		var align = (!table.cols[i]) ? '' : table.cols[i];
 		addTableCell(tagName, align, str);
 	});
 
@@ -124,7 +124,7 @@ function captureTables()
 	tables = [];
 
 	pos = 0;
-	_text.split("\n").forEach((line) =>
+	_text.split("\n").forEach(function(line)
 	{
 		if (line.indexOf('|') < 0)
 		{
@@ -160,7 +160,7 @@ function createBodyTags(startPos, endPos)
 */
 function createCellTags(tagName, startPos, endPos, align)
 {
-	let tag;
+	var tag;
 	if (startPos === endPos)
 	{
 		tag = addSelfClosingTag(tagName, startPos, 0, -101);
@@ -323,7 +323,7 @@ function overwriteMarkdown()
 function parseColumnAlignments(line)
 {
 	// Use a bitfield to represent the colons' presence and map it to the CSS value
-	let align = [
+	var align = [
 			'',
 			'right',
 			'left',
@@ -335,7 +335,7 @@ function parseColumnAlignments(line)
 
 	while (m = regexp.exec(line))
 	{
-		let key = (m[1] ? 2 : 0) + (m[2] ? 1 : 0);
+		var key = (m[1] ? 2 : 0) + (m[2] ? 1 : 0);
 		cols.push(align[key]);
 	}
 
@@ -347,7 +347,7 @@ function parseColumnAlignments(line)
 */
 function processCurrentTable()
 {
-	let firstRow = table.rows[0],
+	var firstRow = table.rows[0],
 		lastRow  = table.rows[table.rows.length - 1];
 	createTableTags(firstRow.pos, lastRow.pos + lastRow.line.length);
 
@@ -361,7 +361,7 @@ function processCurrentTable()
 */
 function processTables()
 {
-	let i = -1, cnt = tables.length;
+	var i = -1, cnt = tables.length;
 	while (++i < cnt)
 	{
 		table = tables[i];

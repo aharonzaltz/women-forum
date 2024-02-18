@@ -4,26 +4,41 @@ declare(strict_types=1);
 
 namespace ProxyManager\Factory\RemoteObject\Adapter;
 
-use Laminas\Server\Client;
 use ProxyManager\Factory\RemoteObject\AdapterInterface;
-
-use function array_key_exists;
+use Zend\Server\Client;
 
 /**
  * Remote Object base adapter
+ *
+ * @author Vincent Blanchon <blanchon.vincent@gmail.com>
+ * @license MIT
  */
 abstract class BaseAdapter implements AdapterInterface
 {
     /**
+     * Adapter client
+     *
+     * @var \Zend\Server\Client
+     */
+    protected $client;
+
+    /**
+     * Service name mapping
+     *
+     * @var string[]
+     */
+    protected $map = [];
+
+    /**
      * Constructor
      *
-     * @param array<string, string> $map map of service names to their aliases
+     * @param Client $client
+     * @param array  $map    map of service names to their aliases
      */
-    public function __construct(
-        protected Client $client,
-        // Service name mapping
-        protected array $map = []
-    ) {
+    public function __construct(Client $client, array $map = [])
+    {
+        $this->client = $client;
+        $this->map    = $map;
     }
 
     /**
@@ -33,7 +48,7 @@ abstract class BaseAdapter implements AdapterInterface
     {
         $serviceName = $this->getServiceName($wrappedClass, $method);
 
-        if (array_key_exists($serviceName, $this->map)) {
+        if (\array_key_exists($serviceName, $this->map)) {
             $serviceName = $this->map[$serviceName];
         }
 
@@ -43,5 +58,5 @@ abstract class BaseAdapter implements AdapterInterface
     /**
      * Get the service name will be used by the adapter
      */
-    abstract protected function getServiceName(string $wrappedClass, string $method): string;
+    abstract protected function getServiceName(string $wrappedClass, string $method) : string;
 }

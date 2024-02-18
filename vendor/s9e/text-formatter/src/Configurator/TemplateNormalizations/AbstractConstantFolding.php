@@ -2,13 +2,13 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Attr;
-use s9e\SweetDOM\Element;
+use DOMAttr;
+use DOMElement;
 use s9e\TextFormatter\Configurator\Helpers\AVTHelper;
 
 abstract class AbstractConstantFolding extends AbstractNormalization
@@ -16,8 +16,8 @@ abstract class AbstractConstantFolding extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = [
-		'//*[namespace-uri() != "' . self::XMLNS_XSL . '"]/@*[contains(.,"{")]',
+	protected $queries = [
+		'//*[namespace-uri() != $XSL]/@*[contains(.,"{")]',
 		'//xsl:if[@test]',
 		'//xsl:value-of[@select]',
 		'//xsl:when[@test]'
@@ -49,9 +49,12 @@ abstract class AbstractConstantFolding extends AbstractNormalization
 	}
 
 	/**
-	* Replace constant expressions in given attribute's AVT
+	* Replace constant expressions in given AVT
+	*
+	* @param  DOMAttr $attribute
+	* @return void
 	*/
-	protected function normalizeAttribute(Attr $attribute): void
+	protected function normalizeAttribute(DOMAttr $attribute)
 	{
 		AVTHelper::replace(
 			$attribute,
@@ -70,10 +73,10 @@ abstract class AbstractConstantFolding extends AbstractNormalization
 	/**
 	* Replace constant expressions in given XSL element
 	*
-	* @param  Element $element
+	* @param  DOMElement $element
 	* @return void
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		$attrName = ($element->localName === 'value-of') ? 'select' : 'test';
 		$oldExpr  = $element->getAttribute($attrName);

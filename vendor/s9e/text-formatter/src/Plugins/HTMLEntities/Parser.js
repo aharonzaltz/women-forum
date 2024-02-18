@@ -1,9 +1,9 @@
-let tagName  = config.tagName,
+var tagName  = config.tagName,
 	attrName = config.attrName;
 
-matches.forEach((m) =>
+matches.forEach(function(m)
 {
-	let entity = m[0][0],
+	var entity = m[0][0],
 		chr    = html_entity_decode(entity);
 
 	if (chr === entity || chr.charCodeAt(0) < 32)

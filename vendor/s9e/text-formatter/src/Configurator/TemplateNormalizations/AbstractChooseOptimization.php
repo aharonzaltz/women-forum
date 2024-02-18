@@ -2,32 +2,32 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Element;
+use DOMElement;
 use DOMNode;
 
 abstract class AbstractChooseOptimization extends AbstractNormalization
 {
 	/**
-	* @var Element Current xsl:choose element
+	* @var DOMElement Current xsl:choose element
 	*/
 	protected $choose;
 
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = ['//xsl:choose'];
+	protected $queries = ['//xsl:choose'];
 
 	/**
 	* Retrieve a list of attributes from given element
 	*
 	* @return array NamespaceURI#nodeName as keys, attribute values as values
 	*/
-	protected function getAttributes(Element $element)
+	protected function getAttributes(DOMElement $element)
 	{
 		$attributes = array();
 		foreach ($element->attributes as $attribute)
@@ -42,11 +42,13 @@ abstract class AbstractChooseOptimization extends AbstractNormalization
 	/**
 	* Return a list the xsl:when and xsl:otherwise children of current xsl:choose element
 	*
-	* @return Element[]
+	* @return DOMElement[]
 	*/
-	protected function getBranches(): array
+	protected function getBranches()
 	{
-		return iterator_to_array($this->choose->query('xsl:when|xsl:otherwise'));
+		$query = 'xsl:when|xsl:otherwise';
+
+		return $this->xpath($query, $this->choose);
 	}
 
 	/**
@@ -56,7 +58,7 @@ abstract class AbstractChooseOptimization extends AbstractNormalization
 	*/
 	protected function hasOtherwise()
 	{
-		return (bool) $this->choose->evaluate('count(xsl:otherwise)');
+		return (bool) $this->xpath->evaluate('count(xsl:otherwise)', $this->choose);
 	}
 
 	/**
@@ -66,17 +68,34 @@ abstract class AbstractChooseOptimization extends AbstractNormalization
 	*/
 	protected function isEmpty()
 	{
-		return !$this->choose->evaluate('count(xsl:when/node() | xsl:otherwise/node())');
+		$query = 'count(xsl:when/node() | xsl:otherwise/node())';
+
+		return !$this->xpath->evaluate($query, $this->choose);
+	}
+
+	/**
+	* Test whether two nodes are identical
+	*
+	* ext/dom does not support isEqualNode() from DOM Level 3 so this is a makeshift replacement.
+	* Unlike the DOM 3 function, attributes order matters
+	*
+	* @param  DOMNode $node1
+	* @param  DOMNode $node2
+	* @return bool
+	*/
+	protected function isEqualNode(DOMNode $node1, DOMNode $node2)
+	{
+		return ($node1->ownerDocument->saveXML($node1) === $node2->ownerDocument->saveXML($node2));
 	}
 
 	/**
 	* Test whether two elements have the same start tag
 	*
-	* @param  Element $el1
-	* @param  Element $el2
+	* @param  DOMElement $el1
+	* @param  DOMElement $el2
 	* @return bool
 	*/
-	protected function isEqualTag(Element $el1, Element $el2)
+	protected function isEqualTag(DOMElement $el1, DOMElement $el2)
 	{
 		return ($el1->namespaceURI === $el2->namespaceURI && $el1->nodeName === $el2->nodeName && $this->getAttributes($el1) === $this->getAttributes($el2));
 	}
@@ -84,7 +103,7 @@ abstract class AbstractChooseOptimization extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		$this->choose = $element;
 		$this->optimizeChoose();
@@ -100,7 +119,7 @@ abstract class AbstractChooseOptimization extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected function reset(): void
+	protected function reset()
 	{
 		$this->choose = null;
 		parent::reset();

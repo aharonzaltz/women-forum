@@ -1,7 +1,7 @@
-let tagName  = config.tagName,
+var tagName  = config.tagName,
 	attrName = config.attrName;
 
-matches.forEach((m) =>
+matches.forEach(function(m)
 {
 	if (isAllowed(m[0][0]))
 	{
@@ -10,15 +10,15 @@ matches.forEach((m) =>
 
 	// NOTE: unlike the PCRE regexp, the JavaScript regexp can consume an extra character at the
 	//       start of the match, so we have to adjust the position and length accordingly
-	let offset = /^\W/.test(m[0][0]) ? 1 : 0,
+	var offset = /^\W/.test(m[0][0]) ? 1 : 0,
 		word   = m[0][0].substring(offset),
 		tag    = addSelfClosingTag(tagName, m[0][1] + offset, word.length);
 
 	if (HINT.CENSOR_HAS_REPLACEMENTS && config.replacements)
 	{
-		for (let i = 0; i < config.replacements.length; ++i)
+		for (var i = 0; i < config.replacements.length; ++i)
 		{
-			let regexp      = config.replacements[i][0],
+			var regexp      = config.replacements[i][0],
 				replacement = config.replacements[i][1];
 
 			if (regexp.test(word))

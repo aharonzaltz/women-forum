@@ -9,10 +9,11 @@ use ProxyManager\Exception\InvalidProxiedClassException;
 use ReflectionClass;
 use ReflectionMethod;
 
-use function array_filter;
-
 /**
  * Assertion that verifies that a class can be proxied
+ *
+ * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
  */
 final class CanProxyAssertion
 {
@@ -27,24 +28,27 @@ final class CanProxyAssertion
     }
 
     /**
+     * @param ReflectionClass $originalClass
+     * @param bool            $allowInterfaces
+     *
      * @throws InvalidProxiedClassException
      */
-    public static function assertClassCanBeProxied(ReflectionClass $originalClass, bool $allowInterfaces = true): void
+    public static function assertClassCanBeProxied(ReflectionClass $originalClass, bool $allowInterfaces = true) : void
     {
         self::isNotFinal($originalClass);
         self::hasNoAbstractProtectedMethods($originalClass);
 
-        if ($allowInterfaces) {
-            return;
+        if (! $allowInterfaces) {
+            self::isNotInterface($originalClass);
         }
-
-        self::isNotInterface($originalClass);
     }
 
     /**
+     * @param ReflectionClass $originalClass
+     *
      * @throws InvalidProxiedClassException
      */
-    private static function isNotFinal(ReflectionClass $originalClass): void
+    private static function isNotFinal(ReflectionClass $originalClass) : void
     {
         if ($originalClass->isFinal()) {
             throw InvalidProxiedClassException::finalClassNotSupported($originalClass);
@@ -52,13 +56,17 @@ final class CanProxyAssertion
     }
 
     /**
+     * @param ReflectionClass $originalClass
+     *
      * @throws InvalidProxiedClassException
      */
-    private static function hasNoAbstractProtectedMethods(ReflectionClass $originalClass): void
+    private static function hasNoAbstractProtectedMethods(ReflectionClass $originalClass) : void
     {
         $protectedAbstract = array_filter(
             $originalClass->getMethods(),
-            static fn (ReflectionMethod $method): bool => $method->isAbstract() && $method->isProtected()
+            function (ReflectionMethod $method) : bool {
+                return $method->isAbstract() && $method->isProtected();
+            }
         );
 
         if ($protectedAbstract) {
@@ -67,9 +75,11 @@ final class CanProxyAssertion
     }
 
     /**
+     * @param ReflectionClass $originalClass
+     *
      * @throws InvalidProxiedClassException
      */
-    private static function isNotInterface(ReflectionClass $originalClass): void
+    private static function isNotInterface(ReflectionClass $originalClass) : void
     {
         if ($originalClass->isInterface()) {
             throw InvalidProxiedClassException::interfaceNotSupported($originalClass);

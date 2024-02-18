@@ -4,25 +4,36 @@ declare(strict_types=1);
 
 namespace ProxyManager\Signature;
 
-use Laminas\Code\Exception\InvalidArgumentException;
-use Laminas\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\ClassGenerator;
+use Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Applies a signature to a given class generator
+ *
+ * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
  */
 final class ClassSignatureGenerator implements ClassSignatureGeneratorInterface
 {
-    public function __construct(private SignatureGeneratorInterface $signatureGenerator)
+    /**
+     * @var SignatureGeneratorInterface
+     */
+    private $signatureGenerator;
+
+    /**
+     * @param SignatureGeneratorInterface $signatureGenerator
+     */
+    public function __construct(SignatureGeneratorInterface $signatureGenerator)
     {
+        $this->signatureGenerator = $signatureGenerator;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidArgumentException
+     * @throws \Zend\Code\Exception\InvalidArgumentException
      */
-    public function addSignature(ClassGenerator $classGenerator, array $parameters): ClassGenerator
+    public function addSignature(ClassGenerator $classGenerator, array $parameters) : ClassGenerator
     {
         $classGenerator->addPropertyFromGenerator(new PropertyGenerator(
             'signature' . $this->signatureGenerator->generateSignatureKey($parameters),

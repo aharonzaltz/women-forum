@@ -2,27 +2,27 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Element;
+use DOMElement;
 
 class InlineTextElements extends AbstractNormalization
 {
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = ['//xsl:text[not(@disable-output-escaping="yes")]'];
+	protected $queries = ['//xsl:text[not(@disable-output-escaping="yes")]'];
 
 	/**
 	* Test whether an element is followed by a text node
 	*
-	* @param  Element $element
+	* @param  DOMElement $element
 	* @return bool
 	*/
-	protected function isFollowedByText(Element $element)
+	protected function isFollowedByText(DOMElement $element)
 	{
 		return ($element->nextSibling && $element->nextSibling->nodeType === XML_TEXT_NODE);
 	}
@@ -30,10 +30,10 @@ class InlineTextElements extends AbstractNormalization
 	/**
 	* Test whether an element is preceded by a text node
 	*
-	* @param  Element $element
+	* @param  DOMElement $element
 	* @return bool
 	*/
-	protected function isPrecededByText(Element $element)
+	protected function isPrecededByText(DOMElement $element)
 	{
 		return ($element->previousSibling && $element->previousSibling->nodeType === XML_TEXT_NODE);
 	}
@@ -41,7 +41,7 @@ class InlineTextElements extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		// If this node's content is whitespace, ensure it's preceded or followed by a text node
 		if (trim($element->textContent) === '')
@@ -52,6 +52,6 @@ class InlineTextElements extends AbstractNormalization
 				return;
 			}
 		}
-		$element->replaceWith($element->textContent);
+		$element->parentNode->replaceChild($this->createTextNode($element->textContent), $element);
 	}
 }

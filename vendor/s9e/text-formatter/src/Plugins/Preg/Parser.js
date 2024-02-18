@@ -1,6 +1,6 @@
-config.generics.forEach((entry) =>
+config.generics.forEach(function(entry)
 {
-	let tagName        = entry[0],
+	var tagName        = entry[0],
 		regexp         = entry[1],
 		passthroughIdx = entry[2],
 		map            = entry[3],
@@ -11,7 +11,7 @@ config.generics.forEach((entry) =>
 
 	while (m = regexp.exec(text))
 	{
-		let startTagPos = m.index,
+		var startTagPos = m.index,
 			matchLen    = m[0].length,
 			tag;
 
@@ -21,7 +21,7 @@ config.generics.forEach((entry) =>
 			// between. m.index gives us the position of the start tag but we don't know its length.
 			// We use indexOf() to locate the content part so that we know how long the start tag
 			// is. It is an imperfect solution but it should work well enough in most cases.
-			let contentPos  = text.indexOf(m[passthroughIdx], startTagPos),
+			var contentPos  = text.indexOf(m[passthroughIdx], startTagPos),
 				contentLen  = m[passthroughIdx].length,
 				startTagLen = contentPos - startTagPos,
 				endTagPos   = contentPos + contentLen,
@@ -34,7 +34,7 @@ config.generics.forEach((entry) =>
 			tag = addSelfClosingTag(tagName, startTagPos, matchLen, -100);
 		}
 
-		map.forEach((attrName, i) =>
+		map.forEach(function(attrName, i)
 		{
 			// NOTE: subpatterns with no name have an empty entry to preserve the array indices
 			if (attrName && typeof m[i] !== 'undefined')

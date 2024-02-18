@@ -1,4 +1,5 @@
-const RegexpFilter =
+/** @const */
+var RegexpFilter =
 {
 	/**
 	* @param  {*} attrValue

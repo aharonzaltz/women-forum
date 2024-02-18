@@ -7,7 +7,7 @@
 */
 function setLinkAttributes(tag, linkInfo, attrName)
 {
-	let url   = linkInfo.replace(/^\s*/, '').replace(/\s*$/, ''),
+	var url   = linkInfo.replace(/^\s*/, '').replace(/\s*$/, ''),
 		title = '',
 		pos   = url.indexOf(' ');
 	if (pos !== -1)

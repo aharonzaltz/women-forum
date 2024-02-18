@@ -1,7 +1,11 @@
+---
+title: Download / Installation
+---
+
 ## Download / Installation
 
-The suggested installation method is via [Composer](https://getcomposer.org/):
+The suggested installation method is via [composer](https://getcomposer.org/).
 
 ```sh
-composer require ocramius/proxy-manager
+php composer.phar require ocramius/proxy-manager:1.0.*
 ```

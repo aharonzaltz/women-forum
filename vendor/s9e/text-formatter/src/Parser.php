@@ -2,7 +2,7 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter;
@@ -216,9 +216,9 @@ class Parser
 			throw new InvalidArgumentException('Invalid UTF-8 input');
 		}
 
-		// Normalize CR/CRLF to LF, remove characters that aren't allowed in XML
+		// Normalize CR/CRLF to LF, remove control characters that aren't allowed in XML
 		$text = preg_replace('/\\r\\n?/', "\n", $text);
-		$text = preg_replace('/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]|\\xEF\\xBF[\\xBE\\xBF]/', '', $text);
+		$text = preg_replace('/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]+/S', '', $text);
 
 		// Clear the logs
 		$this->logger->clear();
@@ -417,8 +417,8 @@ class Parser
 			$this->output = str_replace('</i><i>', '', $this->output);
 		}
 
-		// Remove illegal characters from the output to ensure it's valid XML
-		$this->output = preg_replace('([\\x00-\\x08\\x0B-\\x1F]|\\xEF\\xBF[\\xBE\\xBF])', '', $this->output);
+		// Remove control characters from the output to ensure it's valid XML
+		$this->output = preg_replace('([\\x00-\\x08\\x0B-\\x1F])', '', $this->output);
 
 		// Encode Unicode characters that are outside of the BMP
 		$this->output = Utils::encodeUnicodeSupplementaryCharacters($this->output);

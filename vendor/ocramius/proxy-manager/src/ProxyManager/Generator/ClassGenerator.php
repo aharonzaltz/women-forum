@@ -4,15 +4,37 @@ declare(strict_types=1);
 
 namespace ProxyManager\Generator;
 
-use Laminas\Code\Generator\ClassGenerator as LaminasClassGenerator;
+use Zend\Code\Generator\ClassGenerator as ZendClassGenerator;
 
 /**
  * Class generator that ensures that interfaces/classes that are implemented/extended are FQCNs
  *
- * @internal do not use this in your code: it is only here for internal use
- * @deprecated this class was in use due to parent implementation not receiving prompt bugfixes, but
- *             `laminas/laminas-code` is actively maintained and receives quick release iterations.
+ * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
  */
-class ClassGenerator extends LaminasClassGenerator
+class ClassGenerator extends ZendClassGenerator
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function setExtendedClass($extendedClass) : parent
+    {
+        if ($extendedClass) {
+            $extendedClass = '\\' . trim($extendedClass, '\\');
+        }
+
+        return parent::setExtendedClass($extendedClass);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setImplementedInterfaces(array $interfaces) : parent
+    {
+        foreach ($interfaces as & $interface) {
+            $interface = '\\' . trim($interface, '\\');
+        }
+
+        return parent::setImplementedInterfaces($interfaces);
+    }
 }

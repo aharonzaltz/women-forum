@@ -1,4 +1,5 @@
-const HashmapFilter =
+/** @const */
+var HashmapFilter =
 {
 	/**
 	* @param  {*}        attrValue Original value

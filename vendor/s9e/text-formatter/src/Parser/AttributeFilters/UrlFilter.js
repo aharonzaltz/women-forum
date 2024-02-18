@@ -1,4 +1,5 @@
-const UrlFilter =
+/** @const */
+var UrlFilter =
 {
 	/**
 	* @param  {*}        attrValue
@@ -12,9 +13,9 @@ const UrlFilter =
 		* Trim the URL to conform with HTML5 then parse it
 		* @link http://dev.w3.org/html5/spec/links.html#attr-hyperlink-href
 		*/
-		let p = UrlFilter.parseUrl(attrValue.replace(/^\s+/, '').replace(/\s+$/, ''));
+		var p = UrlFilter.parseUrl(attrValue.replace(/^\s+/, '').replace(/\s+$/, ''));
 
-		let error = UrlFilter.validateUrl(urlConfig, p);
+		var error = UrlFilter.validateUrl(urlConfig, p);
 		if (error)
 		{
 			if (logger)
@@ -39,10 +40,10 @@ const UrlFilter =
 	*/
 	parseUrl: function(url)
 	{
-		let regexp = /^(?:([a-z][-+.\w]*):)?(?:\/\/(?:([^:\/?#]*)(?::([^\/?#]*)?)?@)?(?:(\[[a-f\d:]+\]|[^:\/?#]+)(?::(\d*))?)?(?![^\/?#]))?([^?#]*)(\?[^#]*)?(#.*)?$/i;
+		var regexp = /^(?:([a-z][-+.\w]*):)?(?:\/\/(?:([^:\/?#]*)(?::([^\/?#]*)?)?@)?(?:(\[[a-f\d:]+\]|[^:\/?#]+)(?::(\d*))?)?(?![^\/?#]))?([^?#]*)(\?[^#]*)?(#.*)?$/i;
 
 		// NOTE: this regexp always matches because of the last three captures
-		let m = regexp['exec'](url),
+		var m = regexp['exec'](url),
 			parts = {},
 			tokens = ['scheme', 'user', 'pass', 'host', 'port', 'path', 'query', 'fragment'];
 		tokens.forEach(
@@ -85,7 +86,7 @@ const UrlFilter =
 	*/
 	rebuildUrl: function(urlConfig, p)
 	{
-		let url = '';
+		var url = '';
 		if (p['scheme'] !== '')
 		{
 			url += p['scheme'] + ':';
@@ -125,7 +126,7 @@ const UrlFilter =
 		}
 
 		// Build the path, including the query and fragment parts
-		let path = p['path'] + p['query'] + p['fragment'];
+		var path = p['path'] + p['query'] + p['fragment'];
 
 		/**
 		* "For consistency, URI producers and normalizers should use uppercase hexadecimal digits
@@ -194,8 +195,6 @@ const UrlFilter =
 	/**
 	* Validate a parsed URL
 	*
-	* @suppress {missingProperties}
-	*
 	* @param  {!Object} urlConfig
 	* @param  {!Object} p
 	* @return {string|undefined}
@@ -214,7 +213,7 @@ const UrlFilter =
 			* @link http://tools.ietf.org/html/rfc1035#section-2.3.1
 			* @link http://tools.ietf.org/html/rfc1123#section-2
 			*/
-			let regexp = /^(?!-)[-a-z0-9]{0,62}[a-z0-9](?:\.(?!-)[-a-z0-9]{0,62}[a-z0-9])*$/i;
+			var regexp = /^(?!-)[-a-z0-9]{0,62}[a-z0-9](?:\.(?!-)[-a-z0-9]{0,62}[a-z0-9])*$/i;
 			if (!regexp.test(p['host']))
 			{
 				// If the host invalid, retest as an IPv4 and IPv6 address (IPv6 in brackets)

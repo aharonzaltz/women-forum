@@ -14,10 +14,10 @@ function parseInlineMarkup(str, regexp, tagName)
 		return;
 	}
 
-	let m;
+	var m;
 	while (m = regexp.exec(text))
 	{
-		let match    = m[0],
+		var match    = m[0],
 			matchPos = m.index,
 			matchLen = match.length,
 			endPos   = matchPos + matchLen - 2;

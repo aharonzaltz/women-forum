@@ -1,6 +1,6 @@
 function parse()
 {
-	let pos = text.indexOf('![');
+	var pos = text.indexOf('![');
 	if (pos === -1)
 	{
 		return;
@@ -26,7 +26,7 @@ function parse()
 */
 function addImageTag(startPos, endPos, endLen, linkInfo, alt)
 {
-	let tag = addTagPair('IMG', startPos, 2, endPos, endLen);
+	var tag = addTagPair('IMG', startPos, 2, endPos, endLen);
 	setLinkAttributes(tag, linkInfo, 'src');
 	tag.setAttribute('alt', decode(alt));
 
@@ -39,10 +39,10 @@ function addImageTag(startPos, endPos, endLen, linkInfo, alt)
 */
 function parseInlineImages()
 {
-	let m, regexp = /!\[(?:[^\x17[\]]|\[[^\x17[\]]*\])*\]\(( *(?:[^\x17\s()]|\([^\x17\s()]*\))*(?=[ )]) *(?:"[^\x17]*?"|'[^\x17]*?'|\([^\x17)]*\))? *)\)/g;
+	var m, regexp = /!\[(?:[^\x17[\]]|\[[^\x17[\]]*\])*\]\(( *(?:[^\x17\s()]|\([^\x17\s()]*\))*(?=[ )]) *(?:"[^\x17]*?"|'[^\x17]*?'|\([^\x17)]*\))? *)\)/g;
 	while (m = regexp.exec(text))
 	{
-		let linkInfo = m[1],
+		var linkInfo = m[1],
 			startPos = m.index,
 			endLen   = 3 + linkInfo.length,
 			endPos   = startPos + m[0].length - endLen,
@@ -57,10 +57,10 @@ function parseInlineImages()
 */
 function parseReferenceImages()
 {
-	let m, regexp = /!\[((?:[^\x17[\]]|\[[^\x17[\]]*\])*)\](?: ?\[([^\x17[\]]+)\])?/g;
+	var m, regexp = /!\[((?:[^\x17[\]]|\[[^\x17[\]]*\])*)\](?: ?\[([^\x17[\]]+)\])?/g;
 	while (m = regexp.exec(text))
 	{
-		let startPos = m.index,
+		var startPos = m.index,
 			endPos   = startPos + 2 + m[1].length,
 			endLen   = 1,
 			alt      = m[1],

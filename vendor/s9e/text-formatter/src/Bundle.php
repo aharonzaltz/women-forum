@@ -2,7 +2,7 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter;
@@ -44,21 +44,21 @@ abstract class Bundle
 	*
 	* @return Parser
 	*/
-	abstract public static function getParser(): Parser;
+	abstract public static function getParser();
 
 	/**
 	* Return a new instance of s9e\TextFormatter\Renderer
 	*
 	* @return Renderer
 	*/
-	abstract public static function getRenderer(): Renderer;
+	abstract public static function getRenderer();
 
 	/**
 	* Return the source of the JavaScript parser if available
 	*
 	* @return string
 	*/
-	public static function getJS(): string
+	public static function getJS()
 	{
 		return '';
 	}
@@ -69,7 +69,7 @@ abstract class Bundle
 	* @param  string $text Original text
 	* @return string       Intermediate representation
 	*/
-	public static function parse($text): string
+	public static function parse($text)
 	{
 		if (isset(static::$beforeParse))
 		{
@@ -93,7 +93,7 @@ abstract class Bundle
 	* @param  array  $params Stylesheet parameters
 	* @return string         Rendered result
 	*/
-	public static function render($xml, array $params = []): string
+	public static function render($xml, array $params = [])
 	{
 		$renderer = static::getCachedRenderer();
 
@@ -122,7 +122,7 @@ abstract class Bundle
 	*
 	* @return void
 	*/
-	public static function reset(): void
+	public static function reset()
 	{
 		static::$parser   = null;
 		static::$renderer = null;

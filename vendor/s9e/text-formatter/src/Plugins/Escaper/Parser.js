@@ -1,4 +1,4 @@
-matches.forEach((m) =>
+matches.forEach(function(m)
 {
 	addTagPair(
 		config.tagName,

@@ -4,67 +4,61 @@ declare(strict_types=1);
 
 namespace ProxyManager\Factory;
 
-use Laminas\Code\Generator\ClassGenerator;
-use OutOfBoundsException;
 use ProxyManager\Configuration;
+use ProxyManager\Generator\ClassGenerator;
 use ProxyManager\ProxyGenerator\ProxyGeneratorInterface;
 use ProxyManager\Signature\Exception\InvalidSignatureException;
 use ProxyManager\Signature\Exception\MissingSignatureException;
 use ProxyManager\Version;
 use ReflectionClass;
 
-use function array_key_exists;
-use function assert;
-use function class_exists;
-use function is_a;
-
 /**
  * Base factory common logic
+ *
+ * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
  */
 abstract class AbstractBaseFactory
 {
-    protected Configuration $configuration;
+    /**
+     * @var \ProxyManager\Configuration
+     */
+    protected $configuration;
 
     /**
      * Cached checked class names
      *
-     * @var array<string, string>
-     * @psalm-var array<class-string, class-string>
+     * @var string[]
      */
-    private array $checkedClasses = [];
+    private $checkedClasses = [];
 
-    public function __construct(?Configuration $configuration = null)
+    /**
+     * @param \ProxyManager\Configuration $configuration
+     */
+    public function __construct(Configuration $configuration = null)
     {
-        $this->configuration = $configuration ?? new Configuration();
+        $this->configuration = $configuration ?: new Configuration();
     }
 
     /**
      * Generate a proxy from a class name
      *
-     * @param array<string, mixed> $proxyOptions
-     * @psalm-param class-string<RealObjectType> $className
-     *
-     * @psalm-return class-string<RealObjectType>
+     * @param string  $className
+     * @param mixed[] $proxyOptions
      *
      * @throws InvalidSignatureException
      * @throws MissingSignatureException
-     * @throws OutOfBoundsException
-     *
-     * @psalm-template RealObjectType of object
+     * @throws \OutOfBoundsException
      */
-    protected function generateProxy(string $className, array $proxyOptions = []): string
+    protected function generateProxy(string $className, array $proxyOptions = []) : string
     {
-        if (array_key_exists($className, $this->checkedClasses)) {
-            $generatedClassName = $this->checkedClasses[$className];
-
-            assert(is_a($generatedClassName, $className, true));
-
-            return $generatedClassName;
+        if (\array_key_exists($className, $this->checkedClasses)) {
+            return $this->checkedClasses[$className];
         }
 
         $proxyParameters = [
             'className'           => $className,
-            'factory'             => static::class,
+            'factory'             => get_class($this),
             'proxyManagerVersion' => Version::getVersion(),
             'proxyOptions'        => $proxyOptions,
         ];
@@ -90,31 +84,29 @@ abstract class AbstractBaseFactory
         return $this->checkedClasses[$className] = $proxyClassName;
     }
 
-    abstract protected function getGenerator(): ProxyGeneratorInterface;
+    abstract protected function getGenerator() : ProxyGeneratorInterface;
 
     /**
      * Generates the provided `$proxyClassName` from the given `$className` and `$proxyParameters`
      *
-     * @param array<string, mixed> $proxyParameters
-     * @param array<string, mixed> $proxyOptions
-     * @psalm-param class-string $proxyClassName
-     * @psalm-param class-string $className
+     * @param string  $proxyClassName
+     * @param string  $className
+     * @param array   $proxyParameters
+     * @param mixed[] $proxyOptions
      */
     private function generateProxyClass(
         string $proxyClassName,
         string $className,
         array $proxyParameters,
         array $proxyOptions = []
-    ): void {
+    ) : void {
         $className = $this->configuration->getClassNameInflector()->getUserClassName($className);
         $phpClass  = new ClassGenerator($proxyClassName);
 
-        /** @psalm-suppress TooManyArguments - generator interface was not updated due to BC compliance */
         $this->getGenerator()->generate(new ReflectionClass($className), $phpClass, $proxyOptions);
 
         $phpClass = $this->configuration->getClassSignatureGenerator()->addSignature($phpClass, $proxyParameters);
 
-        /** @psalm-suppress TooManyArguments - generator interface was not updated due to BC compliance */
         $this->configuration->getGeneratorStrategy()->generate($phpClass, $proxyOptions);
 
         $autoloader = $this->configuration->getProxyAutoloader();

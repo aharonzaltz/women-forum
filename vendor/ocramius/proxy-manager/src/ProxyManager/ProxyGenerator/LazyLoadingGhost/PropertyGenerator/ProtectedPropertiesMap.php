@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace ProxyManager\ProxyGenerator\LazyLoadingGhost\PropertyGenerator;
 
-use Laminas\Code\Generator\Exception\InvalidArgumentException;
-use Laminas\Code\Generator\PropertyGenerator;
 use ProxyManager\Generator\Util\IdentifierSuffixer;
 use ProxyManager\ProxyGenerator\Util\Properties;
+use Zend\Code\Generator\PropertyGenerator;
 
 /**
  * Property that contains the protected instance lazy-loadable properties of an object
+ *
+ * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
  */
 class ProtectedPropertiesMap extends PropertyGenerator
 {
-    public const KEY_DEFAULT_VALUE = 'defaultValue';
+    const KEY_DEFAULT_VALUE = 'defaultValue';
 
     /**
      * Constructor
      *
-     * @throws InvalidArgumentException
+     * @param Properties $properties
+     *
+     * @throws \Zend\Code\Generator\Exception\InvalidArgumentException
      */
     public function __construct(Properties $properties)
     {
@@ -35,8 +39,13 @@ class ProtectedPropertiesMap extends PropertyGenerator
         $this->setDefaultValue($this->getMap($properties));
     }
 
-    /** @return string[] */
-    private function getMap(Properties $properties): array
+    /**
+     *
+     * @param Properties $properties
+     *
+     * @return int[][]|mixed[][]
+     */
+    private function getMap(Properties $properties) : array
     {
         $map = [];
 

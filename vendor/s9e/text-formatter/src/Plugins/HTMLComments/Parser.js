@@ -1,10 +1,10 @@
-let tagName  = config.tagName,
+var tagName  = config.tagName,
 	attrName = config.attrName;
 
-matches.forEach((m) =>
+matches.forEach(function(m)
 {
 	// Decode HTML entities
-	let content = html_entity_decode(m[0][0].substring(4, m[0][0].length - 3));
+	var content = html_entity_decode(m[0][0].substring(4, m[0][0].length - 3));
 
 	// Remove angle brackets from the content
 	content = content.replace(/[<>]/g, '');

@@ -51,7 +51,7 @@ Logger.prototype.add = function(type, msg, context)
 	// Execute callbacks
 	if (this.callbacks[type])
 	{
-		this.callbacks[type].forEach((callback) =>
+		this.callbacks[type].forEach(function(callback)
 		{
 			callback(msg, context);
 		});

@@ -2,25 +2,28 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\CdataSection;
+use DOMNode;
 
 class InlineCDATA extends AbstractNormalization
 {
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = ['//text()'];
+	protected $queries = ['//text()'];
 
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeCdataSection(CdataSection $node): void
+	protected function normalizeNode(DOMNode $node)
 	{
-		$node->replaceWith($this->createPolymorphicText($node->textContent));
+		if ($node->nodeType === XML_CDATA_SECTION_NODE)
+		{
+			$node->parentNode->replaceChild($this->createText($node->textContent), $node);
+		}
 	}
 }

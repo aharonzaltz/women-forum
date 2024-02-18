@@ -1,4 +1,4 @@
-let attrName       = config.attrName,
+var attrName       = config.attrName,
 	hasSingleQuote = (text.indexOf("'") >= 0),
 	hasDoubleQuote = (text.indexOf('"') >= 0),
 	tagName        = config.tagName;
@@ -39,7 +39,7 @@ if (typeof config.disableSymbols === 'undefined')
 */
 function addTag(tagPos, tagLen, chr, prio)
 {
-	let tag = addSelfClosingTag(tagName, tagPos, tagLen, prio || 0);
+	var tag = addSelfClosingTag(tagName, tagPos, tagLen, prio || 0);
 	tag.setAttribute(attrName, chr);
 
 	return tag;
@@ -57,7 +57,7 @@ function parseDashesAndEllipses()
 		return;
 	}
 
-	let chrs = {
+	var chrs = {
 			'--'  : "\u2013",
 			'---' : "\u2014",
 			'...' : "\u2026"
@@ -94,7 +94,7 @@ function parseFractions()
 	}
 
 	/** @const */
-	let map = {
+	var map = {
 		'0/3'  : "\u2189",
 		'1/10' : "\u2152",
 		'1/2'  : "\u00BD",
@@ -116,7 +116,7 @@ function parseFractions()
 		'7/8'  : "\u215E"
 	};
 
-	let m, regexp = /\b(?:0\/3|1\/(?:[2-9]|10)|2\/[35]|3\/[458]|4\/5|5\/[68]|7\/8)\b/g;
+	var m, regexp = /\b(?:0\/3|1\/(?:[2-9]|10)|2\/[35]|3\/[458]|4\/5|5\/[68]|7\/8)\b/g;
 	while (m = regexp.exec(text))
 	{
 		addTag(m.index, m[0].length, map[m[0]]);
@@ -133,10 +133,10 @@ function parseGuillemets()
 		return;
 	}
 
-	let m, regexp = /<<( ?)(?! )[^\n<>]*?[^\n <>]\1>>(?!>)/g;
+	var m, regexp = /<<( ?)(?! )[^\n<>]*?[^\n <>]\1>>(?!>)/g;
 	while (m = regexp.exec(text))
 	{
-		let left  = addTag(m.index,                   2, "\u00AB"),
+		var left  = addTag(m.index,                   2, "\u00AB"),
 			right = addTag(m.index + m[0].length - 2, 2, "\u00BB");
 
 		left.cascadeInvalidationTo(right);
@@ -155,7 +155,7 @@ function parseNotEqualSign()
 		return;
 	}
 
-	let m, regexp = /\b (?:!|=\/)=(?= \b)/g;
+	var m, regexp = /\b (?:!|=\/)=(?= \b)/g;
 	while (m = regexp.exec(text))
 	{
 		addTag(m.index + 1, m[0].length - 1, "\u2260");
@@ -172,10 +172,10 @@ function parseNotEqualSign()
 */
 function parseQuotePairs(q, regexp, leftQuote, rightQuote)
 {
-	let m;
+	var m;
 	while (m = regexp.exec(text))
 	{
-		let left  = addTag(m.index + m[0].indexOf(q), 1, leftQuote),
+		var left  = addTag(m.index + m[0].indexOf(q), 1, leftQuote),
 			right = addTag(m.index + m[0].length - 1, 1, rightQuote);
 
 		// Cascade left tag's invalidation to the right so that if we skip the left quote,
@@ -209,7 +209,7 @@ function parseSingleQuotes()
 		return;
 	}
 
-	let m, regexp = /[a-z]'|(?:^|\s)'(?=[a-z]|[0-9]{2})/gi;
+	var m, regexp = /[a-z]'|(?:^|\s)'(?=[a-z]|[0-9]{2})/gi;
 	while (m = regexp.exec(text))
 	{
 		// Give this tag a worse priority than default so that quote pairs take precedence
@@ -233,7 +233,7 @@ function parseSymbolsAfterDigits()
 	}
 
 	/** @const */
-	let map = {
+	var map = {
 		// 80's -- use an apostrophe
 		"'s" : "\u2019",
 		// 12' or 12" -- use a prime
@@ -245,7 +245,7 @@ function parseSymbolsAfterDigits()
 		'"x' : "\u2033"
 	};
 
-	let m, regexp = /[0-9](?:'s|["']? ?x(?= ?[0-9])|["'])/g;
+	var m, regexp = /[0-9](?:'s|["']? ?x(?= ?[0-9])|["'])/g;
 	while (m = regexp.exec(text))
 	{
 		// Test for a multiply sign at the end
@@ -255,7 +255,7 @@ function parseSymbolsAfterDigits()
 		}
 
 		// Test for an apostrophe/prime right after the digit
-		let str = m[0].substring(1, 3);
+		var str = m[0].substring(1, 3);
 		if (map[str])
 		{
 			addTag(m.index + 1, 1, map[str]);
@@ -275,7 +275,7 @@ function parseSymbolsInParentheses()
 		return;
 	}
 
-	let chrs = {
+	var chrs = {
 			'(c)'  : "\u00A9",
 			'(r)'  : "\u00AE",
 			'(tm)' : "\u2122"

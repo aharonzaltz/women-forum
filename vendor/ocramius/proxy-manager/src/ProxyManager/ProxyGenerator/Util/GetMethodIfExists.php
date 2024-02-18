@@ -9,6 +9,9 @@ use ReflectionMethod;
 
 /**
  * Internal utility class - allows fetching a method from a given class, if it exists
+ *
+ * @author Marco Pivetta <ocramius@gmail.com>
+ * @license MIT
  */
 final class GetMethodIfExists
 {
@@ -16,7 +19,7 @@ final class GetMethodIfExists
     {
     }
 
-    public static function get(ReflectionClass $class, string $method): ?ReflectionMethod
+    public static function get(ReflectionClass $class, string $method) : ?ReflectionMethod
     {
         return $class->hasMethod($method) ? $class->getMethod($method) : null;
     }

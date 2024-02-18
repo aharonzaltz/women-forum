@@ -2,12 +2,12 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Element;
+use DOMElement;
 use DOMException;
 
 /**
@@ -23,15 +23,15 @@ class InlineElements extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = ['//xsl:element'];
+	protected $queries = ['//xsl:element'];
 
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		$elName = $element->getAttribute('name');
-		$dom    = $element->ownerDocument;
+		$dom    = $this->ownerDocument;
 
 		try
 		{
@@ -48,9 +48,12 @@ class InlineElements extends AbstractNormalization
 
 		// Replace the old <xsl:element/> with it. We do it now so that libxml doesn't have to
 		// redeclare the XSL namespace
-		$element->replaceWith($newElement);
+		$element->parentNode->replaceChild($newElement, $element);
 
-		// Move all the nodes from the old element to the new one
-		$newElement->append(...$element->childNodes);
+		// One by one and in order, we move the nodes from the old element to the new one
+		while ($element->firstChild)
+		{
+			$newElement->appendChild($element->removeChild($element->firstChild));
+		}
 	}
 }

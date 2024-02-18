@@ -1,37 +1,37 @@
 /**
 * @type {boolean} Whether current EM span is being closed by current emphasis mark
 */
-let closeEm;
+var closeEm;
 
 /**
 * @type {boolean} Whether current EM span is being closed by current emphasis mark
 */
-let closeStrong;
+var closeStrong;
 
 /**
 * @type {number} Starting position of the current EM span in the text
 */
-let emPos;
+var emPos;
 
 /**
 * @type {number} Ending position of the current EM span in the text
 */
-let emEndPos;
+var emEndPos;
 
 /**
 * @type {number} Number of emphasis characters unused in current span
 */
-let remaining;
+var remaining;
 
 /**
 * @type {number} Starting position of the current STRONG span in the text
 */
-let strongPos;
+var strongPos;
 
 /**
 * @type {number} Ending position of the current STRONG span in the text
 */
-let strongEndPos;
+var strongEndPos;
 
 function parse()
 {
@@ -107,7 +107,7 @@ function closeSpans()
 */
 function getEmphasisByBlock(regexp, pos)
 {
-	let block    = [],
+	var block    = [],
 		blocks   = [],
 		breakPos = text.indexOf("\x17", pos),
 		m;
@@ -115,7 +115,7 @@ function getEmphasisByBlock(regexp, pos)
 	regexp.lastIndex = pos;
 	while (m = regexp.exec(text))
 	{
-		let matchPos = m.index,
+		var matchPos = m.index,
 			matchLen = m[0].length;
 
 		// Test whether we've just passed the limits of a block
@@ -176,7 +176,7 @@ function openSpans(pos)
 */
 function parseEmphasisByCharacter(character, regexp)
 {
-	let pos = text.indexOf(character);
+	var pos = text.indexOf(character);
 	if (pos === -1)
 	{
 		return;
@@ -196,7 +196,7 @@ function processEmphasisBlock(block)
 	emPos     = -1,
 	strongPos = -1;
 
-	block.forEach((pair) =>
+	block.forEach(function(pair)
 	{
 		processEmphasisMatch(pair[0], pair[1]);
 	});
@@ -210,7 +210,7 @@ function processEmphasisBlock(block)
 */
 function processEmphasisMatch(matchPos, matchLen)
 {
-	let canOpen  = !isBeforeWhitespace(matchPos + matchLen - 1),
+	var canOpen  = !isBeforeWhitespace(matchPos + matchLen - 1),
 		canClose = !isAfterWhitespace(matchPos),
 		closeLen = (canClose) ? Math.min(matchLen, 3) : 0;
 

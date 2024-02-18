@@ -1,4 +1,5 @@
-const NetworkFilter =
+/** @const */
+var NetworkFilter =
 {
 	/**
 	* @param  {*} attrValue
@@ -25,7 +26,7 @@ const NetworkFilter =
 	*/
 	filterIpport: function(attrValue)
 	{
-		let m, ip;
+		var m, ip;
 
 		if (m = /^\[([\da-f:]+)(\]:[1-9]\d*)$/i.exec(attrValue))
 		{
@@ -65,7 +66,7 @@ const NetworkFilter =
 			return false;
 		}
 
-		let i = 4, p = attrValue.split('.');
+		var i = 4, p = attrValue.split('.');
 		while (--i >= 0)
 		{
 			// NOTE: ext/filter doesn't support octal notation

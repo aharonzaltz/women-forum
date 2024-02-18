@@ -2,27 +2,27 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Element;
+use DOMElement;
 
 class NormalizeElementNames extends AbstractNormalization
 {
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = [
-		'//*[namespace-uri() != "' . self::XMLNS_XSL . '"]',
+	protected $queries = [
+		'//*[namespace-uri() != $XSL]',
 		'//xsl:element[not(contains(@name, "{"))]'
 	];
 
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeElement(Element $element): void
+	protected function normalizeElement(DOMElement $element)
 	{
 		if ($this->isXsl($element, 'element'))
 		{
@@ -37,10 +37,10 @@ class NormalizeElementNames extends AbstractNormalization
 	/**
 	* Normalize and replace a non-XSL element if applicable
 	*
-	* @param  Element $element
+	* @param  DOMElement $element
 	* @return void
 	*/
-	protected function replaceElement(Element $element)
+	protected function replaceElement(DOMElement $element)
 	{
 		$elName = $this->lowercase($element->localName);
 		if ($elName === $element->localName)
@@ -54,7 +54,10 @@ class NormalizeElementNames extends AbstractNormalization
 		            : $this->ownerDocument->createElementNS($element->namespaceURI, $elName);
 
 		// Move every child to the new element
-		$newElement->append(...$element->childNodes);
+		while ($element->firstChild)
+		{
+			$newElement->appendChild($element->removeChild($element->firstChild));
+		}
 
 		// Copy attributes to the new node
 		foreach ($element->attributes as $attribute)
@@ -67,16 +70,16 @@ class NormalizeElementNames extends AbstractNormalization
 		}
 
 		// Replace the old element with the new one
-		$element->replaceWith($newElement);
+		$element->parentNode->replaceChild($newElement, $element);
 	}
 
 	/**
 	* Normalize the name used in a xsl:element
 	*
-	* @param  Element $element
+	* @param  DOMElement $element
 	* @return void
 	*/
-	protected function replaceXslElement(Element $element)
+	protected function replaceXslElement(DOMElement $element)
 	{
 		$elName = $this->lowercase($element->getAttribute('name'));
 		$element->setAttribute('name', $elName);

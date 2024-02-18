@@ -2,12 +2,12 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\TemplateNormalizations;
 
-use s9e\SweetDOM\Text;
+use DOMNode;
 
 /**
 * Convert simple expressions in curly brackets in text into xsl:value-of elements
@@ -22,24 +22,30 @@ class ConvertCurlyExpressionsInText extends AbstractNormalization
 	/**
 	* {@inheritdoc}
 	*/
-	protected array $queries = ['//*[namespace-uri() != "' . self::XMLNS_XSL . '"]/text()[contains(., "{@") or contains(., "{$")]'];
+	protected $queries = ['//*[namespace-uri() != $XSL]/text()[contains(., "{@") or contains(., "{$")]'];
 
 	/**
 	* Insert a text node before given node
+	*
+	* @param  string  $text
+	* @param  DOMNode $node
+	* @return void
 	*/
-	protected function insertTextBefore(string $text, Text $node): void
+	protected function insertTextBefore($text, $node)
 	{
 		if ($text > '')
 		{
-			$node->before($this->createPolymorphicText($text));
+			$node->parentNode->insertBefore($this->createText($text), $node);
 		}
 	}
 
 	/**
 	* {@inheritdoc}
 	*/
-	protected function normalizeText(Text $node): void
+	protected function normalizeNode(DOMNode $node)
 	{
+		$parentNode = $node->parentNode;
+
 		preg_match_all(
 			'#\\{([$@][-\\w]+)\\}#',
 			$node->textContent,
@@ -61,7 +67,9 @@ class ConvertCurlyExpressionsInText extends AbstractNormalization
 			$lastPos = $pos + strlen($m[0][0]);
 
 			// Add the xsl:value-of element
-			$node->beforeXslValueOf($m[1][0]);
+			$parentNode
+				->insertBefore($this->createElement('xsl:value-of'), $node)
+				->setAttribute('select', $m[1][0]);
 		}
 
 		// Append the rest of the text
@@ -69,6 +77,6 @@ class ConvertCurlyExpressionsInText extends AbstractNormalization
 		$this->insertTextBefore($text, $node);
 
 		// Now remove the old text node
-		$node->remove();
+		$parentNode->removeChild($node);
 	}
 }

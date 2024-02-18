@@ -2,7 +2,7 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2023 The s9e authors
+* @copyright Copyright (c) 2010-2022 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -83,6 +83,7 @@ class RecursiveParser
 			}
 
 			$regexp = $matchConfig['regexp'];
+			$regexp = $this->insertCaptureNames($matchName , $regexp);
 			$regexp = str_replace(' ', '\\s*+', $regexp);
 			$regexp = '(?<' . $matchName  . '>' . $regexp . ')(*:' . $matchName  . ')';
 
@@ -110,28 +111,13 @@ class RecursiveParser
 	*/
 	protected function getArguments(array $matches, string $name): array
 	{
-		$args    = [];
-		$collect = false;
-		foreach ($matches as $k => $v)
+		$args = [];
+		$i    = 0;
+		while (isset($matches[$name . $i]))
 		{
-			if ($k === $name)
-			{
-				// Start collecting matches once we reach the target capture
-				$collect = true;
-			}
-			elseif ($collect)
-			{
-				if (!is_int($k))
-				{
-					// Stop collecting when we reach the next capture
-					break;
-				}
-				$args[] = $v;
-			}
+			$args[] = $matches[$name . $i];
+			++$i;
 		}
-
-		// Remove the first entry, which contains the whole string that was matched
-		array_shift($args);
 
 		return $args;
 	}
@@ -167,9 +153,30 @@ class RecursiveParser
 				$matchersConfig[$matchName] = $matchConfig;
 			}
 		}
-		uasort($matchersConfig, static::class . '::sortMatcherConfig');
+		uasort($matchersConfig, 'static::sortMatcherConfig');
 
 		return $matchersConfig;
+	}
+
+	/**
+	* Insert capture names into given regexp
+	*
+	* @param  string $name   Name of the regexp, used to name captures
+	* @param  string $regexp Original regexp
+	* @return string         Modified regexp
+	*/
+	protected function insertCaptureNames(string $name, string $regexp): string
+	{
+		$i = 0;
+
+		return preg_replace_callback(
+			'((?<!\\\\)\\((?!\\?))',
+			function ($m) use (&$i, $name)
+			{
+				return '(?<' . $name . $i++ . '>';
+			},
+			$regexp
+		);
 	}
 
 	/**

@@ -1,10 +1,10 @@
-let setextLines = {};
+var setextLines = {};
 
 function parse()
 {
 	matchSetextLines();
 
-	let blocks       = [],
+	var blocks       = [],
 		blocksCnt    = 0,
 		codeFence,
 		codeIndent   = 4,
@@ -29,7 +29,7 @@ function parse()
 
 	// Capture all the lines at once so that we can overwrite newlines safely, without preventing
 	// further matches
-	let matches = [],
+	var matches = [],
 		m,
 		regexp = /^(?:(?=[-*+\d \t>`~#_])((?: {0,3}>(?:(?!!)|!(?![^\n>]*?!<)) ?)+)?([ \t]+)?(\* *\* *\*[* ]*$|- *- *-[- ]*$|_ *_ *_[_ ]*$)?((?:[-*+]|\d+\.)[ \t]+(?=\S))?[ \t]*(#{1,6}[ \t]+|```+[^`\n]*$|~~~+[^~\n]*$)?)?/gm;
 	while (m = regexp.exec(text))
@@ -43,9 +43,9 @@ function parse()
 		}
 	}
 
-	matches.forEach((m) =>
+	matches.forEach(function(m)
 	{
-		let blockMarks = [],
+		var blockMarks = [],
 			matchPos   = m.index,
 			matchLen   = m[0].length,
 			startPos,
@@ -94,7 +94,7 @@ function parse()
 			newContext = true;
 			do
 			{
-				let startTag = blocks.pop();
+				var startTag = blocks.pop();
 				addEndTag(startTag.getName(), textBoundary, 0).pairWith(startTag);
 			}
 			while (blockDepth < --blocksCnt);
@@ -106,14 +106,14 @@ function parse()
 			newContext = true;
 			do
 			{
-				let tagName = (blockMarks[blocksCnt] === '>!') ? 'SPOILER' : 'QUOTE';
+				var tagName = (blockMarks[blocksCnt] === '>!') ? 'SPOILER' : 'QUOTE';
 				blocks.push(addStartTag(tagName, matchPos, 0, -999));
 			}
 			while (blockDepth > ++blocksCnt);
 		}
 
 		// Compute the width of the indentation
-		let indentWidth = 0,
+		var indentWidth = 0,
 			indentPos   = 0;
 		if (m[2] && !codeFence)
 		{
@@ -163,7 +163,7 @@ function parse()
 			}
 
 			// Close all the lists
-			lists.forEach((list) =>
+			lists.forEach(function(list)
 			{
 				closeList(list, textBoundary);
 			});
@@ -196,7 +196,7 @@ function parse()
 		}
 		else if (!codeTag)
 		{
-			let hasListItem = !!m[4];
+			var hasListItem = !!m[4];
 
 			if (!indentWidth && !continuation && !hasListItem)
 			{
@@ -246,7 +246,7 @@ function parse()
 				tagLen = m[4].length;
 
 				// Create a LI tag that consumes its markup
-				let itemTag = addStartTag('LI', tagPos, tagLen);
+				var itemTag = addStartTag('LI', tagPos, tagLen);
 
 				// Overwrite the markup
 				overwrite(tagPos, tagLen);
@@ -278,14 +278,14 @@ function parse()
 					}
 
 					// Create a 0-width LIST tag right before the item tag LI
-					let listTag = addStartTag('LIST', tagPos, 0);
+					var listTag = addStartTag('LIST', tagPos, 0);
 
 					// Test whether the list item ends with a dot, as in "1."
 					if (m[4].indexOf('.') > -1)
 					{
 						listTag.setAttribute('type', 'decimal');
 
-						let start = +m[4];
+						var start = +m[4];
 						if (start !== 1)
 						{
 							listTag.setAttribute('start', start);
@@ -311,7 +311,7 @@ function parse()
 				if (lists[0].itemTags.length > 1 || !hasListItem)
 				{
 					// ...every list that is currently open becomes loose
-					lists.forEach((list) =>
+					lists.forEach(function(list)
 					{
 						list.tight = false;
 					});
@@ -369,7 +369,7 @@ function parse()
 					addIgnoreTag(tagPos + tagLen, 1);
 
 					// Add the language if present, e.g. ```php
-					let lang = m[5].replace(/^[`~\s]*/, '').replace(/\s+$/, '');
+					var lang = m[5].replace(/^[`~\s]*/, '').replace(/\s+$/, '');
 					if (lang !== '')
 					{
 						codeTag.setAttribute('lang', lang);
@@ -432,7 +432,7 @@ function closeList(list, textBoundary)
 
 	if (list.tight)
 	{
-		list.itemTags.forEach((itemTag) =>
+		list.itemTags.forEach(function(itemTag)
 		{
 			itemTag.removeFlags(RULE_CREATE_PARAGRAPHS);
 		});
@@ -448,7 +448,7 @@ function closeList(list, textBoundary)
 */
 function computeBlockIgnoreLen(str, maxBlockDepth)
 {
-	let remaining = str;
+	var remaining = str;
 	while (--maxBlockDepth >= 0)
 	{
 		remaining = remaining.replace(/^ *>!? ?/, '');
@@ -466,7 +466,7 @@ function computeBlockIgnoreLen(str, maxBlockDepth)
 */
 function getAtxHeaderEndTagLen(startPos, endPos)
 {
-	let content = text.substring(startPos, endPos),
+	var content = text.substring(startPos, endPos),
 		m = /[ \t]*#*[ \t]*$/.exec(content);
 
 	return m[0].length;
@@ -480,7 +480,7 @@ function getAtxHeaderEndTagLen(startPos, endPos)
 */
 function getBlockMarks(str)
 {
-	let blockMarks = [],
+	var blockMarks = [],
 		regexp     = />!?/g,
 		m;
 	while (m = regexp.exec(str))
@@ -504,16 +504,16 @@ function matchSetextLines()
 
 	// Capture the any series of - or = alone on a line, optionally preceded with the
 	// angle brackets notation used in block markup
-	let m, regexp = /^(?=[-=>])(?:>!? ?)*(?=[-=])(?:-+|=+) *$/gm;
+	var m, regexp = /^(?=[-=>])(?:>!? ?)*(?=[-=])(?:-+|=+) *$/gm;
 
 	while (m = regexp.exec(text))
 	{
-		let match    = m[0],
+		var match    = m[0],
 			matchPos = m.index;
 
 		// Compute the position of the end tag. We start on the LF character before the
 		// match and keep rewinding until we find a non-space character
-		let endPos = matchPos - 1;
+		var endPos = matchPos - 1;
 		while (endPos > 0 && text[endPos - 1] === ' ')
 		{
 			--endPos;

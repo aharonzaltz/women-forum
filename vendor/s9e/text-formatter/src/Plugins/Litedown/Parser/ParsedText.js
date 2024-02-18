@@ -1,22 +1,22 @@
 /**
 * @type {boolean} Whether to decode HTML entities when decoding text
 */
-let decodeHtmlEntities = config.decodeHtmlEntities;
+var decodeHtmlEntities = config.decodeHtmlEntities;
 
 /**
 * @type {boolean} Whether text contains escape characters
 */
-let hasEscapedChars = false;
+var hasEscapedChars = false;
 
 /**
 * @type {boolean} Whether text contains link references
 */
-let hasReferences = false;
+var hasReferences = false;
 
 /**
 * @dict
 */
-let linkReferences = {};
+var linkReferences = {};
 
 if (text.indexOf('\\') >= 0)
 {
