@@ -2,7 +2,7 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2022 The s9e authors
+* @copyright Copyright (c) 2010-2023 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator;
@@ -16,6 +16,8 @@ use s9e\TextFormatter\Configurator\JavaScript\Code;
 use s9e\TextFormatter\Configurator\JavaScript\ConfigOptimizer;
 use s9e\TextFormatter\Configurator\JavaScript\Dictionary;
 use s9e\TextFormatter\Configurator\JavaScript\Encoder;
+use s9e\TextFormatter\Configurator\JavaScript\FunctionCache;
+use s9e\TextFormatter\Configurator\JavaScript\Hasher;
 use s9e\TextFormatter\Configurator\JavaScript\HintGenerator;
 use s9e\TextFormatter\Configurator\JavaScript\Minifier;
 use s9e\TextFormatter\Configurator\JavaScript\Minifiers\Noop;
@@ -67,6 +69,8 @@ class JavaScript
 		'setTagLimit'
 	];
 
+	public FunctionCache $functionCache;
+
 	/**
 	* @var HintGenerator
 	*/
@@ -76,6 +80,11 @@ class JavaScript
 	* @var Minifier Instance of Minifier used to minify the JavaScript parser
 	*/
 	protected $minifier;
+
+	/**
+	* @var XSLT Renderer generator used to generate the live preview's stylesheet
+	*/
+	public XSLT $rendererGenerator;
 
 	/**
 	* @var StylesheetCompressor
@@ -98,8 +107,12 @@ class JavaScript
 		$this->callbackGenerator    = new CallbackGenerator;
 		$this->configOptimizer      = new ConfigOptimizer($this->encoder);
 		$this->configurator         = $configurator;
+		$this->functionCache        = new FunctionCache;
 		$this->hintGenerator        = new HintGenerator;
+		$this->rendererGenerator    = new XSLT;
 		$this->stylesheetCompressor = new StylesheetCompressor;
+
+		$this->rendererGenerator->normalizer->remove('RemoveLivePreviewAttributes');
 	}
 
 	/**
@@ -128,9 +141,7 @@ class JavaScript
 		$this->configOptimizer->reset();
 
 		// Get the stylesheet used for rendering
-		$xslt      = new XSLT;
-		$xslt->normalizer->remove('RemoveLivePreviewAttributes');
-		$this->xsl = $xslt->getXSL($this->configurator->rendering);
+		$this->xsl = $this->rendererGenerator->getXSL($this->configurator->rendering);
 
 		// Prepare the parser's config
 		$this->config = $config ?? $this->configurator->asConfig();
@@ -226,20 +237,9 @@ class JavaScript
 	*/
 	protected function getFunctionCache(): string
 	{
-		preg_match_all('(data-s9e-livepreview-on\\w+="([^">]++)(?=[^<>]++>))', $this->xsl, $m);
+		$this->functionCache->addFromXSL($this->xsl);
 
-		$cache = [];
-		foreach ($m[1] as $js)
-		{
-			$avt = AVTHelper::parse($js);
-			if (count($avt) === 1 && $avt[0][0] === 'literal')
-			{
-				$js = htmlspecialchars_decode($js);
-				$cache[] = json_encode($js) . ':/**@this {!Element}*/function(){' . trim($js, ';') . ';}';
-			}
-		}
-
-		return '{' . implode(',', $cache) . '}';
+		return $this->functionCache->getJSON();
 	}
 
 	/**
@@ -330,8 +330,7 @@ class JavaScript
 				*/
 				function(text, matches)
 				{
-					/** @const */
-					var config=' . $this->encode($localConfig) . ';
+					const config=' . $this->encode($localConfig) . ';
 					' . $js . '
 				}'
 			);
@@ -393,8 +392,8 @@ class JavaScript
 		if (in_array('preview', $this->exports, true))
 		{
 			$files[] = $rootDir . '/render.js';
-			$src .= '/** @const */ var xsl=' . $this->getStylesheet() . ";\n";
-			$src .= 'var functionCache=' . $this->getFunctionCache() . ";\n";
+			$src .= 'const xsl=' . $this->getStylesheet() . ";\n";
+			$src .= 'let functionCache=' . $this->getFunctionCache() . ";\n";
 		}
 
 		$src .= implode("\n", array_map('file_get_contents', $files));
@@ -456,7 +455,7 @@ class JavaScript
 		);
 
 		$src = preg_replace_callback(
-			'/(\\nvar (' . implode('|', array_keys($config)) . '))(;)/',
+			'/(\\n(?:cons|le)t (' . implode('|', array_keys($config)) . '))(;)/',
 			function ($m) use ($config)
 			{
 				return $m[1] . '=' . $config[$m[2]] . $m[3];

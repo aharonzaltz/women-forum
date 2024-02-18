@@ -2,7 +2,7 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2022 The s9e authors
+* @copyright Copyright (c) 2010-2023 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Configurator\JavaScript;
@@ -47,7 +47,7 @@ class HintGenerator
 
 		// Build the source. Note that Closure Compiler seems to require that each of HINT's
 		// properties be declared as a const
-		$js = "/** @const */ var HINT={};\n";
+		$js = "const HINT={};\n";
 		ksort($this->hints);
 		foreach ($this->hints as $hintName => $hintValue)
 		{

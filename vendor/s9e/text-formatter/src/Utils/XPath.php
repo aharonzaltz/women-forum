@@ -2,7 +2,7 @@
 
 /**
 * @package   s9e\TextFormatter
-* @copyright Copyright (c) 2010-2022 The s9e authors
+* @copyright Copyright (c) 2010-2023 The s9e authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
 namespace s9e\TextFormatter\Utils;
@@ -19,7 +19,7 @@ abstract class XPath
 	*/
 	public static function export($value)
 	{
-		$callback = get_called_class() . '::export' . ucfirst(gettype($value));
+		$callback = static::class . '::export' . ucfirst(gettype($value));
 		if (!is_callable($callback))
 		{
 			throw new InvalidArgumentException(__METHOD__ . '() cannot export non-scalar values');
